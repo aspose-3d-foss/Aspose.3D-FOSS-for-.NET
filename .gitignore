@@ -1,0 +1,7 @@
+bin
+obj
+.opencode
+*.user
+target
+classes
+testdata

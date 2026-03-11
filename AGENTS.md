@@ -1,0 +1,105 @@
+# Aspose.3D FOSS Implementation - AI Agent Guide
+
+## Project Overview
+
+This is a FOSS (Free and Open Source) implementation of Aspose.3D for .NET 26.1.0.
+
+## Implementation Strategy
+
+### API Classification
+
+**Category 1: Not Implemented (Throw Exception)**
+- License-related APIs (License class, SetLicense, licensing modes)
+- Trial-related APIs (TrialException, trial limitations)
+- Metered APIs (Metered class, SetMeteredKey)
+
+**Category 2: Stub Implementations**
+- Rendering (Scene.Render, ImageRenderOptions)
+- Advanced mesh operations (boolean operations, mesh simplification)
+- Proprietary formats (A3DW, PDF, USD, JT, 3MF)
+- Complex animations
+
+**Category 3: Full Implementation**
+- Core scene graph (Scene, Node, Entity)
+- Basic geometry (Mesh, Box, Cylinder, Sphere)
+- Common file formats (OBJ, STL, FBX, glTF, Collada)
+- Transform hierarchy
+- Materials and textures
+
+## Implementation Status
+
+### Fully Implemented
+- Core scene graph (Scene, Node, Entity, SceneObject, A3DObject)
+- Basic transforms (Transform, GlobalTransform)
+- Basic utilities (Vector2, Vector3, Vector4, Matrix4, Quaternion, BoundingBox)
+- Node hierarchy management (CreateChildNode, AddChildNode, Merge, etc.)
+- Properties system (Property, PropertyCollection, PropertyFlags)
+- Materials (Material base class in Shading namespace)
+- File format detection and format definitions (FileFormat, FileFormatType, FileContentType)
+- Format options (LoadOptions, SaveOptions base classes, OBJ/STL/GLTF/FBX specific options)
+- Asset information (AssetInfo)
+- Custom objects (CustomObject)
+- Exceptions (ImportException, ExportException, TrialException)
+- License and Metered classes (throw NotImplementedException as per FOSS policy)
+- Camera entity stub
+- Geometry base class with vertex elements
+- Vertex elements (VertexElement, VertexElementUV, VertexElementVector, VertexElementVertexColor, VertexElementMaterial)
+- Enums (VertexElementType, MappingMode, ReferenceMode, TextureMapping)
+- Mesh class with polygon and vertex data support
+- Primitive geometry classes (Box, Sphere, Cylinder)
+- OBJ format reader and writer (ObjReader, ObjWriter)
+- Scene.Open() method for OBJ format loading
+- Scene.Save() method for OBJ format saving
+
+### Stub Implementations
+| API | Status | Notes |
+|-----|--------|-------|
+| Scene.Render() | Stub (throws exception) | Rendering not implemented in FOSS version |
+| Scene.Open() for STL/GLTF/FBX | Stub (throws exception) | Only OBJ implemented currently |
+| Scene.Save() for STL/GLTF/FBX | Stub (throws exception) | Only OBJ implemented currently |
+| Geometry.GetDeformers() | Stub (throws exception) | Not yet implemented |
+
+### Not Implemented (Throws Exception)
+| API | Reason |
+|-----|--------|
+| License.SetLicense() | License validation not applicable |
+| Metered.SetMeteredKey() | Trial/metering not applicable |
+| Scene.Render() | Rendering requires proprietary algorithms |
+
+## Test Coverage
+
+Tests have been implemented:
+- SceneTests.cs - Tests for Scene class initialization and basic operations
+- FileIOTests.cs - Tests for OBJ file I/O and primitive geometry
+
+All 11 tests are passing.
+
+## Test Data
+
+Sample files are located in `testdata/input/`:
+- `cube.obj` - Basic cube mesh
+
+Expected outputs in `testdata/expected/`:
+- Will be populated as tests are added
+
+## Development Commands
+
+### Analyze Aspose.3D API
+```bash
+.opencode/skills/foss-agent/scripts/dump-csharp --package Aspose.3D:26.1.0 --namespace Aspose.ThreeD
+.opencode/skills/foss-agent/scripts/dump-csharp --package Aspose.3D:26.1.0 --class Aspose.ThreeD.Scene
+```
+
+### Build and Test
+```bash
+cd src/main/Aspose.ThreeD
+dotnet build
+dotnet test
+```
+
+## Notes
+
+- Always verify API signatures with `dump-csharp` before implementing
+- Tests must use files from `testdata/` directory
+- Stub implementations should be minimal but compilable
+- Document all deviations from Aspose.3D's behavior in this file
