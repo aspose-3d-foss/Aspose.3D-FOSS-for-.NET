@@ -115,6 +115,8 @@ namespace Aspose.ThreeD
                         return StlFormat;
                     if (TryDetectGltf(stream, fileName))
                         return GltfFormat;
+                    if (TryDetectFbx(stream, fileName))
+                        return FbxFormat;
                 }
                 finally
                 {
@@ -236,6 +238,39 @@ namespace Aspose.ThreeD
                 if (content.StartsWith("{") && (content.Contains("\"asset\"") || content.Contains("\"scene\"") || content.Contains("\"nodes\"")))
                 {
                     return true;
+                }
+            }
+            catch
+            {
+            }
+
+            return false;
+        }
+
+        private static bool TryDetectFbx(Stream stream, string? fileName)
+        {
+            if (fileName != null)
+            {
+                var ext = Path.GetExtension(fileName).ToLower();
+                if (ext == ".fbx")
+                    return true;
+            }
+
+            if (!stream.CanRead || !stream.CanSeek)
+                return false;
+
+            try
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+                
+                var headerBuffer = new byte[18];
+                var bytesRead = stream.Read(headerBuffer, 0, 18);
+                
+                if (bytesRead >= 18)
+                {
+                    var header = System.Text.Encoding.ASCII.GetString(headerBuffer, 0, bytesRead);
+                    if (header.Contains("Kaydara FBX Binary"))
+                        return true;
                 }
             }
             catch

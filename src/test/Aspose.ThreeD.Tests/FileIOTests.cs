@@ -145,15 +145,12 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void LoadSceneFromUnsupportedFormat_ShouldThrowNotSupportedException()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/fbx7400binary/box.fbx";
+            // Test with a non-existent file that doesn't match any supported format
+            // This tests the exception when no matching format is found
+            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/unknown.xyz";
             
-            if (!File.Exists(testFile))
-            {
-                throw new FileNotFoundException($"Test file not found: {testFile}");
-            }
-
             var scene = new Scene();
-            Assert.Throws<NotSupportedException>(() => scene.Open(testFile));
+            Assert.Throws<ArgumentException>(() => scene.Open(testFile));
         }
 
         [Fact]

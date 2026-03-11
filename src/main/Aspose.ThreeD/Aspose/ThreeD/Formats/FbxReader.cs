@@ -1,0 +1,779 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using Aspose.ThreeD.Entities;
+using Aspose.ThreeD.Utilities;
+
+namespace Aspose.ThreeD.Formats
+{
+    internal class FbxReader
+    {
+        public static Scene Read(string fileName, FbxLoadOptions options)
+        {
+            using (var stream = File.OpenRead(fileName))
+            {
+                return Read(stream, options);
+            }
+        }
+
+        public static Scene Read(Stream stream, FbxLoadOptions options)
+        {
+            var buffer = new byte[18];
+            var bytesRead = stream.Read(buffer, 0, 18);
+            stream.Seek(0, SeekOrigin.Begin);
+
+            var header = System.Text.Encoding.ASCII.GetString(buffer, 0, bytesRead);
+            if (header.Contains("Kaydara FBX Binary"))
+            {
+                return ReadBinaryFbx(stream, options);
+            }
+
+            throw new InvalidOperationException("Only FBX binary format is supported");
+        }
+
+        private static Scene ReadBinaryFbx(Stream stream, FbxLoadOptions options)
+        {
+            var scene = new Scene();
+
+            using var reader = new BinaryReader(stream);
+            
+            var header = reader.ReadBytes(18);
+            if (System.Text.Encoding.ASCII.GetString(header) != "Kaydara FBX Binary")
+            {
+                throw new InvalidOperationException("Invalid FBX binary file header");
+            }
+
+            reader.ReadBytes(5);
+
+            var version = reader.ReadUInt32();
+
+            bool is64Bit = version >= 7500;
+
+            var tokens = new List<Token>();
+            while (stream.Position < stream.Length)
+            {
+                try
+                {
+                    if (!ReadScope(reader, tokens, is64Bit, stream.Length))
+                        break;
+                }
+                catch (EndOfStreamException)
+                {
+                    break;
+                }
+            }
+
+            var parser = new FbxParser(tokens);
+            ParseScene(parser.RootScope, scene, options);
+
+            return scene;
+        }
+
+        private static bool ReadScope(BinaryReader reader, List<Token> tokens, bool is64Bit, long streamLength)
+        {
+            ulong endOffset = is64Bit ? reader.ReadUInt64() : reader.ReadUInt32();
+
+            if (endOffset == 0)
+                return false;
+
+            if (endOffset > (ulong)streamLength)
+                return false;
+
+            var propCount = (int)(is64Bit ? reader.ReadUInt64() : reader.ReadUInt32());
+            var propLength = (int)(is64Bit ? reader.ReadUInt64() : reader.ReadUInt32());
+
+            var name = ReadString(reader, longLength: false);
+            tokens.Add(new Token(name, TokenType.KEY));
+
+            long beginCursor = reader.BaseStream.Position;
+
+            for (int i = 0; i < propCount; i++)
+            {
+                var data = ReadData(reader, beginCursor + propLength);
+                tokens.Add(new Token(data, TokenType.DATA));
+
+                if (i != propCount - 1)
+                {
+                    tokens.Add(new Token(",", TokenType.COMMA));
+                }
+            }
+
+            if (reader.BaseStream.Position - beginCursor != propLength)
+            {
+                reader.BaseStream.Seek(beginCursor + propLength - reader.BaseStream.Position, SeekOrigin.Current);
+            }
+
+            int sentinelBlockLength = is64Bit ? 25 : 13;
+
+            if (reader.BaseStream.Position < (long)endOffset)
+            {
+                if ((long)endOffset - reader.BaseStream.Position < sentinelBlockLength)
+                    return false;
+
+                tokens.Add(new Token("{", TokenType.OPEN_BRACKET));
+
+                long end = (long)endOffset - sentinelBlockLength;
+                while (reader.BaseStream.Position < end)
+                {
+                    if (!ReadScope(reader, tokens, is64Bit, streamLength))
+                        break;
+                }
+
+                tokens.Add(new Token("}", TokenType.CLOSE_BRACKET));
+
+                var sentinel = reader.ReadBytes(sentinelBlockLength);
+                if (sentinel.Length > 0 && Array.FindIndex(sentinel, b => b != 0) >= 0)
+                {
+                    throw new InvalidOperationException("Failed to read nested block sentinel");
+                }
+            }
+
+            if (reader.BaseStream.Position != (long)endOffset)
+            {
+                reader.BaseStream.Seek((long)endOffset - reader.BaseStream.Position, SeekOrigin.Current);
+            }
+
+            return true;
+        }
+
+        private static object ReadData(BinaryReader reader, long limit)
+        {
+            if (reader.BaseStream.Position >= reader.BaseStream.Length)
+                throw new EndOfStreamException();
+
+            var typeChar = (char)reader.ReadByte();
+            long startCursor = reader.BaseStream.Position - 1;
+
+            switch (typeChar)
+            {
+                case 'Y':
+                    reader.BaseStream.Seek(2, SeekOrigin.Current);
+                    return reader.ReadInt16();
+                case 'C':
+                    return reader.ReadByte() != 0;
+                case 'I':
+                    return reader.ReadInt32();
+                case 'F':
+                    return reader.ReadSingle();
+                case 'D':
+                    return reader.ReadDouble();
+                case 'L':
+                    return reader.ReadInt64();
+                case 'R':
+                    var length = reader.ReadInt32();
+                    return reader.ReadBytes(length);
+                case 'f':
+                case 'd':
+                case 'i':
+                case 'l':
+                case 'c':
+                    var arrayLength = reader.ReadInt32();
+                    var encoding = reader.ReadInt32();
+                    var compLength = reader.ReadInt32();
+
+                    var arrayData = reader.ReadBytes(compLength);
+
+                    int stride = 1;
+                    if (typeChar == 'f' || typeChar == 'i')
+                        stride = 4;
+                    else if (typeChar == 'd' || typeChar == 'l')
+                        stride = 8;
+
+                    if (typeChar == 'f' && arrayLength > 0)
+                    {
+                        var values = new float[arrayLength];
+                        Buffer.BlockCopy(arrayData, 0, values, 0, arrayLength * 4);
+                        return values;
+                    }
+                    else if (typeChar == 'i' && arrayLength > 0)
+                    {
+                        var values = new int[arrayLength];
+                        Buffer.BlockCopy(arrayData, 0, values, 0, arrayLength * 4);
+                        return values;
+                    }
+                    else if (typeChar == 'd' && arrayLength > 0)
+                    {
+                        var values = new double[arrayLength];
+                        Buffer.BlockCopy(arrayData, 0, values, 0, arrayLength * 8);
+                        return values;
+                    }
+                    else if (typeChar == 'l' && arrayLength > 0)
+                    {
+                        var values = new long[arrayLength];
+                        Buffer.BlockCopy(arrayData, 0, values, 0, arrayLength * 8);
+                        return values;
+                    }
+                    else if (typeChar == 'c' && arrayLength > 0)
+                    {
+                        return arrayData;
+                    }
+                    break;
+                case 'S':
+                    return ReadString(reader, longLength: true);
+                default:
+                    throw new InvalidOperationException($"Unexpected type code: {typeChar}");
+            }
+
+            return null;
+        }
+
+        private static string ReadString(BinaryReader reader, bool longLength = false)
+        {
+            int lenLen = longLength ? 4 : 1;
+            int length = longLength ? reader.ReadInt32() : reader.ReadByte();
+
+            var bytes = reader.ReadBytes(length);
+            return System.Text.Encoding.UTF8.GetString(bytes);
+        }
+
+        private static void ParseScene(FbxScope rootScope, Scene scene, FbxLoadOptions options)
+        {
+            var objectsElement = rootScope.GetFirstElement("Objects");
+            if (objectsElement == null || objectsElement.Compound == null)
+                return;
+
+            var objectsScope = objectsElement.Compound;
+            var objectMap = new Dictionary<ulong, object>();
+
+            var geometryElements = objectsScope.GetElements("Geometry");
+            var modelElements = objectsScope.GetElements("Model");
+            var materialElements = objectsScope.GetElements("Material");
+
+            ParseGeometries(geometryElements, scene, objectMap);
+            ParseModels(modelElements, scene, objectMap);
+            ParseConnections(rootScope, scene, objectMap);
+        }
+
+        private static void ParseGeometries(List<FbxElement> geometryElements, Scene scene, Dictionary<ulong, object> objectMap)
+        {
+            foreach (var geomElem in geometryElements)
+            {
+                var geomScope = geomElem.Compound;
+                if (geomScope == null)
+                    continue;
+
+                ulong geomId = ParseId(geomElem);
+                if (geomId == 0)
+                    continue;
+
+                var mesh = new Mesh();
+                objectMap[geomId] = mesh;
+
+                var verticesElement = geomScope.GetFirstElement("Vertices");
+                if (verticesElement?.Compound != null)
+                {
+                    var aElem = verticesElement.Compound.GetFirstElement("a");
+                    if (aElem != null && aElem.Tokens.Count > 0)
+                    {
+                        var vertices = ParseFloatArray(aElem.Tokens[0].Text);
+                        for (int i = 0; i < vertices.Count - 2; i += 3)
+                        {
+                            mesh.ControlPoints.Add(new Vector4((float)vertices[i], (float)vertices[i + 1], (float)vertices[i + 2], 1.0f));
+                        }
+                    }
+                }
+
+                var polygonElement = geomScope.GetFirstElement("PolygonVertexIndex");
+                if (polygonElement?.Compound != null)
+                {
+                    var aElem = polygonElement.Compound.GetFirstElement("a");
+                    if (aElem != null && aElem.Tokens.Count > 0)
+                    {
+                        var indices = ParseIntArray(aElem.Tokens[0].Text);
+                        int polygonStart = 0;
+                        for (int i = 0; i < indices.Count; i++)
+                        {
+                            var idx = indices[i];
+                            if (idx < 0)
+                            {
+                                int polygonSize = -idx;
+                                int[] poly = new int[polygonSize];
+                                for (int j = 0; j < polygonSize; j++)
+                                {
+                                    poly[j] = indices[polygonStart + j];
+                                }
+                                mesh.CreatePolygon(poly);
+                                polygonStart = i + 1;
+                            }
+                        }
+                    }
+                }
+
+                if (mesh.ControlPoints.Count > 0 && mesh.PolygonCount > 0)
+                {
+                    var meshNode = scene.RootNode.CreateChildNode(mesh.Name, mesh);
+                }
+            }
+        }
+
+        private static void ParseModels(List<FbxElement> modelElements, Scene scene, Dictionary<ulong, object> objectMap)
+        {
+            foreach (var modelElem in modelElements)
+            {
+                ulong modelId = ParseId(modelElem);
+                if (modelId == 0)
+                    continue;
+
+                var node = new Node();
+                objectMap[modelId] = node;
+
+                if (modelElem.Tokens.Count > 1)
+                {
+                    var tokenValue = modelElem.Tokens[1].Text;
+                    if (!string.IsNullOrEmpty(tokenValue))
+                    {
+                        node.Name = tokenValue.Trim('"');
+                    }
+                }
+
+                var modelScope = modelElem.Compound;
+                if (modelScope != null)
+                {
+                    ParseNodeTransform(node, modelScope);
+                }
+            }
+        }
+
+        private static void ParseNodeTransform(Node node, FbxScope modelScope)
+        {
+            var transformElement = modelScope.GetFirstElement("Properties70");
+            if (transformElement?.Compound == null)
+                return;
+
+            var translation = FVector3.Zero;
+            var rotation = FVector3.Zero;
+            var scale = FVector3.One;
+
+            var props = transformElement.Compound.GetElements("P");
+            foreach (var prop in props)
+            {
+                if (prop.Tokens.Count < 5)
+                    continue;
+
+                var propName = prop.Tokens[0].Text.Trim('"');
+                if (propName == "Lcl Translation")
+                {
+                    translation.X = ParseFloat(prop.Tokens[2].Text);
+                    translation.Y = ParseFloat(prop.Tokens[3].Text);
+                    translation.Z = ParseFloat(prop.Tokens[4].Text);
+                }
+                else if (propName == "Lcl Rotation")
+                {
+                    rotation.X = ParseFloat(prop.Tokens[2].Text);
+                    rotation.Y = ParseFloat(prop.Tokens[3].Text);
+                    rotation.Z = ParseFloat(prop.Tokens[4].Text);
+                }
+                else if (propName == "Lcl Scaling")
+                {
+                    scale.X = ParseFloat(prop.Tokens[2].Text);
+                    scale.Y = ParseFloat(prop.Tokens[3].Text);
+                    scale.Z = ParseFloat(prop.Tokens[4].Text);
+                }
+            }
+
+            node.Transform.Translation = translation;
+            var radX = rotation.X * (float)Math.PI / 180.0f;
+            var radY = rotation.Y * (float)Math.PI / 180.0f;
+            var radZ = rotation.Z * (float)Math.PI / 180.0f;
+            var q = FromEulerAngles(radX, radY, radZ);
+            node.Transform.Rotation = q;
+            node.Transform.Scale = scale;
+        }
+
+        private static void ParseConnections(FbxScope rootScope, Scene scene, Dictionary<ulong, object> objectMap)
+        {
+            var connectionsElement = rootScope.GetFirstElement("Connections");
+            if (connectionsElement?.Compound == null)
+                return;
+
+            var connectionsScope = connectionsElement.Compound;
+            var connectionElements = connectionsScope.GetElements("C");
+
+            foreach (var connElem in connectionElements)
+            {
+                if (connElem.Tokens.Count < 3)
+                    continue;
+
+                var connType = connElem.Tokens[0].Text.Trim('"');
+                if (connType != "OO")
+                    continue;
+
+                var childId = ParseId(connElem.Tokens[1].Text);
+                var parentId = ParseId(connElem.Tokens[2].Text);
+
+                ConnectObjects(childId, parentId, scene, objectMap);
+            }
+        }
+
+        private static void ConnectObjects(ulong childId, ulong parentId, Scene scene, Dictionary<ulong, object> objectMap)
+        {
+            if (!objectMap.TryGetValue(childId, out var childObj))
+                return;
+
+            Node parentObj;
+            if (parentId == 0)
+            {
+                parentObj = scene.RootNode;
+            }
+            else
+            {
+                if (!objectMap.TryGetValue(parentId, out var parentObjObj))
+                    return;
+                parentObj = parentObjObj as Node;
+                if (parentObj == null)
+                    return;
+            }
+
+            if (childObj is Mesh mesh)
+            {
+                parentObj.AddEntity(mesh);
+            }
+            else if (childObj is Node childNode)
+            {
+                childNode.ParentNode = parentObj;
+            }
+        }
+
+        private static ulong ParseId(FbxElement element)
+        {
+            if (element.Tokens.Count > 0)
+            {
+                return ParseId(element.Tokens[0].Text);
+            }
+            return 0;
+        }
+
+        private static ulong ParseId(string value)
+        {
+            try
+            {
+                return ulong.Parse(value.Trim('"'));
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        private static List<double> ParseFloatArray(string value)
+        {
+            var text = value;
+            if (text.StartsWith("a:"))
+            {
+                text = text.Substring(2);
+            }
+
+            var result = new List<double>();
+            var parts = text.Split(',');
+            foreach (var part in parts)
+            {
+                if (double.TryParse(part.Trim(), out double val))
+                {
+                    result.Add(val);
+                }
+            }
+            return result;
+        }
+
+        private static List<int> ParseIntArray(string value)
+        {
+            var text = value;
+            if (text.StartsWith("a:"))
+            {
+                text = text.Substring(2);
+            }
+
+            var result = new List<int>();
+            var parts = text.Split(',');
+            foreach (var part in parts)
+            {
+                if (int.TryParse(part.Trim(), out int val))
+                {
+                    result.Add(val);
+                }
+            }
+            return result;
+        }
+
+        private static float ParseFloat(string value)
+        {
+            if (float.TryParse(value, out float result))
+            {
+                return result;
+            }
+            return 0;
+        }
+
+        private static Quaternion FromEulerAngles(float x, float y, float z)
+        {
+            float cx = (float)Math.Cos(x * 0.5f);
+            float cy = (float)Math.Cos(y * 0.5f);
+            float cz = (float)Math.Cos(z * 0.5f);
+            float sx = (float)Math.Sin(x * 0.5f);
+            float sy = (float)Math.Sin(y * 0.5f);
+            float sz = (float)Math.Sin(z * 0.5f);
+
+            float w = cx * cy * cz - sx * sy * sz;
+            float i = sx * cy * cz - cx * sy * sz;
+            float j = cx * sy * cz + sx * cy * sz;
+            float k = cx * cy * sz + sx * sy * cz;
+
+            return new Quaternion(i, j, k, w);
+        }
+    }
+
+    internal class FbxParser
+    {
+        private readonly List<Token> _tokens;
+        private int _position;
+        private FbxScope _rootScope;
+
+        public FbxScope RootScope => _rootScope;
+
+        public FbxParser(List<Token> tokens)
+        {
+            _tokens = tokens;
+            _position = 0;
+            _rootScope = ParseScope(topLevel: true);
+        }
+
+        private Token CurrentToken()
+        {
+            if (_position < _tokens.Count)
+                return _tokens[_position];
+            return null;
+        }
+
+        private Token Advance()
+        {
+            if (_position < _tokens.Count)
+                return _tokens[_position++];
+            return null;
+        }
+
+        private FbxScope ParseScope(bool topLevel = false)
+        {
+            var scope = new FbxScope();
+
+            if (!topLevel)
+            {
+                var token = CurrentToken();
+                if (token == null || token.Type != TokenType.OPEN_BRACKET)
+                    throw new InvalidOperationException($"Expected OPEN_BRACKET, got {token?.Text}");
+                Advance();
+            }
+
+            while (true)
+            {
+                var token = CurrentToken();
+                if (token == null)
+                {
+                    if (topLevel)
+                        break;
+                    throw new InvalidOperationException("Unexpected end of file, expected closing bracket");
+                }
+
+                if (token.Type == TokenType.CLOSE_BRACKET)
+                {
+                    if (topLevel)
+                        break;
+                    Advance();
+                    return scope;
+                }
+
+                if (token.Type == TokenType.KEY)
+                {
+                    var element = ParseElement();
+                    scope.AddElement(element);
+                }
+                else
+                {
+                    throw new InvalidOperationException($"Unexpected token type {token.Type}, expected KEY or CLOSE_BRACKET");
+                }
+            }
+
+            return scope;
+        }
+
+        private FbxElement ParseElement()
+        {
+            var currentToken = CurrentToken();
+            if (currentToken == null || currentToken.Type != TokenType.KEY)
+                throw new InvalidOperationException($"Expected KEY token, got {currentToken?.Text}");
+
+            var element = new FbxElement(currentToken);
+            Advance();
+
+            while (true)
+            {
+                currentToken = CurrentToken();
+                if (currentToken == null)
+                    throw new InvalidOperationException("Unexpected end of file, expected closing bracket or key");
+
+                if (currentToken.Type == TokenType.DATA)
+                {
+                    element.AddToken(currentToken);
+                    Advance();
+
+                    var nextToken = CurrentToken();
+                    if (nextToken == null)
+                        throw new InvalidOperationException("Unexpected end of file, expected bracket, comma or key");
+
+                    if (nextToken.Type == TokenType.OPEN_BRACKET)
+                    {
+                        var childScope = ParseScope();
+                        element.Compound = childScope;
+                        return element;
+                    }
+                    else if (nextToken.Type == TokenType.CLOSE_BRACKET || nextToken.Type == TokenType.KEY)
+                    {
+                        return element;
+                    }
+                    else if (nextToken.Type == TokenType.COMMA)
+                    {
+                        Advance();
+                    }
+                }
+                else if (currentToken.Type == TokenType.OPEN_BRACKET)
+                {
+                    var childScope = ParseScope();
+                    element.Compound = childScope;
+                    return element;
+                }
+                else if (currentToken.Type == TokenType.KEY || currentToken.Type == TokenType.CLOSE_BRACKET)
+                {
+                    return element;
+                }
+                else if (currentToken.Type == TokenType.COMMA)
+                {
+                    Advance();
+                }
+                else
+                {
+                    Advance();
+                }
+            }
+        }
+
+        public object ParseValue(Token token)
+        {
+            var text = token.Text.Trim('"');
+
+            if (text.StartsWith("a:"))
+            {
+                return ParseArray(text.Substring(2));
+            }
+
+            if (int.TryParse(text, out int intVal))
+                return intVal;
+
+            if (double.TryParse(text, out double doubleVal))
+                return doubleVal;
+
+            return text;
+        }
+
+        private object ParseArray(string data)
+        {
+            var values = new List<object>();
+            var parts = data.Split(',');
+            foreach (var part in parts)
+            {
+                var trimmed = part.Trim();
+                if (string.IsNullOrEmpty(trimmed))
+                    continue;
+
+                if (int.TryParse(trimmed, out int intVal))
+                {
+                    values.Add(intVal);
+                }
+                else if (double.TryParse(trimmed, out double doubleVal))
+                {
+                    values.Add(doubleVal);
+                }
+                else
+                {
+                    values.Add(trimmed.Trim('"'));
+                }
+            }
+            return values;
+        }
+    }
+
+    internal class FbxScope
+    {
+        private readonly Dictionary<string, List<FbxElement>> _elements = new Dictionary<string, List<FbxElement>>();
+
+        public IReadOnlyDictionary<string, List<FbxElement>> Elements => _elements;
+
+        public void AddElement(FbxElement element)
+        {
+            var key = element.Key;
+            if (!_elements.ContainsKey(key))
+                _elements[key] = new List<FbxElement>();
+            _elements[key].Add(element);
+        }
+
+        public List<FbxElement> GetElements(string key)
+        {
+            return _elements.ContainsKey(key) ? _elements[key] : new List<FbxElement>();
+        }
+
+        public FbxElement GetFirstElement(string key)
+        {
+            var elements = GetElements(key);
+            return elements.Count > 0 ? elements[0] : null;
+        }
+    }
+
+    internal class FbxElement
+    {
+        private readonly Token _keyToken;
+        private readonly List<Token> _tokens = new List<Token>();
+        private FbxScope _compound;
+
+        public string Key => _keyToken.Text;
+        public IReadOnlyList<Token> Tokens => _tokens;
+        public FbxScope Compound { get => _compound; set => _compound = value; }
+
+        public FbxElement(Token keyToken)
+        {
+            _keyToken = keyToken;
+        }
+
+        public void AddToken(Token token)
+        {
+            _tokens.Add(token);
+        }
+    }
+
+    internal enum TokenType
+    {
+        OPEN_BRACKET = 0,
+        CLOSE_BRACKET = 1,
+        DATA = 2,
+        COMMA = 3,
+        KEY = 4
+    }
+
+    internal class Token
+    {
+        private readonly object _value;
+        private readonly TokenType _type;
+
+        public object Value => _value;
+        public string Text => _value?.ToString();
+        public TokenType Type => _type;
+
+        public Token(object value, TokenType type)
+        {
+            _value = value;
+            _type = type;
+        }
+
+        public override string ToString()
+        {
+            return $"Token({_type}, {_value})";
+        }
+    }
+}

@@ -194,6 +194,14 @@ namespace Aspose.ThreeD
                     _poses.Add(pose);
                 }
             }
+            else if (options is Formats.FbxLoadOptions fbxOptions)
+            {
+                var loadedScene = Formats.FbxReader.Read(stream, fbxOptions);
+                foreach (var node in loadedScene.RootNode.ChildNodes)
+                {
+                    _rootNode.ChildNodes.Add(node);
+                }
+            }
             else
             {
                 throw new NotSupportedException($"File format not yet supported for loading");
@@ -306,6 +314,14 @@ namespace Aspose.ThreeD
                 foreach (var pose in loadedScene.Poses)
                 {
                     _poses.Add(pose);
+                }
+            }
+            else if (options is Formats.FbxLoadOptions fbxOptions)
+            {
+                var loadedScene = Formats.FbxReader.Read(fileName, fbxOptions);
+                foreach (var node in loadedScene.RootNode.ChildNodes)
+                {
+                    _rootNode.ChildNodes.Add(node);
                 }
             }
             else
