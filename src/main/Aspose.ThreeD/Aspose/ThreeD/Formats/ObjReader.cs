@@ -13,6 +13,14 @@ namespace Aspose.ThreeD.Formats
     {
         public static Scene Read(string fileName, ObjLoadOptions options)
         {
+            using (var stream = File.OpenRead(fileName))
+            {
+                return Read(stream, options);
+            }
+        }
+
+        public static Scene Read(Stream stream, ObjLoadOptions options)
+        {
             var scene = new Scene();
             var currentNode = scene.RootNode.CreateChildNode("RootEntity");
             var currentMesh = new Mesh("DefaultMesh");
@@ -26,7 +34,7 @@ namespace Aspose.ThreeD.Formats
             int currentMaterialIndex = -1;
             var objectCount = 0;
 
-            using (var reader = new StreamReader(fileName))
+            using (var reader = new StreamReader(stream))
             {
                 string line;
                 while ((line = reader.ReadLine()) != null)

@@ -143,7 +143,8 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Open(Stream stream, FileFormat format, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException("Opening from stream with FileFormat is not yet implemented");
+            var options = format.CreateLoadOptions();
+            Open(stream, options, cancellationToken);
         }
 
         /// <summary>
@@ -151,23 +152,97 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Open(Stream stream, LoadOptions options, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException("Opening from stream with LoadOptions is not yet implemented");
+            Clear();
+            
+            if (options is Formats.ObjLoadOptions objOptions)
+            {
+                var loadedScene = Formats.ObjReader.Read(stream, objOptions);
+                foreach (var node in loadedScene.RootNode.ChildNodes)
+                {
+                    _rootNode.ChildNodes.Add(node);
+                }
+                foreach (var clip in loadedScene.AnimationClips)
+                {
+                    _animationClips.Add(clip);
+                }
+                foreach (var pose in loadedScene.Poses)
+                {
+                    _poses.Add(pose);
+                }
+            }
+            else if (options is Formats.StlLoadOptions stlOptions)
+            {
+                var loadedScene = Formats.StlReader.Read(stream, stlOptions);
+                foreach (var node in loadedScene.RootNode.ChildNodes)
+                {
+                    _rootNode.ChildNodes.Add(node);
+                }
+            }
+            else if (options is Formats.GltfLoadOptions gltfOptions)
+            {
+                var loadedScene = Formats.GltfReader.Read(stream, gltfOptions);
+                foreach (var node in loadedScene.RootNode.ChildNodes)
+                {
+                    _rootNode.ChildNodes.Add(node);
+                }
+                foreach (var clip in loadedScene.AnimationClips)
+                {
+                    _animationClips.Add(clip);
+                }
+                foreach (var pose in loadedScene.Poses)
+                {
+                    _poses.Add(pose);
+                }
+            }
+            else
+            {
+                throw new NotSupportedException($"File format not yet supported for loading");
+            }
         }
 
         /// <summary>
-        /// Opens the scene from given stream
+        /// Opens the scene from given stream using detected file format.
         /// </summary>
         public void Open(Stream stream)
         {
-            throw new NotImplementedException("Opening from stream is not yet implemented");
+            var format = FileFormat.Detect(stream, null);
+            Open(stream, format.CreateLoadOptions());
         }
 
         /// <summary>
-        /// Opens the scene from given stream
+        /// Opens the scene from given stream using detected file format.
         /// </summary>
         public void Open(Stream stream, CancellationToken cancellationToken)
         {
-            Open(stream);
+            var format = FileFormat.Detect(stream, null);
+            Open(stream, format.CreateLoadOptions(), cancellationToken);
+        }
+
+        /// <summary>
+        /// Opens the scene from given stream using detected file format based on filename header.
+        /// </summary>
+        public void Open(Stream stream, string fileName)
+        {
+            var format = FileFormat.Detect(stream, fileName);
+            Open(stream, format.CreateLoadOptions());
+        }
+
+        /// <summary>
+        /// Opens the scene from given stream using detected file format based on filename header.
+        /// </summary>
+        public void Open(Stream stream, string fileName, CancellationToken cancellationToken)
+        {
+            var format = FileFormat.Detect(stream, fileName);
+            Open(stream, format.CreateLoadOptions(), cancellationToken);
+        }
+
+        /// <summary>
+        /// Opens the scene from given stream using specified IO config.
+        /// </summary>
+        public void Open(Stream stream, LoadOptions options)
+        {
+            var cancellationToken = CancellationToken.None;
+            Open(stream, options, cancellationToken);
         }
 
         /// <summary>
@@ -175,7 +250,7 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Open(string fileName, FileFormat format, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException("Opening from file with FileFormat is not yet implemented");
+            Open(fileName, format);
         }
 
         /// <summary>
@@ -201,6 +276,38 @@ namespace Aspose.ThreeD
                     _poses.Add(pose);
                 }
             }
+            else if (options is Formats.StlLoadOptions stlOptions)
+            {
+                var loadedScene = Formats.StlReader.Read(fileName, stlOptions);
+                foreach (var node in loadedScene.RootNode.ChildNodes)
+                {
+                    _rootNode.ChildNodes.Add(node);
+                }
+                foreach (var clip in loadedScene.AnimationClips)
+                {
+                    _animationClips.Add(clip);
+                }
+                foreach (var pose in loadedScene.Poses)
+                {
+                    _poses.Add(pose);
+                }
+            }
+            else if (options is Formats.GltfLoadOptions gltfOptions)
+            {
+                var loadedScene = Formats.GltfReader.Read(fileName, gltfOptions);
+                foreach (var node in loadedScene.RootNode.ChildNodes)
+                {
+                    _rootNode.ChildNodes.Add(node);
+                }
+                foreach (var clip in loadedScene.AnimationClips)
+                {
+                    _animationClips.Add(clip);
+                }
+                foreach (var pose in loadedScene.Poses)
+                {
+                    _poses.Add(pose);
+                }
+            }
             else
             {
                 throw new NotSupportedException($"File format not yet supported for loading");
@@ -212,7 +319,7 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Open(string fileName, LoadOptions options, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException("Opening from file with LoadOptions and cancellation token is not yet implemented");
+            Open(fileName, options);
         }
 
         /// <summary>
@@ -313,7 +420,8 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Save(Stream stream, FileFormat format)
         {
-            throw new NotImplementedException("Saving to stream with FileFormat is not yet implemented");
+            var options = format.CreateSaveOptions();
+            Save(stream, options);
         }
 
         /// <summary>
@@ -321,7 +429,7 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Save(Stream stream, FileFormat format, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException("Saving to stream with FileFormat and cancellation token is not yet implemented");
+            Save(stream, format);
         }
 
         /// <summary>
@@ -329,7 +437,26 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Save(Stream stream, SaveOptions options)
         {
-            throw new NotImplementedException("Saving to stream with SaveOptions is not yet implemented");
+            if (options is Formats.ObjSaveOptions objOptions)
+            {
+                Formats.ObjWriter.Write(stream, this, objOptions);
+            }
+            else if (options is Formats.StlSaveOptions stlOptions)
+            {
+                Formats.StlWriter.Write(stream, this, stlOptions);
+            }
+            else if (options is Formats.GltfSaveOptions gltfOptions)
+            {
+                Formats.GltfWriter.Write(stream, this, gltfOptions);
+            }
+            else if (options is Formats.FbxSaveOptions fbxOptions)
+            {
+                throw new NotSupportedException("FBX saving is not yet supported in the FOSS version");
+            }
+            else
+            {
+                throw new NotSupportedException($"File format not yet supported for saving");
+            }
         }
 
         /// <summary>
@@ -337,7 +464,15 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Save(Stream stream, SaveOptions options, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException("Saving to stream with SaveOptions and cancellation token is not yet implemented");
+            Save(stream, options);
+        }
+
+        /// <summary>
+        /// Saves the scene to specified path using specified file format.
+        /// </summary>
+        public void Save(string fileName, FileFormat format, CancellationToken cancellationToken)
+        {
+            Save(fileName, format);
         }
 
         /// <summary>
@@ -362,23 +497,11 @@ namespace Aspose.ThreeD
         /// <summary>
         /// Saves the scene to specified path using specified file format.
         /// </summary>
-        public void Save(string fileName, FileFormat format, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException("Saving to file with FileFormat and cancellation token is not yet implemented");
-        }
-
-        /// <summary>
-        /// Saves the scene to specified path using specified file format.
-        /// </summary>
         public void Save(string fileName, SaveOptions options)
         {
-            if (options is Formats.ObjSaveOptions objOptions)
+            using (var stream = File.OpenWrite(fileName))
             {
-                Formats.ObjWriter.Write(fileName, this, objOptions);
-            }
-            else
-            {
-                throw new NotSupportedException($"File format not yet supported for saving");
+                Save(stream, options);
             }
         }
 
@@ -387,7 +510,7 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Save(string fileName, SaveOptions options, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException("Saving to file with SaveOptions and cancellation token is not yet implemented");
+            Save(fileName, options);
         }
 
         /// <summary>

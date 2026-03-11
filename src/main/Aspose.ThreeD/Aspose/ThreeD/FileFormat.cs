@@ -18,6 +18,11 @@ namespace Aspose.ThreeD
         private readonly FileContentType _contentType;
         private readonly FileFormatType _fileFormatType;
 
+        internal static FileFormat ObjFormat { get;	private set; } = null!;
+        internal static FileFormat StlFormat { get;	private set; } = null!;
+        internal static FileFormat GltfFormat { get;	private set; } = null!;
+        internal static FileFormat FbxFormat { get;	private set; } = null!;
+
         static FileFormat()
         {
             InitializeFormats();
@@ -99,13 +104,145 @@ namespace Aspose.ThreeD
         /// </summary>
         public static FileFormat Detect(Stream stream, string? fileName)
         {
+            if (stream.CanRead && stream.CanSeek)
+            {
+                var position = stream.Position;
+                try
+                {
+                    if (TryDetectObj(stream, fileName))
+                        return ObjFormat;
+                    if (TryDetectStl(stream, fileName))
+                        return StlFormat;
+                    if (TryDetectGltf(stream, fileName))
+                        return GltfFormat;
+                }
+                finally
+                {
+                    stream.Position = position;
+                }
+            }
+
             if (fileName != null)
             {
                 var ext = Path.GetExtension(fileName);
                 return GetFormatByExtension(ext);
             }
 
-            throw new ArgumentException("Cannot detect file format without file name");
+            throw new ArgumentException("Cannot detect file format without file name or stream data");
+        }
+
+        private static bool TryDetectObj(Stream stream, string? fileName)
+        {
+            if (fileName != null)
+            {
+                var ext = Path.GetExtension(fileName).ToLower();
+                if (ext == ".obj")
+                    return true;
+            }
+
+            try
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+                
+                var buffer = new byte[Math.Min(500, (int)stream.Length)];
+                var bytesRead = stream.Read(buffer, 0, buffer.Length);
+                
+                if (bytesRead > 0)
+                {
+                    var header = System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRead).ToLower();
+                    if (header.Contains("# obj") || header.Contains("v "))
+                        return true;
+                }
+            }
+            catch
+            {
+            }
+
+            return false;
+        }
+
+        private static bool TryDetectStl(Stream stream, string? fileName)
+        {
+            if (fileName != null)
+            {
+                var ext = Path.GetExtension(fileName).ToLower();
+                if (ext == ".stl")
+                    return true;
+            }
+
+            try
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+                
+                var headerBuffer = new byte[5];
+                var bytesRead = stream.Read(headerBuffer, 0, 5);
+                
+                var header = System.Text.Encoding.ASCII.GetString(headerBuffer, 0, bytesRead);
+                
+                if (bytesRead >= 5 && header.ToLower().StartsWith("solid"))
+                    return true;
+
+                stream.Seek(0, SeekOrigin.Begin);
+                var firstByteBuffer = new byte[1];
+                stream.Read(firstByteBuffer, 0, 1);
+                var firstByte = firstByteBuffer[0];
+                
+                if (firstByte == 's' || firstByte == '0' || firstByte == '1' || firstByte == '2' || firstByte == '3' || firstByte == '4' || firstByte == '5' || firstByte == '6' || firstByte == '7' || firstByte == '8' || firstByte == '9')
+                {
+                    stream.Seek(80, SeekOrigin.Begin);
+                    var countBuffer = new byte[4];
+                    var countBytesRead = stream.Read(countBuffer, 0, 4);
+                    
+                    if (countBytesRead == 4)
+                    {
+                        var count = BitConverter.ToInt32(countBuffer, 0);
+                        if (count > 0 && count < 1000000)
+                            return true;
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            return false;
+        }
+
+        private static bool TryDetectGltf(Stream stream, string? fileName)
+        {
+            if (fileName != null)
+            {
+                var ext = Path.GetExtension(fileName).ToLower();
+                if (ext == ".gltf" || ext == ".glb")
+                    return true;
+            }
+
+            if (!stream.CanRead || !stream.CanSeek)
+                return false;
+
+            try
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+                
+                var contentBuffer = new byte[Math.Min(1024, (int)stream.Length)];
+                var bytesRead = stream.Read(contentBuffer, 0, contentBuffer.Length);
+                
+                var content = System.Text.Encoding.UTF8.GetString(contentBuffer, 0, bytesRead);
+                
+                var header = content.Length >= 4 ? content.Substring(0, 4) : content;
+                if (header == "glTF")
+                    return true;
+                
+                if (content.StartsWith("{") && (content.Contains("\"asset\"") || content.Contains("\"scene\"") || content.Contains("\"nodes\"")))
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -143,15 +280,15 @@ namespace Aspose.ThreeD
 
         private static void InitializeFormats()
         {
-            var objFormat = new ObjFormat();
-            var stlFormat = new StlFormat();
-            var gltfFormat = new GltfFormat();
-            var fbxFormat = new FbxFormat();
+            ObjFormat = new ObjFormat();
+            StlFormat = new StlFormat();
+            GltfFormat = new GltfFormat();
+            FbxFormat = new FbxFormat();
 
-            _formats.Add(objFormat);
-            _formats.Add(stlFormat);
-            _formats.Add(gltfFormat);
-            _formats.Add(fbxFormat);
+            _formats.Add(ObjFormat);
+            _formats.Add(StlFormat);
+            _formats.Add(GltfFormat);
+            _formats.Add(FbxFormat);
         }
     }
 
