@@ -24,6 +24,8 @@ namespace Aspose.ThreeD
         internal static FileFormat StlFormat { get;	private set; } = null!;
         internal static FileFormat GltfFormat { get;	private set; } = null!;
         internal static FileFormat FbxFormat { get;	private set; } = null!;
+        internal static FileFormat TmfFormat { get;	private set; } = null!;
+        internal static FileFormat ColladaFormat { get;	private set; } = null!;
 
         static FileFormat()
         {
@@ -163,11 +165,15 @@ namespace Aspose.ThreeD
             StlFormat = new StlFormat();
             GltfFormat = new GltfFormat();
             FbxFormat = new FbxFormat();
+            TmfFormat = new TmfFormat();
+            ColladaFormat = new ColladaFormat();
 
             _formats.Add(ObjFormat);
             _formats.Add(StlFormat);
             _formats.Add(GltfFormat);
             _formats.Add(FbxFormat);
+            _formats.Add(TmfFormat);
+            _formats.Add(ColladaFormat);
         }
     }
 
@@ -385,4 +391,100 @@ namespace Aspose.ThreeD
             return false;
         }
     }
+
+    internal class TmfFormat : FileFormat
+    {
+        public TmfFormat() : base(".3mf", new[] { ".3mf" }, new Version(1, 0), true, true, FileContentType.Binary, new FileFormatType(".3mf"), new Formats.Microsoft3MFReader(), new Formats.TmfWriter())
+        {
+        }
+
+        public override Formats.LoadOptions CreateLoadOptions()
+        {
+            return new Formats.TmfLoadOptions();
+        }
+
+        public override Formats.SaveOptions CreateSaveOptions()
+        {
+            return new Formats.TmfSaveOptions();
+        }
+
+        public override bool CanDetect(Stream stream, string? fileName)
+        {
+            if (fileName != null)
+            {
+                var ext = Path.GetExtension(fileName).ToLower();
+                if (ext == ".3mf")
+                    return true;
+            }
+
+            if (!stream.CanRead || !stream.CanSeek)
+                return false;
+
+            try
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+                var buffer = new byte[4];
+                var bytesRead = stream.Read(buffer, 0, 4);
+                if (bytesRead >= 4)
+                {
+                    var signature = BitConverter.ToUInt32(buffer, 0);
+                    if (signature == 0x30464D33)
+                        return true;
+                }
+            }
+            catch
+            {
+            }
+
+            return false;
+        }
+    }
+
+    internal class ColladaFormat : FileFormat
+    {
+        public ColladaFormat() : base(".dae", new[] { ".dae" }, new Version(1, 4), true, true, FileContentType.ASCII, new FileFormatType(".dae"), new Formats.ColladaReader(), new Formats.ColladaWriter())
+        {
+        }
+
+        public override Formats.LoadOptions CreateLoadOptions()
+        {
+            return new Formats.ColladaLoadOptions();
+        }
+
+        public override Formats.SaveOptions CreateSaveOptions()
+        {
+            return new Formats.ColladaSaveOptions();
+        }
+
+        public override bool CanDetect(Stream stream, string? fileName)
+        {
+            if (fileName != null)
+            {
+                var ext = Path.GetExtension(fileName).ToLower();
+                if (ext == ".dae")
+                    return true;
+            }
+
+            try
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+                
+                var buffer = new byte[Math.Min(100, (int)stream.Length)];
+                var bytesRead = stream.Read(buffer, 0, buffer.Length);
+                
+                if (bytesRead > 0)
+                {
+                    var header = System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRead).ToLower();
+                    if (header.Contains("<collada") || header.Contains("< COLLADA"))
+                        return true;
+                }
+            }
+            catch
+            {
+            }
+
+            return false;
+        }
+    }
+
 }

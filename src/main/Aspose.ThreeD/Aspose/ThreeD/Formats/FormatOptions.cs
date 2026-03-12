@@ -174,4 +174,62 @@ namespace Aspose.ThreeD.Formats
         {
         }
     }
+
+    /// <summary>
+    /// Save options for Collada format
+    /// </summary>
+    public class ColladaSaveOptions : SaveOptions
+    {
+        /// <summary>
+        /// Initializes a new instance of the ColladaSaveOptions class
+        /// </summary>
+        public ColladaSaveOptions()
+        {
+            Indented = false;
+            TransformStyle = ColladaTransformStyle.Components;
+        }
+
+        /// <summary>
+        /// Gets or sets whether the exported XML document is indented.
+        /// </summary>
+        public bool Indented { get; set; }
+
+        /// <summary>
+        /// Gets or sets the style of node transformation
+        /// </summary>
+        public ColladaTransformStyle TransformStyle { get; set; }
+    }
+
+    /// <summary>
+    /// Load options for Collada format
+    /// </summary>
+    public class ColladaLoadOptions : LoadOptions
+    {
+        /// <summary>
+        /// Initializes a new instance of the ColladaLoadOptions class
+        /// </summary>
+        public ColladaLoadOptions() : base()
+        {
+            FlipCoordinateSystem = false;
+        }
+
+        /// <summary>
+        /// Gets or sets whether flip coordinate system of control points/normal during importing
+        /// </summary>
+        public bool FlipCoordinateSystem { get; set; }
+    }
+
+    public class TmfLoadOptions : LoadOptions
+    {
+        public TmfLoadOptions() : base()
+        {
+        }
+    }
+
+    public class TmfSaveOptions : SaveOptions
+    {
+        public TmfSaveOptions() : base()
+        {
+        }
+    }
 }

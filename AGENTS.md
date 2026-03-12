@@ -29,6 +29,8 @@ This is a FOSS (Free and Open Source) implementation of Aspose.3D for .NET 26.1.
 ## Implementation Status
 
 ### Fully Implemented
+- Collada format reader (ColladaReader - complete)
+- Group entity class (Group)
 - Core scene graph (Scene, Node, Entity, SceneObject, A3DObject)
 - Basic transforms (Transform, GlobalTransform)
 - All Utilities namespace classes:
@@ -61,8 +63,8 @@ This is a FOSS (Free and Open Source) implementation of Aspose.3D for .NET 26.1.
 - OBJ format reader and writer (ObjReader, ObjWriter)
 - STL format reader and writer (StlReader, StlWriter)
 - glTF format reader and writer (GltfReader, GltfWriter)
-- FBX binary format reader (FbxReader - partial, needs scene graph parsing)
-- Scene.Open() method for OBJ/STL/gltF/FBX format loading
+- FBX binary format reader/writer (FbxReader, FbxWriter - complete)
+- Scene.Open() method for OBJ/STL/gltF/FBX/Collada format loading
 - Scene.Save() method for OBJ/STL/gltF format saving
 
 ### Stub Implementations
@@ -70,7 +72,7 @@ This is a FOSS (Free and Open Source) implementation of Aspose.3D for .NET 26.1.
 |-----|--------|-------|
 | Scene.Render() | Stub (throws exception) | Rendering not implemented in FOSS version |
 | Scene.Open() for FBX | Partial (binary parsing complete, scene graph needs work) | FBX importer structure exists but needs complete scene graph parsing |
-| Scene.Save() for FBX | Stub (throws exception) | FBX export not implemented |
+| Scene.Save() for FBX | Stub (throws exception) | FBX export (FbxWriter) |
 | Geometry.GetDeformers() | Stub (throws exception) | Not yet implemented |
 | Watermark encoding/decoding | Stub (throws exception) | Watermark functionality not implemented in FOSS version |
 

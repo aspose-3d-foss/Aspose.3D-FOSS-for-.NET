@@ -1,0 +1,777 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using Aspose.ThreeD.Entities;
+using Aspose.ThreeD.Utilities;
+using Aspose.ThreeD.Shading;
+
+namespace Aspose.ThreeD.Formats
+{
+    internal class FbxWriter : IExporter
+    {
+        public void Export(Scene scene, Stream stream, SaveOptions options)
+        {
+            if (options is FbxSaveOptions fbxOptions)
+            {
+                Write(stream, scene, fbxOptions);
+            }
+            else
+            {
+                throw new ArgumentException("Options must be FbxSaveOptions", nameof(options));
+            }
+        }
+
+        private static void Write(Stream stream, Scene scene, FbxSaveOptions options)
+        {
+            using var writer = new BinaryWriter(stream, Encoding.ASCII, leaveOpen: true);
+
+            WriteHeader(writer);
+            WriteGlobalInfo(writer);
+            WriteObjects(writer, scene);
+            WriteConnections(writer, scene);
+            WriteFooter(writer);
+        }
+
+        private static void WriteHeader(BinaryWriter writer)
+        {
+            var header = "Kaydara FBX Binary  ";
+            writer.Write(Encoding.ASCII.GetBytes(header));
+            writer.Write((byte)0x00);
+            writer.Write((byte)0x1A);
+            writer.Write((byte)0x00);
+            writer.Write((byte)0xE8);
+            writer.Write((byte)0x1C);
+            writer.Write((byte)0x00);
+            writer.Write((byte)0x00);
+
+            WriteInt32(writer, 0);
+            WriteInt32(writer, 0);
+            WriteInt32(writer, 0);
+
+            WriteString(writer, "FBXHeaderExtension");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 0);
+            WriteInt32(writer, 0);
+
+            WriteString(writer, "FBXHeaderVersion");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteInt32(writer, 100);
+
+            WriteString(writer, "FBXVersion");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteInt32(writer, 7400);
+
+            WriteString(writer, "EncryptionType");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteInt32(writer, 0);
+
+            WriteString(writer, "CreationTimestamp");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 8);
+            WriteInt64(writer, 0);
+
+            WriteString(writer, "Creator");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteString(writer, "Aspose.3D FOSS");
+
+            WriteInt32(writer, 0);
+        }
+
+        private static void WriteGlobalInfo(BinaryWriter writer)
+        {
+            WriteScopeStart(writer, "GlobalInfo", 3, 72);
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteInt32(writer, 1);
+
+            WriteString(writer, "SceneInfo");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteString(writer, "UserData");
+
+            WriteInt32(writer, 0);
+        }
+
+        private static void WriteObjects(BinaryWriter writer, Scene scene)
+        {
+            WriteScopeStart(writer, "Objects", 1, 16);
+
+            var objectId = 1000;
+            var materialId = 2000;
+            var meshId = 3000;
+
+            var meshToId = new Dictionary<Mesh, int>();
+            var materialToId = new Dictionary<Material, int>();
+            var nodeToId = new Dictionary<Node, int>();
+
+            WriteMaterials(writer, scene, materialToId, ref materialId);
+            WriteMeshes(writer, scene, meshToId, ref meshId);
+            WriteNodes(writer, scene, nodeToId, ref objectId, meshToId, materialToId);
+
+            WriteInt32(writer, 0);
+        }
+
+        private static void WriteMaterials(BinaryWriter writer, Scene scene, Dictionary<Material, int> materialToId, ref int nextId)
+        {
+            var materials = new HashSet<Material>();
+            CollectMaterials(scene.RootNode, materials);
+
+            foreach (var material in materials)
+            {
+                WriteMaterial(writer, material, materialToId, ref nextId);
+            }
+        }
+
+        private static void CollectMaterials(Node node, HashSet<Material> materials)
+        {
+            foreach (var entity in node.Entities)
+            {
+                if (entity is Mesh mesh)
+                {
+                    foreach (var mat in node.Materials)
+                    {
+                        if (!materials.Contains(mat))
+                            materials.Add(mat);
+                    }
+                }
+            }
+
+            foreach (var childNode in node.ChildNodes)
+            {
+                CollectMaterials(childNode, materials);
+            }
+        }
+
+        private static void WriteMaterial(BinaryWriter writer, Material material, Dictionary<Material, int> materialToId, ref int nextId)
+        {
+            var id = nextId++;
+            materialToId[material] = id;
+
+            WriteScopeStart(writer, "Material", 1, 120);
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 8);
+            WriteInt64(writer, (long)id);
+
+            WriteString(writer, material.Name ?? "Material");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteInt32(writer, -1);
+
+            WriteString(writer, "ShadingModel");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteString(writer, "phong");
+
+            WriteString(writer, "Shininess");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 8);
+            WriteDouble(writer, 20.0);
+
+            WriteString(writer, "EmissiveColor");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 8);
+            WriteDouble(writer, 0.0);
+            WriteDouble(writer, 0.0);
+            WriteDouble(writer, 0.0);
+
+            WriteString(writer, "AmbientColor");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 8);
+            WriteDouble(writer, 0.2);
+            WriteDouble(writer, 0.2);
+            WriteDouble(writer, 0.2);
+
+            WriteString(writer, "DiffuseColor");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 8);
+            WriteDouble(writer, 0.8);
+            WriteDouble(writer, 0.8);
+            WriteDouble(writer, 0.8);
+
+            WriteString(writer, "SpecularColor");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 8);
+            WriteDouble(writer, 0.5);
+            WriteDouble(writer, 0.5);
+            WriteDouble(writer, 0.5);
+
+            WriteString(writer, " reflection");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 8);
+            WriteDouble(writer, 0.0);
+            WriteDouble(writer, 0.0);
+            WriteDouble(writer, 0.0);
+
+            WriteInt32(writer, 0);
+        }
+
+        private static void WriteMeshes(BinaryWriter writer, Scene scene, Dictionary<Mesh, int> meshToId, ref int nextId)
+        {
+            var meshSet = new HashSet<Mesh>();
+            CollectMeshes(scene.RootNode, meshSet);
+
+            foreach (var mesh in meshSet)
+            {
+                WriteMesh(writer, mesh, meshToId, ref nextId);
+            }
+        }
+
+        private static void CollectMeshes(Node node, HashSet<Mesh> meshSet)
+        {
+            foreach (var entity in node.Entities)
+            {
+                if (entity is Mesh mesh)
+                {
+                    if (!meshSet.Contains(mesh))
+                        meshSet.Add(mesh);
+                }
+                else if (entity is Primitive primitive)
+                {
+                    var primMesh = primitive.ToMesh();
+                    if (!meshSet.Contains(primMesh))
+                        meshSet.Add(primMesh);
+                }
+            }
+
+            foreach (var childNode in node.ChildNodes)
+            {
+                CollectMeshes(childNode, meshSet);
+            }
+        }
+
+        private static void WriteMesh(BinaryWriter writer, Mesh mesh, Dictionary<Mesh, int> meshToId, ref int nextId)
+        {
+            var id = nextId++;
+            meshToId[mesh] = id;
+
+            var vertices = mesh.ControlPoints;
+            var polygons = mesh.Polygons;
+
+            WriteScopeStart(writer, "Geometry", 1, 80 + vertices.Count * 24 + polygons.Count * 4);
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 8);
+            WriteInt64(writer, (long)id);
+
+            WriteString(writer, mesh.Name ?? "Mesh");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteInt32(writer, -1);
+
+            WriteString(writer, "Vertices");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteInt32(writer, vertices.Count * 3);
+
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                writer.Write((float)vertices[i].X);
+                writer.Write((float)vertices[i].Y);
+                writer.Write((float)vertices[i].Z);
+            }
+
+            WriteString(writer, "PolygonVertexIndex");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteInt32(writer, polygons.Count * 3);
+
+            foreach (var polygon in polygons)
+            {
+                if (polygon.Length == 3)
+                {
+                    writer.Write(polygon[0]);
+                    writer.Write(polygon[1]);
+                    writer.Write(-polygon[2] - 1);
+                }
+                else if (polygon.Length == 4)
+                {
+                    writer.Write(polygon[0]);
+                    writer.Write(polygon[1]);
+                    writer.Write(polygon[2]);
+                    writer.Write(-polygon[3] - 1);
+                }
+                else
+                {
+                    for (int i = 0; i < polygon.Length - 1; i++)
+                    {
+                        writer.Write(polygon[i]);
+                    }
+                    writer.Write(-polygon[polygon.Length - 1] - 1);
+                }
+            }
+
+            WriteString(writer, "LayerElementNormal");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 24);
+            WriteScopeStart(writer, "", 0, 0);
+
+            WriteString(writer, "Version");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteInt32(writer, 101);
+
+            WriteString(writer, "Name");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteString(writer, "");
+
+            WriteString(writer, "MappingInformationType");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteString(writer, "ByPolygonVertex");
+
+            WriteString(writer, "ReferenceInformationType");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteString(writer, "IndexToDirect");
+
+            WriteString(writer, "Normals");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteInt32(writer, 0);
+
+            WriteInt32(writer, 0);
+
+            WriteString(writer, "LayerElementTexture");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 24);
+            WriteScopeStart(writer, "", 0, 0);
+
+            WriteString(writer, "Version");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteInt32(writer, 101);
+
+            WriteString(writer, "Name");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteString(writer, "");
+
+            WriteString(writer, "MappingInformationType");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteString(writer, "ByPolygonVertex");
+
+            WriteString(writer, "ReferenceInformationType");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteString(writer, "IndexToDirect");
+
+            WriteString(writer, "UV");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteInt32(writer, 0);
+
+            WriteInt32(writer, 0);
+
+            WriteString(writer, "LayerElementMaterial");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 24);
+            WriteScopeStart(writer, "", 0, 0);
+
+            WriteString(writer, "Version");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteInt32(writer, 101);
+
+            WriteString(writer, "Name");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteString(writer, "");
+
+            WriteString(writer, "MappingInformationType");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteString(writer, "AllSame");
+
+            WriteString(writer, "ReferenceInformationType");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteString(writer, "Index");
+
+            WriteString(writer, "Materials");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteInt32(writer, 0);
+
+            WriteInt32(writer, 0);
+
+            WriteInt32(writer, 0);
+        }
+
+        private static void WriteNodes(BinaryWriter writer, Scene scene, Dictionary<Node, int> nodeToId, ref int nextId, Dictionary<Mesh, int> meshToId, Dictionary<Material, int> materialToId)
+        {
+            WriteNode(writer, scene, scene.RootNode, nodeToId, ref nextId, meshToId, materialToId, 0);
+        }
+
+        private static void WriteNode(BinaryWriter writer, Scene scene, Node node, Dictionary<Node, int> nodeToId, ref int nextId, Dictionary<Mesh, int> meshToId, Dictionary<Material, int> materialToId, int parentId)
+        {
+            var id = nextId++;
+            nodeToId[node] = id;
+
+            if (node == scene.RootNode)
+            {
+                WriteScopeStart(writer, "Model", 1, 104);
+                WriteInt32(writer, 1);
+                WriteInt32(writer, 8);
+                WriteInt64(writer, (long)id);
+
+                WriteString(writer, "RootNode");
+                WriteInt32(writer, 1);
+                WriteInt32(writer, 4);
+                WriteInt32(writer, -1);
+
+                WriteInt32(writer, 0);
+            }
+            else
+            {
+                var typeName = "Node";
+
+                foreach (var entity in node.Entities)
+                {
+                    if (entity is Mesh || entity is Primitive)
+                    {
+                        typeName = "Mesh";
+                        break;
+                    }
+                }
+
+                WriteScopeStart(writer, typeName, 1, 104);
+                WriteInt32(writer, 1);
+                WriteInt32(writer, 8);
+                WriteInt64(writer, (long)id);
+
+                WriteString(writer, node.Name ?? "Node");
+                WriteInt32(writer, 1);
+                WriteInt32(writer, 4);
+                WriteInt32(writer, -1);
+
+                WriteInt32(writer, 0);
+            }
+
+            WriteString(writer, "Properties70");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteInt32(writer, 1);
+
+            WriteString(writer, "Lcl Translation");
+            WriteInt32(writer, 5);
+            WriteInt32(writer, 24);
+            WriteString(writer, "Lcl Translation");
+            WriteDouble(writer, node.Transform.Translation.X);
+            WriteDouble(writer, node.Transform.Translation.Y);
+            WriteDouble(writer, node.Transform.Translation.Z);
+
+            WriteString(writer, "Lcl Rotation");
+            WriteInt32(writer, 5);
+            WriteInt32(writer, 24);
+            WriteString(writer, "Lcl Rotation");
+            var euler = ConvertQuaternionToEuler(node.Transform.Rotation);
+            WriteDouble(writer, euler.X);
+            WriteDouble(writer, euler.Y);
+            WriteDouble(writer, euler.Z);
+
+            WriteString(writer, "Lcl Scaling");
+            WriteInt32(writer, 5);
+            WriteInt32(writer, 24);
+            WriteString(writer, "Lcl Scaling");
+            WriteDouble(writer, node.Transform.Scale.X);
+            WriteDouble(writer, node.Transform.Scale.Y);
+            WriteDouble(writer, node.Transform.Scale.Z);
+
+            WriteInt32(writer, 0);
+
+            WriteString(writer, "Properties");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteInt32(writer, 1);
+
+            WriteString(writer, "Visible");
+            WriteInt32(writer, 5);
+            WriteInt32(writer, 4);
+            WriteString(writer, "Visible");
+            writer.Write(1);
+
+            WriteInt32(writer, 0);
+
+            WriteString(writer, "UpAxis");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 8);
+            WriteInt64(writer, 1);
+
+            WriteString(writer, "FrontAxis");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 8);
+            WriteInt64(writer, 2);
+
+            WriteString(writer, "SignDir");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 8);
+            WriteInt64(writer, 1);
+
+            WriteInt32(writer, 0);
+
+            WriteString(writer, "Geometry");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 8);
+            WriteInt64(writer, 0);
+
+            if (node.Entities != null)
+            {
+                foreach (var entity in node.Entities)
+                {
+                    if (entity is Mesh mesh)
+                    {
+                        if (meshToId.TryGetValue(mesh, out int meshId))
+                        {
+                            WriteString(writer, "Geometry");
+                            WriteInt32(writer, 1);
+                            WriteInt32(writer, 8);
+                            WriteInt64(writer, (long)meshId);
+                        }
+                    }
+                    else if (entity is Primitive primitive)
+                    {
+                        var primMesh = primitive.ToMesh();
+                        if (meshToId.TryGetValue(primMesh, out int primMeshId))
+                        {
+                            WriteString(writer, "Geometry");
+                            WriteInt32(writer, 1);
+                            WriteInt32(writer, 8);
+                            WriteInt64(writer, (long)primMeshId);
+                        }
+                    }
+                }
+            }
+
+            if (node.Materials != null && node.Materials.Count > 0)
+            {
+                foreach (var material in node.Materials)
+                {
+                    if (materialToId.TryGetValue(material, out int matId))
+                    {
+                        WriteString(writer, "Material");
+                        WriteInt32(writer, 1);
+                        WriteInt32(writer, 8);
+                        WriteInt64(writer, (long)matId);
+                    }
+                }
+            }
+
+            WriteInt32(writer, 0);
+
+            foreach (var childNode in node.ChildNodes)
+            {
+                WriteNode(writer, scene, childNode, nodeToId, ref nextId, meshToId, materialToId, id);
+            }
+        }
+
+        private static FVector3 ConvertQuaternionToEuler(Quaternion q)
+        {
+            float x = q.X;
+            float y = q.Y;
+            float z = q.Z;
+            float w = q.W;
+
+            float sinpitch = 2 * (w * y - z * x);
+            float pitch;
+            
+            if (Math.Abs(sinpitch) >= 1)
+            {
+                pitch = (float)(Math.PI / 2 * Math.Sign(sinpitch));
+            }
+            else
+            {
+                pitch = (float)Math.Asin(sinpitch);
+            }
+
+            float yaw = (float)Math.Atan2(2 * (w * z + x * y), 1 - 2 * (y * y + z * z));
+            float roll = (float)Math.Atan2(2 * (w * x + y * z), 1 - 2 * (x * x + y * y));
+
+            return new FVector3(
+                (float)(pitch * 180.0 / Math.PI),
+                (float)(yaw * 180.0 / Math.PI),
+                (float)(roll * 180.0 / Math.PI)
+            );
+        }
+
+        private static void WriteConnections(BinaryWriter writer, Scene scene)
+        {
+            WriteScopeStart(writer, "Connections", 1, 16);
+
+            var nodeToId = new Dictionary<Node, int>();
+            var meshToId = new Dictionary<Mesh, int>();
+            var materialToId = new Dictionary<Material, int>();
+
+            CollectIds(scene.RootNode, nodeToId, meshToId, materialToId, 1000);
+
+            WriteString(writer, "C");
+            WriteInt32(writer, 1);
+            WriteInt32(writer, 4);
+            WriteString(writer, "OO");
+
+            foreach (var childNode in scene.RootNode.ChildNodes)
+            {
+                WriteScopeStart(writer, "", 0, 0);
+                WriteInt64(writer, (long)nodeToId[childNode]);
+                WriteInt64(writer, 0);
+                WriteInt32(writer, 0);
+            }
+
+            foreach (var childNode in scene.RootNode.ChildNodes)
+            {
+                WriteConnectionsRecursive(writer, childNode, nodeToId, meshToId, materialToId);
+            }
+
+            WriteInt32(writer, 0);
+        }
+
+        private static void WriteConnectionsRecursive(BinaryWriter writer, Node node, Dictionary<Node, int> nodeToId, Dictionary<Mesh, int> meshToId, Dictionary<Material, int> materialToId)
+        {
+            foreach (var childNode in node.ChildNodes)
+            {
+                WriteString(writer, "C");
+                WriteInt32(writer, 1);
+                WriteInt32(writer, 4);
+                WriteString(writer, "OO");
+
+                WriteScopeStart(writer, "", 0, 0);
+                WriteInt64(writer, (long)nodeToId[childNode]);
+                WriteInt64(writer, (long)nodeToId[node]);
+                WriteInt32(writer, 0);
+            }
+
+            foreach (var entity in node.Entities)
+            {
+                if (entity is Mesh mesh)
+                {
+                    if (meshToId.TryGetValue(mesh, out int meshId))
+                    {
+                        WriteString(writer, "C");
+                        WriteInt32(writer, 1);
+                        WriteInt32(writer, 4);
+                        WriteString(writer, "OO");
+
+                        WriteScopeStart(writer, "", 0, 0);
+                        WriteInt64(writer, (long)meshId);
+                        WriteInt64(writer, (long)nodeToId[node]);
+                        WriteInt32(writer, 0);
+                    }
+                }
+                else if (entity is Primitive primitive)
+                {
+                    var primMesh = primitive.ToMesh();
+                    if (meshToId.TryGetValue(primMesh, out int primMeshId))
+                    {
+                        WriteString(writer, "C");
+                        WriteInt32(writer, 1);
+                        WriteInt32(writer, 4);
+                        WriteString(writer, "OO");
+
+                        WriteScopeStart(writer, "", 0, 0);
+                        WriteInt64(writer, (long)primMeshId);
+                        WriteInt64(writer, (long)nodeToId[node]);
+                        WriteInt32(writer, 0);
+                    }
+                }
+            }
+
+            foreach (var material in node.Materials)
+            {
+                if (materialToId.TryGetValue(material, out int matId))
+                {
+                    WriteString(writer, "C");
+                    WriteInt32(writer, 1);
+                    WriteInt32(writer, 4);
+                    WriteString(writer, "OO");
+
+                    WriteScopeStart(writer, "", 0, 0);
+                    WriteInt64(writer, (long)matId);
+                    WriteInt64(writer, (long)nodeToId[node]);
+                    WriteInt32(writer, 0);
+                }
+            }
+
+            foreach (var childNode in node.ChildNodes)
+            {
+                WriteConnectionsRecursive(writer, childNode, nodeToId, meshToId, materialToId);
+            }
+        }
+
+        private static void CollectIds(Node node, Dictionary<Node, int> nodeToId, Dictionary<Mesh, int> meshToId, Dictionary<Material, int> materialToId, int nextId)
+        {
+            nodeToId[node] = nextId++;
+
+            foreach (var entity in node.Entities)
+            {
+                if (entity is Mesh mesh)
+                {
+                    if (!meshToId.ContainsKey(mesh))
+                        meshToId[mesh] = nextId++;
+                }
+                else if (entity is Primitive primitive)
+                {
+                    var primMesh = primitive.ToMesh();
+                    if (!meshToId.ContainsKey(primMesh))
+                        meshToId[primMesh] = nextId++;
+                }
+            }
+
+            foreach (var material in node.Materials)
+            {
+                if (!materialToId.ContainsKey(material))
+                    materialToId[material] = nextId++;
+            }
+
+            foreach (var childNode in node.ChildNodes)
+            {
+                CollectIds(childNode, nodeToId, meshToId, materialToId, nextId);
+            }
+        }
+
+        private static void WriteFooter(BinaryWriter writer)
+        {
+            WriteInt32(writer, 0);
+        }
+
+        private static void WriteScopeStart(BinaryWriter writer, string name, int propCount, int propLength)
+        {
+            WriteInt64(writer, 0);
+            WriteInt32(writer, propCount);
+            WriteInt32(writer, propLength);
+            WriteString(writer, name);
+        }
+
+        private static void WriteInt32(BinaryWriter writer, int value)
+        {
+            writer.Write(value);
+        }
+
+        private static void WriteInt64(BinaryWriter writer, long value)
+        {
+            writer.Write(value);
+        }
+
+        private static void WriteDouble(BinaryWriter writer, double value)
+        {
+            writer.Write(value);
+        }
+
+        private static void WriteString(BinaryWriter writer, string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                writer.Write((byte)0);
+                return;
+            }
+
+            var bytes = Encoding.UTF8.GetBytes(value);
+            writer.Write((byte)bytes.Length);
+            writer.Write(bytes);
+        }
+    }
+}

@@ -350,5 +350,62 @@ namespace Aspose.ThreeD.Tests
             Assert.NotNull(scene.RootNode);
         }
 
+        [Fact]
+        public void LoadSceneFrom3mf_ShouldLoadCorrectly()
+        {
+            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/3mf/box.3mf";
+            
+            if (!File.Exists(testFile))
+            {
+                throw new FileNotFoundException($"Test file not found: {testFile}");
+            }
+
+            var scene = new Scene();
+            scene.Open(testFile);
+
+            Assert.NotNull(scene);
+            Assert.NotNull(scene.RootNode);
+            Assert.True(scene.RootNode.ChildNodes.Count > 0);
+        }
+
+        [Fact]
+        public void LoadSceneFrom3mfWithLoadOptions_ShouldLoadCorrectly()
+        {
+            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/3mf/box.3mf";
+            
+            if (!File.Exists(testFile))
+            {
+                throw new FileNotFoundException($"Test file not found: {testFile}");
+            }
+
+            using var stream = File.OpenRead(testFile);
+            var scene = new Scene();
+            var options = new Formats.TmfLoadOptions();
+            scene.Open(stream, options);
+
+            Assert.NotNull(scene);
+            Assert.NotNull(scene.RootNode);
+        }
+
+        [Fact]
+        public void SaveSceneTo3mf_ShouldThrowException()
+        {
+            var scene = new Scene();
+            var box = new Box(2, 2, 2);
+            scene.RootNode.CreateChildNode("BoxNode", box);
+
+            var outputFile = Path.Combine(Path.GetTempPath(), "test_output.3mf");
+            try
+            {
+                Assert.Throws<NotImplementedException>(() => scene.Save(outputFile));
+            }
+            finally
+            {
+                if (File.Exists(outputFile))
+                {
+                    File.Delete(outputFile);
+                }
+            }
+        }
     }
 }
