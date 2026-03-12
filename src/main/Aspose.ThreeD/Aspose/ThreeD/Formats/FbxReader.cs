@@ -6,17 +6,18 @@ using Aspose.ThreeD.Utilities;
 
 namespace Aspose.ThreeD.Formats
 {
-    internal class FbxReader
+    internal class FbxReader : IImporter
     {
-        public static Scene Read(string fileName, FbxLoadOptions options)
+        public Scene Import(Stream stream, LoadOptions options)
         {
-            using (var stream = File.OpenRead(fileName))
+            if (options is FbxLoadOptions fbxOptions)
             {
-                return Read(stream, options);
+                return Read(stream, fbxOptions);
             }
+            throw new ArgumentException("Options must be FbxLoadOptions", nameof(options));
         }
 
-        public static Scene Read(Stream stream, FbxLoadOptions options)
+        private static Scene Read(Stream stream, FbxLoadOptions options)
         {
             var buffer = new byte[18];
             var bytesRead = stream.Read(buffer, 0, 18);

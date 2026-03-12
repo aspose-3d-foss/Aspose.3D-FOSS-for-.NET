@@ -27,7 +27,7 @@ namespace Aspose.ThreeD.Tests
             }
 
             using var stream = File.OpenRead(testFile);
-            var format = FileFormat.Detect(stream, null);
+            var format = IOService.DetectFormat(stream, null);
 
             Assert.Equal(".obj", format.Extension);
         }
@@ -43,7 +43,7 @@ namespace Aspose.ThreeD.Tests
             }
 
             using var stream = File.OpenRead(testFile);
-            var format = FileFormat.Detect(stream, null);
+            var format = IOService.DetectFormat(stream, null);
 
             Assert.Equal(".stl", format.Extension);
         }
@@ -59,7 +59,7 @@ namespace Aspose.ThreeD.Tests
             }
 
             using var stream = File.OpenRead(testFile);
-            var format = FileFormat.Detect(stream, null);
+            var format = IOService.DetectFormat(stream, null);
 
             Assert.Equal(".gltf", format.Extension);
         }
@@ -173,7 +173,7 @@ namespace Aspose.ThreeD.Tests
             }
 
             using var stream = File.OpenRead(testFile);
-            var format = FileFormat.Detect(stream, "test.obj");
+            var format = IOService.DetectFormat(stream, "test.obj");
 
             Assert.Equal(".obj", format.Extension);
         }
@@ -189,7 +189,7 @@ namespace Aspose.ThreeD.Tests
             }
 
             using var stream = File.OpenRead(testFile);
-            var format = FileFormat.Detect(stream, "test.stl");
+            var format = IOService.DetectFormat(stream, "test.stl");
 
             Assert.Equal(".stl", format.Extension);
         }
@@ -205,7 +205,7 @@ namespace Aspose.ThreeD.Tests
             }
 
             using var stream = File.OpenRead(testFile);
-            var format = FileFormat.Detect(stream, "test.gltf");
+            var format = IOService.DetectFormat(stream, "test.gltf");
 
             Assert.Equal(".gltf", format.Extension);
         }

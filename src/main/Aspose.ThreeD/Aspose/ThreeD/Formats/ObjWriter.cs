@@ -9,18 +9,21 @@ namespace Aspose.ThreeD.Formats
     /// <summary>
     /// OBJ format writer
     /// </summary>
-    internal class ObjWriter
+    internal class ObjWriter : IExporter
     {
-        public static void Write(string fileName, Scene scene, ObjSaveOptions options)
+        public void Export(Scene scene, Stream stream, SaveOptions options)
         {
-            using (var stream = File.OpenWrite(fileName))
-            using (var writer = new StreamWriter(stream))
+            if (options is ObjSaveOptions objOptions)
             {
-                Write(writer, scene, options);
+                Write(stream, scene, objOptions);
+            }
+            else
+            {
+                throw new ArgumentException("Options must be ObjSaveOptions", nameof(options));
             }
         }
 
-        public static void Write(Stream stream, Scene scene, ObjSaveOptions options)
+        private static void Write(Stream stream, Scene scene, ObjSaveOptions options)
         {
             using (var writer = new StreamWriter(stream, leaveOpen: true))
             {

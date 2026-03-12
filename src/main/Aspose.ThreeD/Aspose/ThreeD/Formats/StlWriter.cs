@@ -7,17 +7,21 @@ using Aspose.ThreeD.Utilities;
 
 namespace Aspose.ThreeD.Formats
 {
-    internal class StlWriter
+    internal class StlWriter : IExporter
     {
-        public static void Write(string fileName, Scene scene, StlSaveOptions options)
+        public void Export(Scene scene, Stream stream, SaveOptions options)
         {
-            using (var stream = File.OpenWrite(fileName))
+            if (options is StlSaveOptions stlOptions)
             {
-                Write(stream, scene, options);
+                Write(stream, scene, stlOptions);
+            }
+            else
+            {
+                throw new ArgumentException("Options must be StlSaveOptions", nameof(options));
             }
         }
 
-        public static void Write(Stream stream, Scene scene, StlSaveOptions options)
+        private static void Write(Stream stream, Scene scene, StlSaveOptions options)
         {
             WriteBinarySTL(stream, scene);
         }

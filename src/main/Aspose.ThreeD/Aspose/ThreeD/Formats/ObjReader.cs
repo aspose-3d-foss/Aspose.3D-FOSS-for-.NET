@@ -9,17 +9,18 @@ namespace Aspose.ThreeD.Formats
     /// <summary>
     /// OBJ format reader
     /// </summary>
-    internal class ObjReader
+    internal class ObjReader : IImporter
     {
-        public static Scene Read(string fileName, ObjLoadOptions options)
+        public Scene Import(Stream stream, LoadOptions options)
         {
-            using (var stream = File.OpenRead(fileName))
+            if (options is ObjLoadOptions objOptions)
             {
-                return Read(stream, options);
+                return Read(stream, objOptions);
             }
+            throw new ArgumentException("Options must be ObjLoadOptions", nameof(options));
         }
 
-        public static Scene Read(Stream stream, ObjLoadOptions options)
+        private static Scene Read(Stream stream, ObjLoadOptions options)
         {
             var scene = new Scene();
             var currentNode = scene.RootNode.CreateChildNode("RootEntity");

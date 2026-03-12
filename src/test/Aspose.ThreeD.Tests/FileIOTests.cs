@@ -313,5 +313,42 @@ namespace Aspose.ThreeD.Tests
             Assert.NotNull(scene.RootNode);
             Assert.True(scene.RootNode.ChildNodes.Count > 0);
         }
+
+        [Fact]
+        public void LoadSceneFromFbx_ShouldLoadCorrectly()
+        {
+            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube.fbx";
+            
+            if (!File.Exists(testFile))
+            {
+                throw new FileNotFoundException($"Test file not found: {testFile}");
+            }
+
+            var scene = new Scene();
+            scene.Open(testFile);
+
+            Assert.NotNull(scene);
+            Assert.NotNull(scene.RootNode);
+        }
+
+        [Fact]
+        public void LoadSceneFromFbxWithLoadOptions_ShouldLoadCorrectly()
+        {
+            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube.fbx";
+            
+            if (!File.Exists(testFile))
+            {
+                throw new FileNotFoundException($"Test file not found: {testFile}");
+            }
+
+            using var stream = File.OpenRead(testFile);
+            var scene = new Scene();
+            var options = new Formats.FbxLoadOptions();
+            scene.Open(stream, options);
+
+            Assert.NotNull(scene);
+            Assert.NotNull(scene.RootNode);
+        }
+
     }
 }

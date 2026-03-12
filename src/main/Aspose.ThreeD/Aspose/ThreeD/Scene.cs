@@ -153,58 +153,33 @@ namespace Aspose.ThreeD
         public void Open(Stream stream, LoadOptions options, CancellationToken cancellationToken)
         {
             Clear();
-            
-            if (options is Formats.ObjLoadOptions objOptions)
+
+            FileFormat? format = options switch
             {
-                var loadedScene = Formats.ObjReader.Read(stream, objOptions);
-                foreach (var node in loadedScene.RootNode.ChildNodes)
-                {
-                    _rootNode.ChildNodes.Add(node);
-                }
-                foreach (var clip in loadedScene.AnimationClips)
-                {
-                    _animationClips.Add(clip);
-                }
-                foreach (var pose in loadedScene.Poses)
-                {
-                    _poses.Add(pose);
-                }
+                Formats.ObjLoadOptions => FileFormat.ObjFormat,
+                Formats.StlLoadOptions => FileFormat.StlFormat,
+                Formats.GltfLoadOptions => FileFormat.GltfFormat,
+                Formats.FbxLoadOptions => FileFormat.FbxFormat,
+                _ => null
+            };
+
+            if (format == null || format.Importer == null)
+            {
+                throw new NotSupportedException($"Import not supported for the provided options type");
             }
-            else if (options is Formats.StlLoadOptions stlOptions)
+
+            var loadedScene = format.Importer.Import(stream, options);
+            foreach (var node in loadedScene.RootNode.ChildNodes)
             {
-                var loadedScene = Formats.StlReader.Read(stream, stlOptions);
-                foreach (var node in loadedScene.RootNode.ChildNodes)
-                {
-                    _rootNode.ChildNodes.Add(node);
-                }
+                _rootNode.ChildNodes.Add(node);
             }
-            else if (options is Formats.GltfLoadOptions gltfOptions)
+            foreach (var clip in loadedScene.AnimationClips)
             {
-                var loadedScene = Formats.GltfReader.Read(stream, gltfOptions);
-                foreach (var node in loadedScene.RootNode.ChildNodes)
-                {
-                    _rootNode.ChildNodes.Add(node);
-                }
-                foreach (var clip in loadedScene.AnimationClips)
-                {
-                    _animationClips.Add(clip);
-                }
-                foreach (var pose in loadedScene.Poses)
-                {
-                    _poses.Add(pose);
-                }
+                _animationClips.Add(clip);
             }
-            else if (options is Formats.FbxLoadOptions fbxOptions)
+            foreach (var pose in loadedScene.Poses)
             {
-                var loadedScene = Formats.FbxReader.Read(stream, fbxOptions);
-                foreach (var node in loadedScene.RootNode.ChildNodes)
-                {
-                    _rootNode.ChildNodes.Add(node);
-                }
-            }
-            else
-            {
-                throw new NotSupportedException($"File format not yet supported for loading");
+                _poses.Add(pose);
             }
         }
 
@@ -213,7 +188,7 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Open(Stream stream)
         {
-            var format = FileFormat.Detect(stream, null);
+            var format = IOService.DetectFormat(stream, null);
             Open(stream, format.CreateLoadOptions());
         }
 
@@ -222,7 +197,7 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Open(Stream stream, CancellationToken cancellationToken)
         {
-            var format = FileFormat.Detect(stream, null);
+            var format = IOService.DetectFormat(stream, null);
             Open(stream, format.CreateLoadOptions(), cancellationToken);
         }
 
@@ -231,7 +206,7 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Open(Stream stream, string fileName)
         {
-            var format = FileFormat.Detect(stream, fileName);
+            var format = IOService.DetectFormat(stream, fileName);
             Open(stream, format.CreateLoadOptions());
         }
 
@@ -240,7 +215,7 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Open(Stream stream, string fileName, CancellationToken cancellationToken)
         {
-            var format = FileFormat.Detect(stream, fileName);
+            var format = IOService.DetectFormat(stream, fileName);
             Open(stream, format.CreateLoadOptions(), cancellationToken);
         }
 
@@ -268,9 +243,17 @@ namespace Aspose.ThreeD
         {
             Clear();
 
-            if (options is Formats.ObjLoadOptions objOptions)
+            var format = IOService.GetFormatByFileName(fileName);
+            var importer = format.Importer;
+
+            if (importer == null)
             {
-                var loadedScene = Formats.ObjReader.Read(fileName, objOptions);
+                throw new NotSupportedException($"Import not supported for {format.Extension}");
+            }
+
+            using (var stream = File.OpenRead(fileName))
+            {
+                var loadedScene = importer.Import(stream, options);
                 foreach (var node in loadedScene.RootNode.ChildNodes)
                 {
                     _rootNode.ChildNodes.Add(node);
@@ -283,50 +266,6 @@ namespace Aspose.ThreeD
                 {
                     _poses.Add(pose);
                 }
-            }
-            else if (options is Formats.StlLoadOptions stlOptions)
-            {
-                var loadedScene = Formats.StlReader.Read(fileName, stlOptions);
-                foreach (var node in loadedScene.RootNode.ChildNodes)
-                {
-                    _rootNode.ChildNodes.Add(node);
-                }
-                foreach (var clip in loadedScene.AnimationClips)
-                {
-                    _animationClips.Add(clip);
-                }
-                foreach (var pose in loadedScene.Poses)
-                {
-                    _poses.Add(pose);
-                }
-            }
-            else if (options is Formats.GltfLoadOptions gltfOptions)
-            {
-                var loadedScene = Formats.GltfReader.Read(fileName, gltfOptions);
-                foreach (var node in loadedScene.RootNode.ChildNodes)
-                {
-                    _rootNode.ChildNodes.Add(node);
-                }
-                foreach (var clip in loadedScene.AnimationClips)
-                {
-                    _animationClips.Add(clip);
-                }
-                foreach (var pose in loadedScene.Poses)
-                {
-                    _poses.Add(pose);
-                }
-            }
-            else if (options is Formats.FbxLoadOptions fbxOptions)
-            {
-                var loadedScene = Formats.FbxReader.Read(fileName, fbxOptions);
-                foreach (var node in loadedScene.RootNode.ChildNodes)
-                {
-                    _rootNode.ChildNodes.Add(node);
-                }
-            }
-            else
-            {
-                throw new NotSupportedException($"File format not yet supported for loading");
             }
         }
 
@@ -343,7 +282,7 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Open(string fileName)
         {
-            var format = FileFormat.Detect(fileName);
+            var format = IOService.GetFormatByFileName(fileName);
             Open(fileName, format.CreateLoadOptions());
         }
 
@@ -453,26 +392,21 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Save(Stream stream, SaveOptions options)
         {
-            if (options is Formats.ObjSaveOptions objOptions)
+            FileFormat? format = options switch
             {
-                Formats.ObjWriter.Write(stream, this, objOptions);
-            }
-            else if (options is Formats.StlSaveOptions stlOptions)
+                Formats.ObjSaveOptions => FileFormat.ObjFormat,
+                Formats.StlSaveOptions => FileFormat.StlFormat,
+                Formats.GltfSaveOptions => FileFormat.GltfFormat,
+                Formats.FbxSaveOptions => FileFormat.FbxFormat,
+                _ => null
+            };
+
+            if (format == null || format.Exporter == null)
             {
-                Formats.StlWriter.Write(stream, this, stlOptions);
+                throw new NotSupportedException($"Export not supported for the provided options type");
             }
-            else if (options is Formats.GltfSaveOptions gltfOptions)
-            {
-                Formats.GltfWriter.Write(stream, this, gltfOptions);
-            }
-            else if (options is Formats.FbxSaveOptions fbxOptions)
-            {
-                throw new NotSupportedException("FBX saving is not yet supported in the FOSS version");
-            }
-            else
-            {
-                throw new NotSupportedException($"File format not yet supported for saving");
-            }
+
+            format.Exporter.Export(this, stream, options);
         }
 
         /// <summary>
@@ -496,7 +430,7 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Save(string fileName)
         {
-            var format = FileFormat.Detect(fileName);
+            var format = IOService.GetFormatByFileName(fileName);
             var options = format.CreateSaveOptions();
             Save(fileName, options);
         }
@@ -515,9 +449,17 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Save(string fileName, SaveOptions options)
         {
+            var format = IOService.GetFormatByFileName(fileName);
+            var exporter = format.Exporter;
+
+            if (exporter == null)
+            {
+                throw new NotSupportedException($"Export not supported for {format.Extension}");
+            }
+
             using (var stream = File.OpenWrite(fileName))
             {
-                Save(stream, options);
+                exporter.Export(this, stream, options);
             }
         }
 

@@ -6,17 +6,18 @@ using Aspose.ThreeD.Utilities;
 
 namespace Aspose.ThreeD.Formats
 {
-    internal class StlReader
+    internal class StlReader : IImporter
     {
-        public static Scene Read(string fileName, StlLoadOptions options)
+        public Scene Import(Stream stream, LoadOptions options)
         {
-            using (var stream = File.OpenRead(fileName))
+            if (options is StlLoadOptions stlOptions)
             {
-                return Read(stream, options);
+                return Read(stream, stlOptions);
             }
+            throw new ArgumentException("Options must be StlLoadOptions", nameof(options));
         }
 
-        public static Scene Read(Stream stream, StlLoadOptions options)
+        private static Scene Read(Stream stream, StlLoadOptions options)
         {
             var scene = new Scene();
             var node = scene.RootNode.CreateChildNode("STLImport");

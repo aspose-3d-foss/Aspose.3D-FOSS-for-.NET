@@ -7,17 +7,18 @@ using Aspose.ThreeD.Utilities;
 
 namespace Aspose.ThreeD.Formats
 {
-    internal class GltfReader
+    internal class GltfReader : IImporter
     {
-        public static Scene Read(string fileName, GltfLoadOptions options)
+        public Scene Import(Stream stream, LoadOptions options)
         {
-            using (var stream = File.OpenRead(fileName))
+            if (options is GltfLoadOptions gltfOptions)
             {
-                return Read(stream, options);
+                return Read(stream, gltfOptions);
             }
+            throw new ArgumentException("Options must be GltfLoadOptions", nameof(options));
         }
 
-        public static Scene Read(Stream stream, GltfLoadOptions options)
+        private static Scene Read(Stream stream, GltfLoadOptions options)
         {
             var scene = new Scene();
             

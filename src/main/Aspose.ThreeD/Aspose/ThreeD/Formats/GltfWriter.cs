@@ -7,19 +7,22 @@ using Aspose.ThreeD.Utilities;
 
 namespace Aspose.ThreeD.Formats
 {
-    internal class GltfWriter
+    internal class GltfWriter : IExporter
     {
-        public static void Write(string fileName, Scene scene, GltfSaveOptions options)
+        public void Export(Scene scene, Stream stream, SaveOptions options)
         {
-            bool isBinary = fileName.EndsWith(".glb", StringComparison.OrdinalIgnoreCase);
-            
-            using (var stream = File.OpenWrite(fileName))
+            if (options is GltfSaveOptions gltfOptions)
             {
-                Write(stream, scene, options, isBinary);
+                bool isBinary = IsBinaryStream(stream);
+                Write(stream, scene, gltfOptions, isBinary);
+            }
+            else
+            {
+                throw new ArgumentException("Options must be GltfSaveOptions", nameof(options));
             }
         }
 
-        public static void Write(Stream stream, Scene scene, GltfSaveOptions options)
+        private static void Write(Stream stream, Scene scene, GltfSaveOptions options)
         {
             bool isBinary = IsBinaryStream(stream);
             Write(stream, scene, options, isBinary);
