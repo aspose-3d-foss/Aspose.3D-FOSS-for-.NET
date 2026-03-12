@@ -31,7 +31,18 @@ This is a FOSS (Free and Open Source) implementation of Aspose.3D for .NET 26.1.
 ### Fully Implemented
 - Core scene graph (Scene, Node, Entity, SceneObject, A3DObject)
 - Basic transforms (Transform, GlobalTransform)
-- Basic utilities (Vector2, Vector3, Vector4, Matrix4, Quaternion, BoundingBox)
+- All Utilities namespace classes:
+  - Vectors (FVector2, FVector3, FVector4, Vector2, Vector3, Vector4)
+  - Matrices (FMatrix4, Matrix4)
+  - Quaternions and rotations (Quaternion, RotationOrder, ComposeOrder)
+  - Bounding boxes (BoundingBox, BoundingBox2D, BoundingBoxExtent)
+  - Rectangles (Rect, RelativeRectangle)
+  - Transform builders (TransformBuilder)
+  - Vertex data (Vertex, VertexField, VertexDeclaration, VertexFieldDataType, VertexFieldSemantic)
+  - Math utilities (MathUtils)
+  - IO utilities (IOExtension, FileSystem)
+  - Attributes (SemanticAttribute)
+  - Exceptions (ParseException)
 - Node hierarchy management (CreateChildNode, AddChildNode, Merge, etc.)
 - Properties system (Property, PropertyCollection, PropertyFlags)
 - Materials (Material base class in Shading namespace)
@@ -48,16 +59,20 @@ This is a FOSS (Free and Open Source) implementation of Aspose.3D for .NET 26.1.
 - Mesh class with polygon and vertex data support
 - Primitive geometry classes (Box, Sphere, Cylinder)
 - OBJ format reader and writer (ObjReader, ObjWriter)
-- Scene.Open() method for OBJ format loading
-- Scene.Save() method for OBJ format saving
+- STL format reader and writer (StlReader, StlWriter)
+- glTF format reader and writer (GltfReader, GltfWriter)
+- FBX binary format reader (FbxReader - partial, needs scene graph parsing)
+- Scene.Open() method for OBJ/STL/gltF/FBX format loading
+- Scene.Save() method for OBJ/STL/gltF format saving
 
 ### Stub Implementations
 | API | Status | Notes |
 |-----|--------|-------|
 | Scene.Render() | Stub (throws exception) | Rendering not implemented in FOSS version |
-| Scene.Open() for STL/GLTF/FBX | Stub (throws exception) | Only OBJ implemented currently |
-| Scene.Save() for STL/GLTF/FBX | Stub (throws exception) | Only OBJ implemented currently |
+| Scene.Open() for FBX | Partial (binary parsing complete, scene graph needs work) | FBX importer structure exists but needs complete scene graph parsing |
+| Scene.Save() for FBX | Stub (throws exception) | FBX export not implemented |
 | Geometry.GetDeformers() | Stub (throws exception) | Not yet implemented |
+| Watermark encoding/decoding | Stub (throws exception) | Watermark functionality not implemented in FOSS version |
 
 ### Not Implemented (Throws Exception)
 | API | Reason |
@@ -70,14 +85,18 @@ This is a FOSS (Free and Open Source) implementation of Aspose.3D for .NET 26.1.
 
 Tests have been implemented:
 - SceneTests.cs - Tests for Scene class initialization and basic operations
-- FileIOTests.cs - Tests for OBJ file I/O and primitive geometry
+- FileIOTests.cs - Tests for OBJ and STL file I/O and primitive geometry
+- FormatDetectionTests.cs - Tests for format detection
 
-All 11 tests are passing.
+All 35 tests are passing.
 
 ## Test Data
 
 Sample files are located in `testdata/input/`:
 - `cube.obj` - Basic cube mesh
+- `stl_ascii.stl`, `stl_binary.stl` - STL files for testing
+- `cube.fbx` - FBX file for testing
+- GLTF test files in `testdata/gltf/`
 
 Expected outputs in `testdata/expected/`:
 - Will be populated as tests are added

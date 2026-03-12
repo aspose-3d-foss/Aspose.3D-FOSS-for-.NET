@@ -18,6 +18,13 @@ namespace Aspose.ThreeD.Utilities
             Z = z;
         }
 
+        public FVector3(Vector3 vec)
+        {
+            X = (float)vec.x;
+            Y = (float)vec.y;
+            Z = (float)vec.z;
+        }
+
         public static readonly FVector3 Zero = new FVector3(0, 0, 0);
         public static readonly FVector3 One = new FVector3(1, 1, 1);
 
