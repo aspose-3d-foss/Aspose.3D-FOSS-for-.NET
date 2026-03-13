@@ -39,6 +39,15 @@ namespace Aspose.ThreeD
         }
 
         /// <summary>
+        /// Gets the name
+        /// </summary>
+        /// <returns>The name of the object</returns>
+        public string GetName()
+        {
+            return Name;
+        }
+
+        /// <summary>
         /// Gets the collection of properties
         /// </summary>
         public PropertyCollection Properties => _properties;

@@ -38,6 +38,26 @@ namespace Aspose.ThreeD
 
         public static readonly Vector3 Zero = new Vector3(0, 0, 0);
         public static readonly Vector3 One = new Vector3(1, 1, 1);
+
+        public static Vector3 operator *(Vector3 v, float s)
+        {
+            return new Vector3(v.X * s, v.Y * s, v.Z * s);
+        }
+
+        public static Vector3 operator *(float s, Vector3 v)
+        {
+            return new Vector3(v.X * s, v.Y * s, v.Z * s);
+        }
+
+        public static Vector3 operator +(Vector3 left, Vector3 right)
+        {
+            return new Vector3(left.X + right.X, left.Y + right.Y, left.Z + right.Z);
+        }
+
+        public static Vector3 operator -(Vector3 left, Vector3 right)
+        {
+            return new Vector3(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
+        }
     }
 
     /// <summary>
@@ -56,6 +76,31 @@ namespace Aspose.ThreeD
             Y = y;
             Z = z;
             W = w;
+        }
+
+        public static Vector4 operator *(Vector4 v, float s)
+        {
+            return new Vector4(v.X * s, v.Y * s, v.Z * s, v.W * s);
+        }
+
+        public static Vector4 operator *(float s, Vector4 v)
+        {
+            return new Vector4(v.X * s, v.Y * s, v.Z * s, v.W * s);
+        }
+
+        public static Vector4 operator +(Vector4 left, Vector4 right)
+        {
+            return new Vector4(left.X + right.X, left.Y + right.Y, left.Z + right.Z, left.W + right.W);
+        }
+
+        public static Vector4 operator -(Vector4 left, Vector4 right)
+        {
+            return new Vector4(left.X - right.X, left.Y - right.Y, left.Z - right.Z, left.W - right.W);
+        }
+
+        public static Vector4 operator *(Vector4 left, Vector4 right)
+        {
+            return new Vector4(left.X * right.X, left.Y * right.Y, left.Z * right.Z, left.W * right.W);
         }
     }
 }

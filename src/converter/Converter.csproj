@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Aspose.ThreeD.Converter</RootNamespace>
+    <AssemblyName>aspose-3d-converter</AssemblyName>
+    <PackageId>Aspose.3D.Converter</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Aspose</Authors>
+    <Description>3D file format converter using Aspose.3D FOSS library</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\main\Aspose.ThreeD\Aspose.ThreeD.csproj" />
+  </ItemGroup>
+
+</Project>

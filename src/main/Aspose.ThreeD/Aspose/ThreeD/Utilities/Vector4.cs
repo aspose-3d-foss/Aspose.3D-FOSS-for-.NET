@@ -113,14 +113,29 @@ namespace Aspose.ThreeD.Utilities
             return new Vector4(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z, lhs.w * rhs.w);
         }
 
-        public static Vector4 operator *(Vector4 lhs, double rhs)
-        {
-            return new Vector4(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs, lhs.w * rhs);
-        }
+         public static Vector4 operator *(Vector4 lhs, double rhs)
+         {
+             return new Vector4(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs, lhs.w * rhs);
+         }
 
-        public static explicit operator FVector4(Vector4 v)
-        {
-            return new FVector4(v);
-        }
-    }
-}
+         public static Vector4 operator *(double lhs, Vector4 rhs)
+         {
+             return new Vector4(rhs.x * lhs, rhs.y * lhs, rhs.z * lhs, rhs.w * lhs);
+         }
+
+         public static Vector4 operator *(Vector4 lhs, float rhs)
+         {
+             return new Vector4(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs, lhs.w * rhs);
+         }
+
+         public static Vector4 operator *(float lhs, Vector4 rhs)
+         {
+             return new Vector4(rhs.x * lhs, rhs.y * lhs, rhs.z * lhs, rhs.w * lhs);
+         }
+
+         public static explicit operator FVector4(Vector4 v)
+         {
+             return new FVector4(v);
+         }
+     }
+ }

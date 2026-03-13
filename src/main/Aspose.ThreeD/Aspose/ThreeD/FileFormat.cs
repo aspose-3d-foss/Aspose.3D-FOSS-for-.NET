@@ -344,7 +344,7 @@ namespace Aspose.ThreeD
 
     internal class FbxFormat : FileFormat
     {
-        public FbxFormat() : base(".fbx", new[] { ".fbx" }, new Version(7, 4), true, true, FileContentType.Binary, new FileFormatType(".fbx"), new Formats.FbxReader(), null)
+        public FbxFormat() : base(".fbx", new[] { ".fbx" }, new Version(7, 4), true, true, FileContentType.Binary, new FileFormatType(".fbx"), new Formats.FbxReader(), new Formats.FbxWriter())
         {
         }
 

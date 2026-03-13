@@ -172,7 +172,13 @@ namespace Aspose.ThreeD.Formats
         /// </summary>
         public FbxSaveOptions() : base()
         {
+            IsAscii = false;
         }
+
+        /// <summary>
+        /// Gets or sets whether to export in ASCII format (default is binary)
+        /// </summary>
+        public bool IsAscii { get; set; }
     }
 
     /// <summary>

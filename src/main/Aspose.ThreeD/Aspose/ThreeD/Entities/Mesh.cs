@@ -12,7 +12,6 @@ namespace Aspose.ThreeD.Entities
     {
         private readonly List<int[]> _polygons;
         private readonly List<int> _edges;
-        private string _name;
 
         /// <summary>
         /// Initializes a new instance of the Mesh class.
@@ -28,16 +27,6 @@ namespace Aspose.ThreeD.Entities
         {
             _polygons = new List<int[]>();
             _edges = new List<int>();
-            _name = name;
-        }
-
-        /// <summary>
-        /// Gets the name of the mesh.
-        /// </summary>
-        public string Name
-        {
-            get => _name;
-            set => _name = value;
         }
 
         /// <summary>

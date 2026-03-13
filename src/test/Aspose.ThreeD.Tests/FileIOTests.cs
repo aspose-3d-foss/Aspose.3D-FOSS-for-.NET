@@ -388,7 +388,36 @@ namespace Aspose.ThreeD.Tests
         }
 
         [Fact]
-        public void SaveSceneTo3mf_ShouldThrowException()
+        public void SaveSceneTo3mfStream_ShouldCreateValidFile()
+        {
+            var scene = new Scene();
+            var box = new Box(2, 2, 2);
+            scene.RootNode.CreateChildNode("BoxNode", box);
+
+            using var stream = new MemoryStream();
+            var options = new Formats.TmfSaveOptions();
+            scene.Save(stream, options);
+
+            stream.Seek(0, SeekOrigin.Begin);
+            var content = stream.ToArray();
+            
+            Assert.True(content.Length > 0);
+            
+            using var zip = new System.IO.Compression.ZipArchive(new MemoryStream(content), System.IO.Compression.ZipArchiveMode.Read);
+            Assert.Equal(3, zip.Entries.Count);
+            
+            var modelEntry = zip.GetEntry("3D/3dmodel.model");
+            Assert.NotNull(modelEntry);
+            
+            using var reader = new StreamReader(modelEntry.Open());
+            var xmlContent = reader.ReadToEnd();
+            Assert.Contains("<?xml", xmlContent);
+            Assert.Contains("<model", xmlContent);
+            Assert.Contains("millimeter", xmlContent);
+        }
+
+        [Fact]
+        public void SaveSceneTo3mfFile_ShouldCreateValidFile()
         {
             var scene = new Scene();
             var box = new Box(2, 2, 2);
@@ -397,7 +426,123 @@ namespace Aspose.ThreeD.Tests
             var outputFile = Path.Combine(Path.GetTempPath(), "test_output.3mf");
             try
             {
-                Assert.Throws<NotImplementedException>(() => scene.Save(outputFile));
+                scene.Save(outputFile);
+                
+                Assert.True(File.Exists(outputFile));
+                
+                using var zip = new System.IO.Compression.ZipArchive(File.OpenRead(outputFile), System.IO.Compression.ZipArchiveMode.Read);
+                Assert.Equal(3, zip.Entries.Count);
+                
+                var modelEntry = zip.GetEntry("3D/3dmodel.model");
+                Assert.NotNull(modelEntry);
+            }
+            finally
+            {
+                if (File.Exists(outputFile))
+                {
+                    File.Delete(outputFile);
+                }
+            }
+        }
+
+        [Fact]
+        public void SaveSceneTo3mfWithPrimitive_ShouldCreateValidFile()
+        {
+            var scene = new Scene();
+            var sphere = new Sphere(1);
+            scene.RootNode.CreateChildNode("SphereNode", sphere);
+
+            using var stream = new MemoryStream();
+            var options = new Formats.TmfSaveOptions();
+            scene.Save(stream, options);
+
+            stream.Seek(0, SeekOrigin.Begin);
+            
+            using var zip = new System.IO.Compression.ZipArchive(new MemoryStream(stream.ToArray()), System.IO.Compression.ZipArchiveMode.Read);
+            var modelEntry = zip.GetEntry("3D/3dmodel.model");
+            Assert.NotNull(modelEntry);
+            
+            using var reader = new StreamReader(modelEntry.Open());
+            var xmlContent = reader.ReadToEnd();
+            Assert.Contains("<mesh", xmlContent);
+            Assert.Contains("<vertices", xmlContent);
+            Assert.Contains("<triangles", xmlContent);
+        }
+
+        [Fact]
+        public void SaveSceneTo3mfMultipleObjects_ShouldCreateValidFile()
+        {
+            var scene = new Scene();
+            var box = new Box(2, 2, 2);
+            var sphere = new Sphere(1);
+            scene.RootNode.CreateChildNode("BoxNode", box);
+            scene.RootNode.CreateChildNode("SphereNode", sphere);
+
+            using var stream = new MemoryStream();
+            var options = new Formats.TmfSaveOptions();
+            scene.Save(stream, options);
+
+            stream.Seek(0, SeekOrigin.Begin);
+            
+            using var zip = new System.IO.Compression.ZipArchive(new MemoryStream(stream.ToArray()), System.IO.Compression.ZipArchiveMode.Read);
+            var modelEntry = zip.GetEntry("3D/3dmodel.model");
+            Assert.NotNull(modelEntry);
+            
+            using var reader = new StreamReader(modelEntry.Open());
+            var xmlContent = reader.ReadToEnd();
+            Assert.Contains("<resources", xmlContent);
+            Assert.Contains("<object", xmlContent);
+            Assert.Contains("<build", xmlContent);
+        }
+
+        [Fact]
+        public void SaveSceneToFbxAscii_ShouldCreateValidAsciiFile()
+        {
+            var scene = new Scene();
+            var box = new Box(2, 2, 2);
+            var node = scene.RootNode.CreateChildNode("BoxNode", box);
+
+            var outputFile = Path.Combine(Path.GetTempPath(), "test_output_ascii.fbx");
+            try
+            {
+                var options = new Formats.FbxSaveOptions() { IsAscii = true };
+                scene.Save(outputFile, options);
+
+                Assert.True(File.Exists(outputFile));
+                var content = File.ReadAllText(outputFile);
+                
+                Assert.Contains("; FBX", content);
+                Assert.Contains("FBXHeaderExtension:", content);
+                Assert.Contains("GlobalSettings:", content);
+                Assert.Contains("Objects:", content);
+                Assert.Contains("Connections:", content);
+            }
+            finally
+            {
+                if (File.Exists(outputFile))
+                {
+                    File.Delete(outputFile);
+                }
+            }
+        }
+
+        [Fact]
+        public void SaveSceneToFbxBinary_ShouldCreateValidBinaryFile()
+        {
+            var scene = new Scene();
+            var box = new Box(2, 2, 2);
+            var node = scene.RootNode.CreateChildNode("BoxNode", box);
+
+            var outputFile = Path.Combine(Path.GetTempPath(), "test_output_binary.fbx");
+            try
+            {
+                var options = new Formats.FbxSaveOptions() { IsAscii = false };
+                scene.Save(outputFile, options);
+
+                Assert.True(File.Exists(outputFile));
+                var content = File.ReadAllBytes(outputFile);
+                
+                Assert.Contains("Kaydara FBX Binary", System.Text.Encoding.ASCII.GetString(content, 0, Math.Min(50, content.Length)));
             }
             finally
             {

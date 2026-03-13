@@ -12,7 +12,7 @@ namespace Aspose.ThreeD
     /// Scene can have sub-scenes, acts as multiple-document support in files like collada/blender/fbx
     /// Node hierarchy can be accessed through  is used to keep a reference of unattached objects during serialization(like meta data or custom objects) so it can be used as a library.
     /// </summary>
-    public class Scene : SceneObject
+    public class Scene : SceneObject, INamedObject
     {
         private readonly List<Scene> _subScenes;
         private readonly List<A3DObject> _library;
@@ -400,6 +400,7 @@ namespace Aspose.ThreeD
                 Formats.GltfSaveOptions => FileFormat.GltfFormat,
                 Formats.FbxSaveOptions => FileFormat.FbxFormat,
                 Formats.ColladaSaveOptions => FileFormat.ColladaFormat,
+                Formats.TmfSaveOptions => FileFormat.TmfFormat,
                 _ => null
             };
 
