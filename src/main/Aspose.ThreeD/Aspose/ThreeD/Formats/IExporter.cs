@@ -6,7 +6,7 @@ namespace Aspose.ThreeD.Formats
     /// <summary>
     /// Interface for exporting 3D scene data to a file
     /// </summary>
-    public interface IExporter
+    internal interface IExporter
     {
         /// <summary>
         /// Exports a scene to the given stream using the specified save options

@@ -17,8 +17,6 @@ namespace Aspose.ThreeD
         private readonly bool _canImport;
         private readonly FileContentType _contentType;
         private readonly FileFormatType _fileFormatType;
-        private readonly Formats.IImporter? _importer;
-        private readonly Formats.IExporter? _exporter;
 
         internal static FileFormat ObjFormat { get;	private set; } = null!;
         internal static FileFormat StlFormat { get;	private set; } = null!;
@@ -35,7 +33,7 @@ namespace Aspose.ThreeD
         /// <summary>
         /// Initializes a new instance of the FileFormat class
         /// </summary>
-        protected FileFormat(string extension, string[] extensions, Version version, bool canExport, bool canImport, FileContentType contentType, FileFormatType fileFormatType, Formats.IImporter? importer = null, Formats.IExporter? exporter = null)
+        protected FileFormat(string extension, string[] extensions, Version version, bool canExport, bool canImport, FileContentType contentType, FileFormatType fileFormatType)
         {
             _extension = extension;
             _extensions = extensions;
@@ -44,8 +42,6 @@ namespace Aspose.ThreeD
             _canImport = canImport;
             _contentType = contentType;
             _fileFormatType = fileFormatType;
-            _importer = importer;
-            _exporter = exporter;
         }
 
         /// <summary>
@@ -99,15 +95,7 @@ namespace Aspose.ThreeD
             return false;
         }
 
-        /// <summary>
-        /// Gets importer for this file format
-        /// </summary>
-        public Formats.IImporter? Importer => _importer;
 
-        /// <summary>
-        /// Gets exporter for this file format
-        /// </summary>
-        public Formats.IExporter? Exporter => _exporter;
 
         /// <summary>
         /// Gets the preferred file format from the file extension name
@@ -179,7 +167,7 @@ namespace Aspose.ThreeD
 
     internal class ObjFormat : FileFormat
     {
-        public ObjFormat() : base(".obj", new[] { ".obj" }, new Version(1, 0), true, true, FileContentType.ASCII, new FileFormatType(".obj"), new Formats.ObjReader(), new Formats.ObjWriter())
+        public ObjFormat() : base(".obj", new[] { ".obj" }, new Version(1, 0), true, true, FileContentType.ASCII, new FileFormatType(".obj"))
         {
         }
 
@@ -226,7 +214,7 @@ namespace Aspose.ThreeD
 
     internal class StlFormat : FileFormat
     {
-        public StlFormat() : base(".stl", new[] { ".stl" }, new Version(1, 0), true, true, FileContentType.Binary, new FileFormatType(".stl"), new Formats.StlReader(), new Formats.StlWriter())
+        public StlFormat() : base(".stl", new[] { ".stl" }, new Version(1, 0), true, true, FileContentType.Binary, new FileFormatType(".stl"))
         {
         }
 
@@ -290,7 +278,7 @@ namespace Aspose.ThreeD
 
     internal class GltfFormat : FileFormat
     {
-        public GltfFormat() : base(".gltf", new[] { ".gltf", ".glb" }, new Version(2, 0), true, true, FileContentType.ASCII, new FileFormatType(".gltf"), new Formats.GltfReader(), new Formats.GltfWriter())
+        public GltfFormat() : base(".gltf", new[] { ".gltf", ".glb" }, new Version(2, 0), true, true, FileContentType.ASCII, new FileFormatType(".gltf"))
         {
         }
 
@@ -344,7 +332,7 @@ namespace Aspose.ThreeD
 
     internal class FbxFormat : FileFormat
     {
-        public FbxFormat() : base(".fbx", new[] { ".fbx" }, new Version(7, 4), true, true, FileContentType.Binary, new FileFormatType(".fbx"), new Formats.FbxReader(), new Formats.FbxWriter())
+        public FbxFormat() : base(".fbx", new[] { ".fbx" }, new Version(7, 4), true, true, FileContentType.Binary, new FileFormatType(".fbx"))
         {
         }
 
@@ -394,7 +382,7 @@ namespace Aspose.ThreeD
 
     internal class TmfFormat : FileFormat
     {
-        public TmfFormat() : base(".3mf", new[] { ".3mf" }, new Version(1, 0), true, true, FileContentType.Binary, new FileFormatType(".3mf"), new Formats.Microsoft3MFReader(), new Formats.TmfWriter())
+        public TmfFormat() : base(".3mf", new[] { ".3mf" }, new Version(1, 0), true, true, FileContentType.Binary, new FileFormatType(".3mf"))
         {
         }
 
@@ -442,7 +430,7 @@ namespace Aspose.ThreeD
 
     internal class ColladaFormat : FileFormat
     {
-        public ColladaFormat() : base(".dae", new[] { ".dae" }, new Version(1, 4), true, true, FileContentType.ASCII, new FileFormatType(".dae"), new Formats.ColladaReader(), new Formats.ColladaWriter())
+        public ColladaFormat() : base(".dae", new[] { ".dae" }, new Version(1, 4), true, true, FileContentType.ASCII, new FileFormatType(".dae"))
         {
         }
 

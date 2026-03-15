@@ -164,12 +164,18 @@ namespace Aspose.ThreeD
                 _ => null
             };
 
-            if (format == null || format.Importer == null)
+            if (format == null)
             {
                 throw new NotSupportedException($"Import not supported for the provided options type");
             }
 
-            var loadedScene = format.Importer.Import(stream, options);
+            var importer = Formats.IOService.Instance.CreateImporter(format);
+            if (importer == null)
+            {
+                throw new NotSupportedException($"Import not supported for {format.Extension}");
+            }
+
+            var loadedScene = importer.Import(stream, options);
             foreach (var node in loadedScene.RootNode.ChildNodes)
             {
                 _rootNode.ChildNodes.Add(node);
@@ -245,7 +251,7 @@ namespace Aspose.ThreeD
             Clear();
 
             var format = IOService.GetFormatByFileName(fileName);
-            var importer = format.Importer;
+            var importer = Formats.IOService.Instance.CreateImporter(format);
 
             if (importer == null)
             {
@@ -404,12 +410,18 @@ namespace Aspose.ThreeD
                 _ => null
             };
 
-            if (format == null || format.Exporter == null)
+            if (format == null)
             {
                 throw new NotSupportedException($"Export not supported for the provided options type");
             }
 
-            format.Exporter.Export(this, stream, options);
+            var exporter = Formats.IOService.Instance.CreateExporter(format);
+            if (exporter == null)
+            {
+                throw new NotSupportedException($"Export not supported for {format.Extension}");
+            }
+
+            exporter.Export(this, stream, options);
         }
 
         /// <summary>
@@ -453,7 +465,7 @@ namespace Aspose.ThreeD
         public void Save(string fileName, SaveOptions options)
         {
             var format = IOService.GetFormatByFileName(fileName);
-            var exporter = format.Exporter;
+            var exporter = Formats.IOService.Instance.CreateExporter(format);
 
             if (exporter == null)
             {

@@ -6,7 +6,7 @@ namespace Aspose.ThreeD.Formats
     /// <summary>
     /// Interface for importing 3D scene data from a file
     /// </summary>
-    public interface IImporter
+    internal interface IImporter
     {
         /// <summary>
         /// Imports a scene from the given stream using the specified load options
