@@ -22,7 +22,7 @@ This is a FOSS (Free and Open Source) implementation of Aspose.3D for .NET 26.1.
 **Category 3: Full Implementation**
 - Core scene graph (Scene, Node, Entity)
 - Basic geometry (Mesh, Box, Cylinder, Sphere)
-- Common file formats (OBJ, STL, FBX, glTF, Collada)
+- Common file formats (OBJ, STL, FBX, glTF, Collada, PLY)
 - Transform hierarchy
 - Materials and textures
 
@@ -64,8 +64,8 @@ This is a FOSS (Free and Open Source) implementation of Aspose.3D for .NET 26.1.
 - STL format reader and writer (StlReader, StlWriter)
 - glTF format reader and writer (GltfReader, GltfWriter)
 - FBX binary format reader/writer (FbxReader, FbxWriter - complete)
-- Scene.Open() method for OBJ/STL/gltF/FBX/Collada format loading
-- Scene.Save() method for OBJ/STL/gltF format saving
+- Scene.Open() method for OBJ/STL/gltF/FBX/Collada/PLY format loading
+- Scene.Save() method for OBJ/STL/gltF/PLY format saving
 
 ### Stub Implementations
 | API | Status | Notes |

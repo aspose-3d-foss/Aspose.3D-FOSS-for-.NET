@@ -26,6 +26,7 @@ namespace Aspose.ThreeD.Formats
             RegisterPlugin(new ColladaPlugin());
             RegisterPlugin(new ObjPlugin());
             RegisterPlugin(new TmfPlugin());
+            RegisterPlugin(new PlyPlugin());
         }
 
         /// <summary>

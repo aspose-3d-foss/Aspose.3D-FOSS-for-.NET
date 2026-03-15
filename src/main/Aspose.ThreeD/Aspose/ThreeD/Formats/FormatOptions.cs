@@ -238,4 +238,18 @@ namespace Aspose.ThreeD.Formats
         {
         }
     }
+
+    public class PlyLoadOptions : LoadOptions
+    {
+        public PlyLoadOptions() : base()
+        {
+        }
+    }
+
+    public class PlySaveOptions : SaveOptions
+    {
+        public PlySaveOptions() : base()
+        {
+        }
+    }
 }

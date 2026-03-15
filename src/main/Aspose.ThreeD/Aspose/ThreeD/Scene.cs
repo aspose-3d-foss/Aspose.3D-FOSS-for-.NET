@@ -161,6 +161,7 @@ namespace Aspose.ThreeD
                 Formats.GltfLoadOptions => FileFormat.GltfFormat,
                 Formats.FbxLoadOptions => FileFormat.FbxFormat,
                 Formats.TmfLoadOptions => FileFormat.TmfFormat,
+                Formats.PlyLoadOptions => FileFormat.PlyFormat,
                 _ => null
             };
 

@@ -24,6 +24,7 @@ namespace Aspose.ThreeD
         internal static FileFormat FbxFormat { get;	private set; } = null!;
         internal static FileFormat TmfFormat { get;	private set; } = null!;
         internal static FileFormat ColladaFormat { get;	private set; } = null!;
+        internal static FileFormat PlyFormat { get;	private set; } = null!;
 
         static FileFormat()
         {
@@ -155,6 +156,7 @@ namespace Aspose.ThreeD
             FbxFormat = new FbxFormat();
             TmfFormat = new TmfFormat();
             ColladaFormat = new ColladaFormat();
+            PlyFormat = new PlyFormat();
 
             _formats.Add(ObjFormat);
             _formats.Add(StlFormat);
@@ -162,6 +164,7 @@ namespace Aspose.ThreeD
             _formats.Add(FbxFormat);
             _formats.Add(TmfFormat);
             _formats.Add(ColladaFormat);
+            _formats.Add(PlyFormat);
         }
     }
 
@@ -464,6 +467,56 @@ namespace Aspose.ThreeD
                 {
                     var header = System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRead).ToLower();
                     if (header.Contains("<collada") || header.Contains("< COLLADA"))
+                        return true;
+                }
+            }
+            catch
+            {
+            }
+
+            return false;
+        }
+    }
+
+    internal class PlyFormat : FileFormat
+    {
+        public PlyFormat() : base(".ply", new[] { ".ply" }, new Version(1, 0), true, true, FileContentType.ASCII, new FileFormatType(".ply"))
+        {
+        }
+
+        public override Formats.LoadOptions CreateLoadOptions()
+        {
+            return new Formats.PlyLoadOptions();
+        }
+
+        public override Formats.SaveOptions CreateSaveOptions()
+        {
+            return new Formats.PlySaveOptions();
+        }
+
+        public override bool CanDetect(Stream stream, string? fileName)
+        {
+            if (fileName != null)
+            {
+                var ext = Path.GetExtension(fileName).ToLower();
+                if (ext == ".ply")
+                    return true;
+            }
+
+            if (!stream.CanRead || !stream.CanSeek)
+                return false;
+
+            try
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+
+                var buffer = new byte[Math.Min(256, (int)stream.Length)];
+                var bytesRead = stream.Read(buffer, 0, buffer.Length);
+
+                if (bytesRead > 0)
+                {
+                    var content = System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                    if (content.Contains("ply") && content.Contains("format") && content.Contains("element"))
                         return true;
                 }
             }
