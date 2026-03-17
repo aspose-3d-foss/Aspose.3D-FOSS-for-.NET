@@ -103,13 +103,13 @@ namespace Aspose.ThreeD.Formats
                             if (parts.Length >= 3)
                             {
                                 var propType = parts[1].ToLower();
-                                var propName = parts[2];
+                                var propName = propType == "list" ? parts[4] : parts[2];
 
                                 if (propType == "list")
                                 {
                                     var indexType = parts[2].ToLower();
                                     var elemType = parts[3].ToLower();
-                                    element.Properties.Add(new PlyProperty(propName, GetPropertyDataType(elemType), true, GetPropertyDataType(indexType)));
+                                    element.Properties.Add(new PlyProperty(propName, GetPropertyDataType(elemType), true, GetPropertyDataType(indexType), indexType));
                                 }
                                 else
                                 {
@@ -264,7 +264,16 @@ namespace Aspose.ThreeD.Formats
             {
                 for (var i = 0; i < elem.Count; i++)
                 {
-                    var vertexCount = ReadUByte(reader);
+                    int vertexCount;
+                    var faceProp = FindFaceProperty(elem);
+                    if (faceProp != null && faceProp.IsList && !string.IsNullOrEmpty(faceProp.ListIndexTypeName))
+                    {
+                        vertexCount = ReadListCount(reader, faceProp.ListIndexTypeName, isLittleEndian);
+                    }
+                    else
+                    {
+                        vertexCount = ReadUByte(reader);
+                    }
                     var indices = new int[vertexCount];
 
                     for (var j = 0; j < vertexCount; j++)
@@ -274,6 +283,47 @@ namespace Aspose.ThreeD.Formats
 
                     mesh.CreatePolygon(indices);
                 }
+            }
+        }
+
+        private static PlyProperty FindFaceProperty(PlyElement elem)
+        {
+            foreach (var prop in elem.Properties)
+            {
+                if (prop.Name.ToLower() == "vertex_indices" || prop.Name.ToLower() == "vertex")
+                {
+                    return prop;
+                }
+            }
+            return null;
+        }
+
+        private static int ReadListCount(BinaryReader reader, string indexTypeName, bool isLittleEndian)
+        {
+            var typeLower = indexTypeName.ToLower();
+            switch (typeLower)
+            {
+                case "uchar":
+                case "byte":
+                case "uint8":
+                    return reader.ReadByte();
+                case "short":
+                case "int16":
+                case "ushort":
+                case "uint16":
+                    var bytes2 = reader.ReadBytes(2);
+                    if (!isLittleEndian)
+                    {
+                        Array.Reverse(bytes2);
+                    }
+                    return BitConverter.ToInt16(bytes2, 0);
+                default:
+                    var bytes4 = reader.ReadBytes(4);
+                    if (!isLittleEndian)
+                    {
+                        Array.Reverse(bytes4);
+                    }
+                    return BitConverter.ToInt32(bytes4, 0);
             }
         }
 
@@ -347,6 +397,7 @@ namespace Aspose.ThreeD.Formats
         public VertexFieldDataType DataType { get; set; }
         public bool IsList { get; set; }
         public VertexFieldDataType ListIndexType { get; set; }
+        public string ListIndexTypeName { get; set; }
 
         public PlyProperty(string name, VertexFieldDataType dataType, bool isList, VertexFieldDataType? listIndexType)
         {
@@ -354,6 +405,15 @@ namespace Aspose.ThreeD.Formats
             DataType = dataType;
             IsList = isList;
             ListIndexType = listIndexType ?? VertexFieldDataType.Int32;
+        }
+
+        public PlyProperty(string name, VertexFieldDataType dataType, bool isList, VertexFieldDataType? listIndexType, string listIndexTypeName)
+        {
+            Name = name;
+            DataType = dataType;
+            IsList = isList;
+            ListIndexType = listIndexType ?? VertexFieldDataType.Int32;
+            ListIndexTypeName = listIndexTypeName;
         }
     }
 
