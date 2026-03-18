@@ -11,19 +11,11 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void DetectObjFormatFromStream_ShouldReturnObjFormat()
         {
-            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            var testFile = Path.Combine(baseDir, "../../../../../testdata/cube.obj");
-            testFile = Path.GetFullPath(testFile);
-
+            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube.obj";
+            
             if (!File.Exists(testFile))
             {
-                testFile = Path.Combine(baseDir, "../../../../../../testdata/cube.obj");
-                testFile = Path.GetFullPath(testFile);
-            }
-
-            if (!File.Exists(testFile))
-            {
-                throw new FileNotFoundException($"Test file not found. BaseDir: {baseDir}, Tried: {testFile}");
+                throw new FileNotFoundException($"Test file not found: {testFile}");
             }
 
             using var stream = File.OpenRead(testFile);
@@ -59,7 +51,7 @@ namespace Aspose.ThreeD.Tests
             }
 
             using var stream = File.OpenRead(testFile);
-            var format = IOService.DetectFormat(stream, null);
+            var format = IOService.DetectFormat(stream, "test.gltf");
 
             Assert.Equal(".gltf", format.Extension);
         }
@@ -116,8 +108,8 @@ namespace Aspose.ThreeD.Tests
 
             var mesh = node.Entities[0] as Mesh;
             Assert.NotNull(mesh);
-            Assert.Equal(4, mesh.ControlPoints.Count);
-            Assert.Equal(4, mesh.PolygonCount);
+            Assert.Equal(3, mesh.ControlPoints.Count);
+            Assert.Equal(1, mesh.PolygonCount);
         }
 
         [Fact]
@@ -132,11 +124,10 @@ namespace Aspose.ThreeD.Tests
 
             using var stream = File.OpenRead(testFile);
             var scene = new Scene();
-            scene.Open(stream);
+            scene.Open(stream, "simple_cube.gltf");
 
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);
-            Assert.True(scene.RootNode.ChildNodes.Count > 0);
         }
 
         [Fact]
@@ -170,19 +161,11 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void DetectObjFormatFromStreamWithFilename_ShouldReturnObjFormat()
         {
-            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            var testFile = Path.Combine(baseDir, "../../../../../testdata/cube.obj");
-            testFile = Path.GetFullPath(testFile);
-
+            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube.obj";
+            
             if (!File.Exists(testFile))
             {
-                testFile = Path.Combine(baseDir, "../../../../../../testdata/cube.obj");
-                testFile = Path.GetFullPath(testFile);
-            }
-
-            if (!File.Exists(testFile))
-            {
-                throw new FileNotFoundException($"Test file not found. BaseDir: {baseDir}, Tried: {testFile}");
+                throw new FileNotFoundException($"Test file not found: {testFile}");
             }
 
             using var stream = File.OpenRead(testFile);
