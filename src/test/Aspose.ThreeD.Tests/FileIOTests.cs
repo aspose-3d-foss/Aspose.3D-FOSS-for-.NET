@@ -1,7 +1,9 @@
 using System;
 using System.IO;
+using System.Linq;
 using Aspose.ThreeD;
 using Aspose.ThreeD.Entities;
+using Aspose.ThreeD.Formats;
 using Xunit;
 
 namespace Aspose.ThreeD.Tests
@@ -37,19 +39,11 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void LoadSceneFromObj_ShouldLoadCorrectly()
         {
-            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            var testFile = Path.Combine(baseDir, "../../../../../testdata/cube.obj");
-            testFile = Path.GetFullPath(testFile);
-
+            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube.obj";
+            
             if (!File.Exists(testFile))
             {
-                testFile = Path.Combine(baseDir, "../../../../../../testdata/cube.obj");
-                testFile = Path.GetFullPath(testFile);
-            }
-
-            if (!File.Exists(testFile))
-            {
-                throw new FileNotFoundException($"Test file not found. BaseDir: {baseDir}, Tried: {testFile}");
+                throw new FileNotFoundException($"Test file not found: {testFile}");
             }
 
             var scene = new Scene();
@@ -57,6 +51,16 @@ namespace Aspose.ThreeD.Tests
 
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);
+            Assert.True(scene.RootNode.ChildNodes.Count > 0);
+
+            var node = scene.RootNode.ChildNodes[0];
+            Assert.NotNull(node.Entities);
+            Assert.True(node.Entities.Count > 0);
+
+            var mesh = node.Entities[0] as Mesh;
+            Assert.NotNull(mesh);
+            Assert.Equal(8, mesh.ControlPoints.Count);
+            Assert.Equal(12, mesh.PolygonCount);
         }
 
         [Fact]
@@ -68,6 +72,7 @@ namespace Aspose.ThreeD.Tests
             Assert.NotNull(mesh);
             Assert.True(mesh.ControlPoints.Count > 0);
             Assert.True(mesh.PolygonCount > 0);
+            Assert.True(mesh.PolygonCount >= 32, "Sphere should have at least 32 polygons");
         }
 
         [Fact]
@@ -79,6 +84,7 @@ namespace Aspose.ThreeD.Tests
             Assert.NotNull(mesh);
             Assert.True(mesh.ControlPoints.Count > 0);
             Assert.True(mesh.PolygonCount > 0);
+            Assert.True(mesh.PolygonCount >= 3, "Cylinder should have at least 3 polygons");
         }
 
         [Fact]
@@ -122,6 +128,15 @@ namespace Aspose.ThreeD.Tests
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);
             Assert.True(scene.RootNode.ChildNodes.Count > 0);
+
+            var node = scene.RootNode.ChildNodes[0];
+            Assert.NotNull(node.Entities);
+            Assert.True(node.Entities.Count > 0);
+
+            var mesh = node.Entities[0] as Mesh;
+            Assert.NotNull(mesh);
+            Assert.Equal(4, mesh.ControlPoints.Count);
+            Assert.Equal(4, mesh.PolygonCount);
         }
 
         [Fact]
@@ -140,6 +155,15 @@ namespace Aspose.ThreeD.Tests
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);
             Assert.True(scene.RootNode.ChildNodes.Count > 0);
+
+            var node = scene.RootNode.ChildNodes[0];
+            Assert.NotNull(node.Entities);
+            Assert.True(node.Entities.Count > 0);
+
+            var mesh = node.Entities[0] as Mesh;
+            Assert.NotNull(mesh);
+            Assert.Equal(4, mesh.ControlPoints.Count);
+            Assert.Equal(4, mesh.PolygonCount);
         }
 
         [Fact]
@@ -191,19 +215,11 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void LoadSceneFromStreamObj_ShouldLoadCorrectly()
         {
-            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            var testFile = Path.Combine(baseDir, "../../../../../testdata/cube.obj");
-            testFile = Path.GetFullPath(testFile);
-
+            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube.obj";
+            
             if (!File.Exists(testFile))
             {
-                testFile = Path.Combine(baseDir, "../../../../../../testdata/cube.obj");
-                testFile = Path.GetFullPath(testFile);
-            }
-
-            if (!File.Exists(testFile))
-            {
-                throw new FileNotFoundException($"Test file not found. BaseDir: {baseDir}, Tried: {testFile}");
+                throw new FileNotFoundException($"Test file not found: {testFile}");
             }
 
             using var stream = File.OpenRead(testFile);
@@ -213,6 +229,16 @@ namespace Aspose.ThreeD.Tests
 
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);
+            Assert.True(scene.RootNode.ChildNodes.Count > 0);
+
+            var node = scene.RootNode.ChildNodes[0];
+            Assert.NotNull(node.Entities);
+            Assert.True(node.Entities.Count > 0);
+
+            var mesh = node.Entities[0] as Mesh;
+            Assert.NotNull(mesh);
+            Assert.Equal(8, mesh.ControlPoints.Count);
+            Assert.Equal(12, mesh.PolygonCount);
         }
 
         [Fact]
@@ -233,6 +259,15 @@ namespace Aspose.ThreeD.Tests
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);
             Assert.True(scene.RootNode.ChildNodes.Count > 0);
+
+            var node = scene.RootNode.ChildNodes[0];
+            Assert.NotNull(node.Entities);
+            Assert.True(node.Entities.Count > 0);
+
+            var mesh = node.Entities[0] as Mesh;
+            Assert.NotNull(mesh);
+            Assert.Equal(4, mesh.ControlPoints.Count);
+            Assert.Equal(4, mesh.PolygonCount);
         }
 
         [Fact]
@@ -329,6 +364,17 @@ namespace Aspose.ThreeD.Tests
 
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);
+            Assert.True(scene.RootNode.ChildNodes.Count > 0);
+
+            var node = scene.RootNode.ChildNodes[0];
+            Assert.Equal("Model::pCube1", node.Name);
+            Assert.True(node.Entities.Count > 0);
+            Assert.NotNull(node.Entities[0] as Mesh);
+
+            var mesh = node.Entities[0] as Mesh;
+            Assert.NotNull(mesh);
+            Assert.Equal(8, mesh.ControlPoints.Count);
+            Assert.Equal(12, mesh.PolygonCount);
         }
 
         [Fact]
@@ -348,6 +394,17 @@ namespace Aspose.ThreeD.Tests
 
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);
+            Assert.True(scene.RootNode.ChildNodes.Count > 0);
+
+            var node = scene.RootNode.ChildNodes[0];
+            Assert.Equal("Model::pCube1", node.Name);
+            Assert.True(node.Entities.Count > 0);
+            Assert.NotNull(node.Entities[0] as Mesh);
+
+            var mesh = node.Entities[0] as Mesh;
+            Assert.NotNull(mesh);
+            Assert.Equal(8, mesh.ControlPoints.Count);
+            Assert.Equal(12, mesh.PolygonCount);
         }
 
         [Fact]
@@ -366,6 +423,15 @@ namespace Aspose.ThreeD.Tests
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);
             Assert.True(scene.RootNode.ChildNodes.Count > 0);
+
+            var node = scene.RootNode.ChildNodes[0];
+            Assert.NotNull(node.Entities);
+            Assert.True(node.Entities.Count > 0);
+
+            var mesh = node.Entities[0] as Mesh;
+            Assert.NotNull(mesh);
+            Assert.Equal(8, mesh.ControlPoints.Count);
+            Assert.Equal(12, mesh.PolygonCount);
         }
 
         [Fact]
@@ -385,6 +451,71 @@ namespace Aspose.ThreeD.Tests
 
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);
+            Assert.True(scene.RootNode.ChildNodes.Count > 0);
+
+            var node = scene.RootNode.ChildNodes[0];
+            Assert.NotNull(node.Entities);
+            Assert.True(node.Entities.Count > 0);
+
+            var mesh = node.Entities[0] as Mesh;
+            Assert.NotNull(mesh);
+            Assert.Equal(8, mesh.ControlPoints.Count);
+            Assert.Equal(12, mesh.PolygonCount);
+        }
+
+        [Fact]
+        public void LoadSceneFrom3mf_ShouldVerifyMeshData()
+        {
+            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/3mf/box.3mf";
+            
+            if (!File.Exists(testFile))
+            {
+                throw new FileNotFoundException($"Test file not found: {testFile}");
+            }
+
+            var scene = new Scene();
+            scene.Open(testFile);
+
+            Assert.NotNull(scene);
+            Assert.NotNull(scene.RootNode);
+            Assert.True(scene.RootNode.ChildNodes.Count > 0);
+
+            var node = scene.RootNode.ChildNodes[0];
+            Assert.NotNull(node.Entities);
+            Assert.True(node.Entities.Count > 0);
+
+            var mesh = node.Entities[0] as Mesh;
+            Assert.NotNull(mesh);
+            Assert.Equal(8, mesh.ControlPoints.Count);
+            Assert.Equal(12, mesh.PolygonCount);
+        }
+
+        [Fact]
+        public void SaveSceneToObjFrom3mf_ShouldIncludePolygons()
+        {
+            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/3mf/box.3mf";
+            
+            if (!File.Exists(testFile))
+            {
+                throw new FileNotFoundException($"Test file not found: {testFile}");
+            }
+
+            var scene = new Scene();
+            scene.Open(testFile);
+
+            using var stream = new MemoryStream();
+            var options = new ObjSaveOptions() { Verbose = true };
+            scene.Save(stream, options);
+
+            stream.Seek(0, SeekOrigin.Begin);
+            var content = new StreamReader(stream).ReadToEnd();
+
+            Assert.Contains("v ", content);
+            Assert.Contains("f ", content);
+            
+            var lines = content.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+            var faceLines = lines.Where(l => l.StartsWith("f ")).ToArray();
+            Assert.True(faceLines.Length > 0, "Should have at least some face definitions");
         }
 
         [Fact]
@@ -598,6 +729,11 @@ namespace Aspose.ThreeD.Tests
             Assert.Equal("Model::pCube1", node.Name);
             Assert.True(node.Entities.Count > 0);
             Assert.NotNull(node.Entities[0] as Mesh);
+
+            var mesh = node.Entities[0] as Mesh;
+            Assert.NotNull(mesh);
+            Assert.Equal(8, mesh.ControlPoints.Count);
+            Assert.Equal(12, mesh.PolygonCount);
         }
 
         [Fact]
@@ -642,6 +778,12 @@ namespace Aspose.ThreeD.Tests
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);
             Assert.True(scene.RootNode.ChildNodes.Count > 0);
+
+            var node = scene.RootNode.ChildNodes[0];
+            var meshEntity = node.Entities[0] as Mesh;
+            Assert.NotNull(meshEntity);
+            Assert.Equal(8, meshEntity.ControlPoints.Count);
+            Assert.Equal(6, meshEntity.PolygonCount);
         }
     }
 }

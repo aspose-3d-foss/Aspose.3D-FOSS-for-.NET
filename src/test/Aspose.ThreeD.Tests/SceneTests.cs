@@ -90,10 +90,8 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void Scene_Render_ThrowsNotImplementedException()
         {
-            // Arrange
             var scene = new Scene();
 
-            // Act & Assert
             Assert.Throws<NotImplementedException>(() =>
             {
                 scene.Render(null!, "output.png");

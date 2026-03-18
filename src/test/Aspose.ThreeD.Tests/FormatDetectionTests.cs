@@ -67,19 +67,11 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void OpenStreamWithAutoDetectionObj_ShouldLoadCorrectly()
         {
-            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            var testFile = Path.Combine(baseDir, "../../../../../testdata/cube.obj");
-            testFile = Path.GetFullPath(testFile);
-
+            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube.obj";
+            
             if (!File.Exists(testFile))
             {
-                testFile = Path.Combine(baseDir, "../../../../../../testdata/cube.obj");
-                testFile = Path.GetFullPath(testFile);
-            }
-
-            if (!File.Exists(testFile))
-            {
-                throw new FileNotFoundException($"Test file not found. BaseDir: {baseDir}, Tried: {testFile}");
+                throw new FileNotFoundException($"Test file not found: {testFile}");
             }
 
             using var stream = File.OpenRead(testFile);
@@ -88,6 +80,16 @@ namespace Aspose.ThreeD.Tests
 
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);
+            Assert.True(scene.RootNode.ChildNodes.Count > 0);
+
+            var node = scene.RootNode.ChildNodes[0];
+            Assert.NotNull(node.Entities);
+            Assert.True(node.Entities.Count > 0);
+
+            var mesh = node.Entities[0] as Mesh;
+            Assert.NotNull(mesh);
+            Assert.Equal(8, mesh.ControlPoints.Count);
+            Assert.Equal(12, mesh.PolygonCount);
         }
 
         [Fact]
@@ -107,6 +109,15 @@ namespace Aspose.ThreeD.Tests
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);
             Assert.True(scene.RootNode.ChildNodes.Count > 0);
+
+            var node = scene.RootNode.ChildNodes[0];
+            Assert.NotNull(node.Entities);
+            Assert.True(node.Entities.Count > 0);
+
+            var mesh = node.Entities[0] as Mesh;
+            Assert.NotNull(mesh);
+            Assert.Equal(4, mesh.ControlPoints.Count);
+            Assert.Equal(4, mesh.PolygonCount);
         }
 
         [Fact]
@@ -131,19 +142,11 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void OpenStreamWithFilename_ShouldDetectFormatFromFilename()
         {
-            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            var testFile = Path.Combine(baseDir, "../../../../../testdata/cube.obj");
-            testFile = Path.GetFullPath(testFile);
-
+            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube.obj";
+            
             if (!File.Exists(testFile))
             {
-                testFile = Path.Combine(baseDir, "../../../../../../testdata/cube.obj");
-                testFile = Path.GetFullPath(testFile);
-            }
-
-            if (!File.Exists(testFile))
-            {
-                throw new FileNotFoundException($"Test file not found. BaseDir: {baseDir}, Tried: {testFile}");
+                throw new FileNotFoundException($"Test file not found: {testFile}");
             }
 
             using var stream = File.OpenRead(testFile);
@@ -152,6 +155,16 @@ namespace Aspose.ThreeD.Tests
 
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);
+            Assert.True(scene.RootNode.ChildNodes.Count > 0);
+
+            var node = scene.RootNode.ChildNodes[0];
+            Assert.NotNull(node.Entities);
+            Assert.True(node.Entities.Count > 0);
+
+            var mesh = node.Entities[0] as Mesh;
+            Assert.NotNull(mesh);
+            Assert.Equal(8, mesh.ControlPoints.Count);
+            Assert.Equal(12, mesh.PolygonCount);
         }
 
         [Fact]

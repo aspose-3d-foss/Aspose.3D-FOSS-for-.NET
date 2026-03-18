@@ -68,6 +68,16 @@ namespace Aspose.ThreeD.Tests
 
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);
+            Assert.True(scene.RootNode.ChildNodes.Count > 0);
+
+            var node = scene.RootNode.ChildNodes[0];
+            Assert.NotNull(node.Entities);
+            Assert.True(node.Entities.Count > 0);
+
+            var mesh = node.Entities[0] as Mesh;
+            Assert.NotNull(mesh);
+            Assert.True(mesh.ControlPoints.Count > 0);
+            Assert.True(mesh.PolygonCount > 0);
         }
 
         [Fact]

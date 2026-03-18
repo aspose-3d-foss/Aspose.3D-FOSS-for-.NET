@@ -52,7 +52,17 @@ namespace Aspose.ThreeD.Formats
         {
             var resourcesElement = doc.Root?.Element(ns + "resources");
             if (resourcesElement == null)
-                return;
+            {
+                resourcesElement = doc.Root?.Element("resources");
+                if (resourcesElement != null)
+                {
+                    ns = XNamespace.None;
+                }
+                else
+                {
+                    return;
+                }
+            }
 
             foreach (var objectElement in resourcesElement.Elements(ns + "object"))
             {
@@ -92,22 +102,26 @@ namespace Aspose.ThreeD.Formats
                 }
             }
 
-            foreach (var triangleElement in meshElement.Elements(ns + "triangle"))
+            var trianglesElement = meshElement.Element(ns + "triangles");
+            if (trianglesElement != null)
             {
-                var v1Attr = triangleElement.Attribute("v1");
-                var v2Attr = triangleElement.Attribute("v2");
-                var v3Attr = triangleElement.Attribute("v3");
+                foreach (var triangleElement in trianglesElement.Elements(ns + "triangle"))
+                {
+                    var v1Attr = triangleElement.Attribute("v1");
+                    var v2Attr = triangleElement.Attribute("v2");
+                    var v3Attr = triangleElement.Attribute("v3");
 
-                if (v1Attr == null || v2Attr == null || v3Attr == null)
-                    continue;
+                    if (v1Attr == null || v2Attr == null || v3Attr == null)
+                        continue;
 
-                var v1 = int.Parse(v1Attr.Value);
-                var v2 = int.Parse(v2Attr.Value);
-                var v3 = int.Parse(v3Attr.Value);
+                    var v1 = int.Parse(v1Attr.Value);
+                    var v2 = int.Parse(v2Attr.Value);
+                    var v3 = int.Parse(v3Attr.Value);
 
-                int[] triangle = { v1, v2, v3 };
+                    int[] triangle = { v1, v2, v3 };
 
-                mesh.CreatePolygon(triangle);
+                    mesh.CreatePolygon(triangle);
+                }
             }
 
             return mesh;
