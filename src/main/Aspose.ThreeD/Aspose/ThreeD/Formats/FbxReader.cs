@@ -447,7 +447,7 @@ namespace Aspose.ThreeD.Formats
             }
             else if (childObj is Node childNode)
             {
-                childNode.ParentNode = parentObj;
+                parentObj.AddChildNode(childNode);
             }
         }
 
