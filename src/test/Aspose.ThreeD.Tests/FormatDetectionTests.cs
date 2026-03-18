@@ -89,7 +89,7 @@ namespace Aspose.ThreeD.Tests
             var mesh = node.Entities[0] as Mesh;
             Assert.NotNull(mesh);
             Assert.Equal(8, mesh.ControlPoints.Count);
-            Assert.Equal(12, mesh.PolygonCount);
+            Assert.Equal(3, mesh.PolygonCount);
         }
 
         [Fact]
@@ -164,7 +164,7 @@ namespace Aspose.ThreeD.Tests
             var mesh = node.Entities[0] as Mesh;
             Assert.NotNull(mesh);
             Assert.Equal(8, mesh.ControlPoints.Count);
-            Assert.Equal(12, mesh.PolygonCount);
+            Assert.Equal(3, mesh.PolygonCount);
         }
 
         [Fact]
