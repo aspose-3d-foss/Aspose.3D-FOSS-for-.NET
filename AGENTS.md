@@ -121,6 +121,6 @@ dotnet test
 ## Notes
 
 - Always verify API signatures with `dump-csharp` before implementing
-- Tests must use files from `testdata/` directory
+- Tests must use test files from `testdata/` directory, absolute path is not allowed to use.
 - Stub implementations should be minimal but compilable
 - Document all deviations from Aspose.3D's behavior in this file

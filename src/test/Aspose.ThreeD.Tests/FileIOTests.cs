@@ -39,7 +39,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void LoadSceneFromObj_ShouldLoadCorrectly()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube.obj";
+            var testFile = "../../../../../../../TestData/input/cube.obj";
             
             if (!File.Exists(testFile))
             {
@@ -115,7 +115,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void LoadSceneFromStlAscii_ShouldLoadCorrectly()
         {
-            var testFile = Path.Combine("/home/lexchou/workspace/aspose/foss.3d.net/testdata/stl", "stl_ascii.stl");
+            var testFile = Path.Combine("../../../../../../../TestData/stl", "stl_ascii.stl");
 
             if (!File.Exists(testFile))
             {
@@ -142,7 +142,7 @@ namespace Aspose.ThreeD.Tests
          [Fact]
          public void LoadSceneFromStlBinary_ShouldLoadCorrectly()
         {
-            var testFile = Path.Combine("/home/lexchou/workspace/aspose/foss.3d.net/testdata/stl", "stl_binary.stl");
+            var testFile = Path.Combine("../../../../../../../TestData/stl", "stl_binary.stl");
 
             if (!File.Exists(testFile))
             {
@@ -171,7 +171,7 @@ namespace Aspose.ThreeD.Tests
         {
             // Test with a non-existent file that doesn't match any supported format
             // This tests the exception when no matching format is found
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/unknown.xyz";
+            var testFile = "../../../../../../../TestData/unknown.xyz";
             
             var scene = new Scene();
             Assert.Throws<ArgumentException>(() => scene.Open(testFile));
@@ -215,7 +215,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void LoadSceneFromStreamObj_ShouldLoadCorrectly()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube.obj";
+            var testFile = "../../../../../../../TestData/input/cube.obj";
             
             if (!File.Exists(testFile))
             {
@@ -244,7 +244,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void LoadSceneFromStreamStl_ShouldLoadCorrectly()
         {
-            var testFile = Path.Combine("/home/lexchou/workspace/aspose/foss.3d.net/testdata/stl", "stl_ascii.stl");
+            var testFile = Path.Combine("../../../../../../../TestData/stl", "stl_ascii.stl");
 
             if (!File.Exists(testFile))
             {
@@ -290,7 +290,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void LoadSceneFromStreamGltf_ShouldLoadCorrectly()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/gltf/simple_cube.gltf";
+            var testFile = "../../../../../../../TestData/gltf/simple_cube.gltf";
             
             if (!File.Exists(testFile))
             {
@@ -309,7 +309,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void LoadSceneFromFbx_ShouldLoadCorrectly()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube.fbx";
+            var testFile = "../../../../../../../TestData/input/cube.fbx";
             
             if (!File.Exists(testFile))
             {
@@ -330,7 +330,7 @@ namespace Aspose.ThreeD.Tests
           [Fact]
           public void LoadSceneFromFbxWithLoadOptions_ShouldLoadCorrectly()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube.fbx";
+            var testFile = "../../../../../../../TestData/input/cube.fbx";
             
             if (!File.Exists(testFile))
             {
@@ -353,7 +353,7 @@ namespace Aspose.ThreeD.Tests
           [Fact]
           public void LoadSceneFrom3mf_ShouldLoadCorrectly()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/3mf/box.3mf";
+            var testFile = "../../../../../../../TestData/3mf/box.3mf";
             
             if (!File.Exists(testFile))
             {
@@ -380,7 +380,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void LoadSceneFrom3mfWithLoadOptions_ShouldLoadCorrectly()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/3mf/box.3mf";
+            var testFile = "../../../../../../../TestData/3mf/box.3mf";
             
             if (!File.Exists(testFile))
             {
@@ -409,7 +409,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void LoadSceneFrom3mf_ShouldVerifyMeshData()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/3mf/box.3mf";
+            var testFile = "../../../../../../../TestData/3mf/box.3mf";
             
             if (!File.Exists(testFile))
             {
@@ -436,7 +436,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void SaveSceneToObjFrom3mf_ShouldIncludePolygons()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/3mf/box.3mf";
+            var testFile = "../../../../../../../TestData/3mf/box.3mf";
             
             if (!File.Exists(testFile))
             {
@@ -630,7 +630,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void LoadSceneFromPlyAscii_ShouldLoadCorrectly()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube.ply";
+            var testFile = "../../../../../../../TestData/input/cube.ply";
 
             if (!File.Exists(testFile))
             {
@@ -654,7 +654,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void LoadSceneFromFbx7400Ascii_ShouldLoadCorrectly()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/fbx7400ascii/cube.fbx";
+            var testFile = "../../../../../../../TestData/fbx7400ascii/cube.fbx";
 
             if (!File.Exists(testFile))
             {
@@ -675,7 +675,7 @@ namespace Aspose.ThreeD.Tests
           [Fact]
           public void LoadSceneFromPlyBinary_ShouldLoadCorrectly()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube_binary.ply";
+            var testFile = "../../../../../../../TestData/input/cube_binary.ply";
 
             if (!File.Exists(testFile))
             {
@@ -699,7 +699,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void LoadSceneFromPlyWithLoadOptions_ShouldLoadCorrectly()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube.ply";
+            var testFile = "../../../../../../../TestData/input/cube.ply";
 
             if (!File.Exists(testFile))
             {

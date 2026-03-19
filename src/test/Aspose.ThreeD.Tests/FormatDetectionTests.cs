@@ -11,7 +11,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void DetectObjFormatFromStream_ShouldReturnObjFormat()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube.obj";
+            var testFile = "../../../../../../../TestData/input/cube.obj";
             
             if (!File.Exists(testFile))
             {
@@ -27,7 +27,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void DetectStlFormatFromStream_ShouldReturnStlFormat()
         {
-            var testFile = Path.Combine("/home/lexchou/workspace/aspose/foss.3d.net/testdata/stl", "stl_ascii.stl");
+            var testFile = Path.Combine("../../../../../../../TestData/stl", "stl_ascii.stl");
 
             if (!File.Exists(testFile))
             {
@@ -43,7 +43,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void DetectGltfFormatFromStream_ShouldReturnGltfFormat()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/gltf/simple_cube.gltf";
+            var testFile = "../../../../../../../TestData/gltf/simple_cube.gltf";
             
             if (!File.Exists(testFile))
             {
@@ -59,7 +59,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void OpenStreamWithAutoDetectionObj_ShouldLoadCorrectly()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube.obj";
+            var testFile = "../../../../../../../TestData/input/cube.obj";
             
             if (!File.Exists(testFile))
             {
@@ -87,7 +87,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void OpenStreamWithAutoDetectionStl_ShouldLoadCorrectly()
         {
-            var testFile = Path.Combine("/home/lexchou/workspace/aspose/foss.3d.net/testdata/stl", "stl_ascii.stl");
+            var testFile = Path.Combine("../../../../../../../TestData/stl", "stl_ascii.stl");
 
             if (!File.Exists(testFile))
             {
@@ -115,7 +115,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void OpenStreamWithAutoDetectionGltf_ShouldLoadCorrectly()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/gltf/simple_cube.gltf";
+            var testFile = "../../../../../../../TestData/gltf/simple_cube.gltf";
             
             if (!File.Exists(testFile))
             {
@@ -133,7 +133,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void OpenStreamWithFilename_ShouldDetectFormatFromFilename()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube.obj";
+            var testFile = "../../../../../../../TestData/input/cube.obj";
             
             if (!File.Exists(testFile))
             {
@@ -161,7 +161,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void DetectObjFormatFromStreamWithFilename_ShouldReturnObjFormat()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/input/cube.obj";
+            var testFile = "../../../../../../../TestData/input/cube.obj";
             
             if (!File.Exists(testFile))
             {
@@ -177,7 +177,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void DetectStlFormatFromStreamWithFilename_ShouldReturnStlFormat()
         {
-            var testFile = Path.Combine("/home/lexchou/workspace/aspose/foss.3d.net/testdata/stl", "stl_ascii.stl");
+            var testFile = Path.Combine("../../../../../../../TestData/stl", "stl_ascii.stl");
 
             if (!File.Exists(testFile))
             {
@@ -193,7 +193,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void DetectGltfFormatFromStreamWithFilename_ShouldReturnGltfFormat()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/gltf/simple_cube.gltf";
+            var testFile = "../../../../../../../TestData/gltf/simple_cube.gltf";
             
             if (!File.Exists(testFile))
             {

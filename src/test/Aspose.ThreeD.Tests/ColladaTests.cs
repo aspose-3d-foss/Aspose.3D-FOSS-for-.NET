@@ -56,7 +56,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void LoadSceneFromCollada_ShouldLoadCorrectly()
         {
-            var testFile = "/home/lexchou/workspace/aspose/foss.3d.net/testdata/collada/sphere.dae";
+            var testFile = "../../../../../../../TestData/collada/sphere.dae";
             
             if (!File.Exists(testFile))
             {
