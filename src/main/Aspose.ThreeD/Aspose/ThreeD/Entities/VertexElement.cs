@@ -42,9 +42,11 @@ namespace Aspose.ThreeD.Entities
     /// <summary>
     /// Vertex element with UV coordinates
     /// </summary>
-    public class VertexElementUV : VertexElement
+    public class VertexElementUV : VertexElement, IIndexedVertexElement
     {
         private readonly TextureMapping _mapping;
+        private readonly List<FVector2> _data;
+        private int[] _indices = Array.Empty<int>();
 
         /// <summary>
         /// Initializes a new instance of the VertexElementUV class
@@ -53,12 +55,41 @@ namespace Aspose.ThreeD.Entities
             : base(VertexElementType.UV, mappingMode, referenceMode)
         {
             _mapping = mapping;
+            _data = new List<FVector2>();
         }
 
         /// <summary>
         /// Gets the texture mapping
         /// </summary>
         public TextureMapping Mapping => _mapping;
+
+        /// <summary>
+        /// Gets the UV data
+        /// </summary>
+        public List<FVector2> Data => _data;
+
+        /// <summary>
+        /// Gets the indices for index-to-direct mapping
+        /// </summary>
+        public int[] Indices => _indices;
+
+        /// <summary>
+        /// Sets the indices for index-to-direct mapping
+        /// </summary>
+        public void SetIndices(int[] indices)
+        {
+            _indices = indices ?? Array.Empty<int>();
+        }
+
+        /// <summary>
+        /// Gets the index at the specified position
+        /// </summary>
+        public int GetIndex(int i)
+        {
+            if (i >= 0 && i < _indices.Length)
+                return _indices[i];
+            return i;
+        }
     }
 
     /// <summary>

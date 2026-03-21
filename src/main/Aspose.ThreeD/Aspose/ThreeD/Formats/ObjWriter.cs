@@ -81,6 +81,7 @@ namespace Aspose.ThreeD.Formats
                 writer.WriteLine($"o {mesh.Name}");
             }
 
+            // Write vertices (positions)
             foreach (var vertex in mesh.ControlPoints)
             {
                 var x = vertex.X;
@@ -96,15 +97,53 @@ namespace Aspose.ThreeD.Formats
                 writer.WriteLine($"v {x} {y} {z} {w}");
             }
 
+            // Write normals
+            var normalElement = mesh.GetElement(VertexElementType.Normal);
+            if (normalElement is VertexElementVector normalVector && normalVector.Data.Count > 0)
+            {
+                foreach (var normal in normalVector.Data)
+                {
+                    var nx = normal.X;
+                    var ny = normal.Y;
+                    var nz = normal.Z;
+
+                    if (options.FlipCoordinateSystem)
+                    {
+                        ny = -ny;
+                    }
+
+                    writer.WriteLine($"vn {nx} {ny} {nz}");
+                }
+            }
+
+            // Write UVs
+            var uvElement = mesh.GetVertexElementOfUV(TextureMapping.Diffuse);
+            if (uvElement is VertexElementUV uvData && uvData.Data.Count > 0)
+            {
+                foreach (var uv in uvData.Data)
+                {
+                    writer.WriteLine($"vt {uv.X} {uv.Y}");
+                }
+            }
+
+            // Write faces
             foreach (var polygon in mesh.Polygons)
             {
                 if (polygon.Length == 3)
                 {
-                    writer.WriteLine($"f {polygon[0] + vertexOffset} {polygon[1] + vertexOffset} {polygon[2] + vertexOffset}");
+                    // Check if we have normals or UVs to include in the face
+                    var v1 = polygon[0] + vertexOffset;
+                    var v2 = polygon[1] + vertexOffset;
+                    var v3 = polygon[2] + vertexOffset;
+                    writer.WriteLine($"f {v1} {v2} {v3}");
                 }
                 else if (polygon.Length == 4)
                 {
-                    writer.WriteLine($"f {polygon[0] + vertexOffset} {polygon[1] + vertexOffset} {polygon[2] + vertexOffset} {polygon[3] + vertexOffset}");
+                    var v1 = polygon[0] + vertexOffset;
+                    var v2 = polygon[1] + vertexOffset;
+                    var v3 = polygon[2] + vertexOffset;
+                    var v4 = polygon[3] + vertexOffset;
+                    writer.WriteLine($"f {v1} {v2} {v3} {v4}");
                 }
                 else
                 {

@@ -493,19 +493,22 @@ namespace Aspose.ThreeD.Formats
                         // Create UV element
                         var vertexElement = mesh.CreateElementUV(uvMapping, mappingMode, referenceMode);
                         
-                        if (vertexElement is IIndexedVertexElement indexed)
+                        if (vertexElement is VertexElementUV uvDataElement)
                         {
                             // Parse UVs - 2 floats per UV coordinate
                             int uvCount = uvCoords.Count / 2;
                             int[] indices = new int[uvCount];
+                            
+                            // Add UV data and indices
                             for (int i = 0; i < uvCount; i++)
                             {
+                                var u = (float)uvCoords[i * 2];
+                                var v = (float)uvCoords[i * 2 + 1];
+                                uvDataElement.Data.Add(new FVector2(u, v));
                                 indices[i] = i;
                             }
-                            indexed.SetIndices(indices);
-
-                            // Note: The FOSS VertexElementUV doesn't have a Data property like the real API
-                            // We can't store the UV data in the current FOSS implementation
+                            
+                            uvDataElement.SetIndices(indices);
                         }
                     }
                 }
