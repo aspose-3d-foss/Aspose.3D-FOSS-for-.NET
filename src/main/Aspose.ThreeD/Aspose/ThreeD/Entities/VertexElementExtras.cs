@@ -8,6 +8,7 @@ namespace Aspose.ThreeD.Entities
     {
         int[] Indices { get; }
         int GetIndex(int i);
+        void SetIndices(int[] indices);
     }
 
     public class VertexElementNormal : VertexElementVector

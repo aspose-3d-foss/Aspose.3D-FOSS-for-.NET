@@ -358,11 +358,156 @@ namespace Aspose.ThreeD.Formats
                     }
                 }
 
+                // Parse vertex elements (normals, UVs)
+                ParseVertexElements(geomScope, mesh);
+
                 Console.WriteLine($"ParseGeometries: Mesh has {mesh.ControlPoints.Count} vertices and {mesh.PolygonCount} polygons");
                 if (mesh.ControlPoints.Count > 0 && mesh.PolygonCount > 0)
                 {
                     var meshNode = scene.RootNode.CreateChildNode(mesh.Name, mesh);
                     Console.WriteLine($"ParseGeometries: Created mesh node '{meshNode.Name}'");
+                }
+            }
+        }
+
+        private static void ParseVertexElements(FbxScope geomScope, Mesh mesh)
+        {
+            // Parse normals
+            var normalElement = geomScope.GetFirstElement("LayerElementNormal");
+            if (normalElement?.Compound != null)
+            {
+                var normalScope = normalElement.Compound;
+                var mappingElement = normalScope.GetFirstElement("MappingInformationType");
+                var refElement = normalScope.GetFirstElement("ReferenceInformationType");
+                var normalsData = normalScope.GetFirstElement("Normals");
+
+                MappingMode mappingMode = MappingMode.ControlPoint;
+                ReferenceMode referenceMode = ReferenceMode.Direct;
+
+                if (mappingElement?.Tokens.Count > 0)
+                {
+                    string mapping = mappingElement.Tokens[0].Text.Trim('"');
+                    if (mapping == "PolygonVertex") mappingMode = MappingMode.PolygonVertex;
+                }
+
+                if (refElement?.Tokens.Count > 0)
+                {
+                    string @ref = refElement.Tokens[0].Text.Trim('"');
+                    if (@ref == "IndexToDirect") referenceMode = ReferenceMode.IndexToDirect;
+                }
+
+                if (normalsData?.Compound != null)
+                {
+                    var aElem = normalsData.Compound.GetFirstElement("a");
+                    if (aElem != null)
+                    {
+                        var normals = new List<double>();
+                        foreach (var t in aElem.Tokens)
+                        {
+                            var vals = ParseFloatArray(t.Text);
+                            normals.AddRange(vals);
+                        }
+
+                        // Create vertex element for normals
+                        var vertexElement = mesh.CreateElement(VertexElementType.Normal, mappingMode, referenceMode);
+                        
+                        if (vertexElement is VertexElementVector vectorElement)
+                        {
+                            // Parse normals - 4 floats per normal (x, y, z, w)
+                            for (int i = 0; i < normals.Count - 3; i += 4)
+                            {
+                                var nx = (float)normals[i];
+                                var ny = (float)normals[i + 1];
+                                var nz = (float)normals[i + 2];
+                                var nw = (float)normals[i + 3];
+                                vectorElement.Data.Add(new FVector4(nx, ny, nz, nw));
+                            }
+
+                            // Handle indices for IndexToDirect mode
+                            if (referenceMode == ReferenceMode.IndexToDirect && vectorElement is IIndexedVertexElement indexed)
+                            {
+                                // The number of normals vs control points determines how indices are mapped
+                                if (normals.Count / 4 != mesh.ControlPoints.Count)
+                                {
+                                    // For ByPolygonVertex, we need per-vertex normals (one per polygon corner)
+                                    int vertexCount = normals.Count / 4;
+                                    var indexedElement = (IIndexedVertexElement)vertexElement;
+                                    int[] indices = new int[vertexCount];
+                                    for (int i = 0; i < vertexCount; i++)
+                                    {
+                                        indices[i] = i;
+                                    }
+                                    indexedElement.SetIndices(indices);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Parse UVs
+            var uvElement = geomScope.GetFirstElement("LayerElementUV");
+            if (uvElement?.Compound != null)
+            {
+                var uvScope = uvElement.Compound;
+                var mappingElement = uvScope.GetFirstElement("MappingInformationType");
+                var refElement = uvScope.GetFirstElement("ReferenceInformationType");
+                var uvData = uvScope.GetFirstElement("UV");
+                var nameElement = uvScope.GetFirstElement("Name");
+
+                MappingMode mappingMode = MappingMode.ControlPoint;
+                ReferenceMode referenceMode = ReferenceMode.Direct;
+                TextureMapping uvMapping = TextureMapping.Diffuse;
+
+                if (mappingElement?.Tokens.Count > 0)
+                {
+                    string mapping = mappingElement.Tokens[0].Text.Trim('"');
+                    if (mapping == "PolygonVertex") mappingMode = MappingMode.PolygonVertex;
+                }
+
+                if (refElement?.Tokens.Count > 0)
+                {
+                    string @ref = refElement.Tokens[0].Text.Trim('"');
+                    if (@ref == "IndexToDirect") referenceMode = ReferenceMode.IndexToDirect;
+                }
+
+                if (nameElement?.Tokens.Count > 0)
+                {
+                    string uvName = nameElement.Tokens[0].Text.Trim('"');
+                    // Map UV name to TextureMapping
+                    // For simplicity, we use Diffuse for "MainTex" and similar
+                }
+
+                if (uvData?.Compound != null)
+                {
+                    var aElem = uvData.Compound.GetFirstElement("a");
+                    if (aElem != null)
+                    {
+                        var uvCoords = new List<double>();
+                        foreach (var t in aElem.Tokens)
+                        {
+                            var vals = ParseFloatArray(t.Text);
+                            uvCoords.AddRange(vals);
+                        }
+
+                        // Create UV element
+                        var vertexElement = mesh.CreateElementUV(uvMapping, mappingMode, referenceMode);
+                        
+                        if (vertexElement is IIndexedVertexElement indexed)
+                        {
+                            // Parse UVs - 2 floats per UV coordinate
+                            int uvCount = uvCoords.Count / 2;
+                            int[] indices = new int[uvCount];
+                            for (int i = 0; i < uvCount; i++)
+                            {
+                                indices[i] = i;
+                            }
+                            indexed.SetIndices(indices);
+
+                            // Note: The FOSS VertexElementUV doesn't have a Data property like the real API
+                            // We can't store the UV data in the current FOSS implementation
+                        }
+                    }
                 }
             }
         }

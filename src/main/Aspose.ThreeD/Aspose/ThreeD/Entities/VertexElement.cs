@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Aspose.ThreeD.Utilities;
 
 namespace Aspose.ThreeD.Entities
@@ -63,14 +64,46 @@ namespace Aspose.ThreeD.Entities
     /// <summary>
     /// Vertex element with vector data (normals, tangents, etc.)
     /// </summary>
-    public class VertexElementVector : VertexElement
+    public class VertexElementVector : VertexElement, IIndexedVertexElement
     {
+        private readonly List<FVector4> _data;
+        private int[] _indices = Array.Empty<int>();
+
         /// <summary>
         /// Initializes a new instance of the VertexElementVector class
         /// </summary>
         public VertexElementVector(VertexElementType type, MappingMode mappingMode, ReferenceMode referenceMode)
             : base(type, mappingMode, referenceMode)
         {
+            _data = new List<FVector4>();
+        }
+
+        /// <summary>
+        /// Gets the vertex data
+        /// </summary>
+        public List<FVector4> Data => _data;
+
+        /// <summary>
+        /// Gets the indices for index-to-direct mapping
+        /// </summary>
+        public int[] Indices => _indices;
+
+        /// <summary>
+        /// Sets the indices for index-to-direct mapping
+        /// </summary>
+        public void SetIndices(int[] indices)
+        {
+            _indices = indices ?? Array.Empty<int>();
+        }
+
+        /// <summary>
+        /// Gets the index at the specified position
+        /// </summary>
+        public int GetIndex(int i)
+        {
+            if (i >= 0 && i < _indices.Length)
+                return _indices[i];
+            return i;
         }
     }
 
