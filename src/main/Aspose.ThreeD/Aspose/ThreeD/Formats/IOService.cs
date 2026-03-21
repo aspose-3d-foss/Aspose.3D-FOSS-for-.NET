@@ -238,7 +238,9 @@ namespace Aspose.ThreeD.Formats
 
             public override SaveOptions CreateSaveOptions()
             {
-                return _format.CreateSaveOptions();
+                var options = _format.CreateSaveOptions();
+                options.FileFormat = _format;
+                return options;
             }
         }
     }

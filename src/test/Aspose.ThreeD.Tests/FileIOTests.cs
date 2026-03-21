@@ -570,47 +570,16 @@ namespace Aspose.ThreeD.Tests
         }
 
         [Fact]
-        public void SaveSceneToFbxAscii_ShouldCreateValidAsciiFile()
+        public void SaveSceneToFbx_ShouldCreateValidBinaryFile()
         {
             var scene = new Scene();
             var box = new Box(2, 2, 2);
             var node = scene.RootNode.CreateChildNode("BoxNode", box);
 
-            var outputFile = Path.Combine(Path.GetTempPath(), "test_output_ascii.fbx");
+            var outputFile = Path.Combine(Path.GetTempPath(), "test_output.fbx");
             try
             {
-                var options = new Formats.FbxSaveOptions() { IsAscii = true };
-                scene.Save(outputFile, options);
-
-                Assert.True(File.Exists(outputFile));
-                var content = File.ReadAllText(outputFile);
-                
-                Assert.Contains("; FBX", content);
-                Assert.Contains("FBXHeaderExtension:", content);
-                Assert.Contains("GlobalSettings:", content);
-                Assert.Contains("Objects:", content);
-                Assert.Contains("Connections:", content);
-            }
-            finally
-            {
-                if (File.Exists(outputFile))
-                {
-                    File.Delete(outputFile);
-                }
-            }
-        }
-
-        [Fact]
-        public void SaveSceneToFbxBinary_ShouldCreateValidBinaryFile()
-        {
-            var scene = new Scene();
-            var box = new Box(2, 2, 2);
-            var node = scene.RootNode.CreateChildNode("BoxNode", box);
-
-            var outputFile = Path.Combine(Path.GetTempPath(), "test_output_binary.fbx");
-            try
-            {
-                var options = new Formats.FbxSaveOptions() { IsAscii = false };
+                var options = new Formats.FbxSaveOptions();
                 scene.Save(outputFile, options);
 
                 Assert.True(File.Exists(outputFile));

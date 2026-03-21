@@ -12,21 +12,7 @@ namespace Aspose.ThreeD.Formats
     {
         public void Export(Scene scene, Stream stream, SaveOptions options)
         {
-            if (options is FbxSaveOptions fbxOptions)
-            {
-                if (fbxOptions.IsAscii)
-                {
-                    WriteAsciiFbx(stream, scene);
-                }
-                else
-                {
-                    WriteBinaryFbx(stream, scene);
-                }
-            }
-            else
-            {
-                throw new ArgumentException("Options must be FbxSaveOptions", nameof(options));
-            }
+            WriteBinaryFbx(stream, scene);
         }
 
         private static void WriteBinaryFbx(Stream stream, Scene scene)

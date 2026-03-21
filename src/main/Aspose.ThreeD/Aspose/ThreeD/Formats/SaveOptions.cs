@@ -16,5 +16,10 @@ namespace Aspose.ThreeD.Formats
         /// Gets or sets the file system used for saving external resources
         /// </summary>
         public Utilities.FileSystem? FileSystem { get; set; }
+
+        /// <summary>
+        /// Gets the file format for these save options
+        /// </summary>
+        public FileFormat FileFormat { get; internal set; } = FileFormat.ObjFormat;
     }
 }
