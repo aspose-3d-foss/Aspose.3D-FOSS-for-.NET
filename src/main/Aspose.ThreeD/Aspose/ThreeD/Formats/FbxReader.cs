@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Aspose.ThreeD.Entities;
 using Aspose.ThreeD.Utilities;
 
@@ -76,9 +77,12 @@ namespace Aspose.ThreeD.Formats
 
             using var reader = new StreamReader(stream);
             string content = reader.ReadToEnd();
+            
+            Console.WriteLine($"ReadAsciiFbx: content length = {content.Length}");
 
             var tokenizer = new FbxTokenizer(content);
             var tokens = tokenizer.Tokenize();
+            Console.WriteLine($"ReadAsciiFbx: tokens count = {tokens.Count}");
 
             var parser = new FbxParser(tokens);
             ParseScene(parser.RootScope, scene, options);
@@ -247,14 +251,21 @@ namespace Aspose.ThreeD.Formats
         {
             var objectsElement = rootScope.GetFirstElement("Objects");
             if (objectsElement == null || objectsElement.Compound == null)
+            {
+                Console.WriteLine("ParseScene: objectsElement=" + (objectsElement != null) + ", Compound=" + (objectsElement?.Compound != null));
                 return;
+            }
 
+            Console.WriteLine("ParseScene: objectsElement=True, Compound=True");
+            
             var objectsScope = objectsElement.Compound;
             var objectMap = new Dictionary<ulong, object>();
 
             var geometryElements = objectsScope.GetElements("Geometry");
             var modelElements = objectsScope.GetElements("Model");
             var materialElements = objectsScope.GetElements("Material");
+            
+            Console.WriteLine($"ParseScene: {geometryElements.Count} geometry elements, {modelElements.Count} model elements, {materialElements.Count} material elements");
 
             ParseGeometries(geometryElements, scene, objectMap);
             ParseModels(modelElements, scene, objectMap);
@@ -280,13 +291,21 @@ namespace Aspose.ThreeD.Formats
                 if (verticesElement?.Compound != null)
                 {
                     var aElem = verticesElement.Compound.GetFirstElement("a");
-                    if (aElem != null && aElem.Tokens.Count > 0)
+                    if (aElem != null)
                     {
-                        var vertices = ParseFloatArray(aElem.Tokens[0].Text);
+                        Console.WriteLine($"ParseGeometries: aElem has {aElem.Tokens.Count} tokens");
+                        var vertices = new List<double>();
+                        foreach (var t in aElem.Tokens)
+                        {
+                            var vals = ParseFloatArray(t.Text);
+                            vertices.AddRange(vals);
+                        }
+                        Console.WriteLine($"ParseGeometries: Vertices count: {vertices.Count}");
                         for (int i = 0; i < vertices.Count - 2; i += 3)
                         {
                             mesh.ControlPoints.Add(new Vector4((float)vertices[i], (float)vertices[i + 1], (float)vertices[i + 2], 1.0f));
                         }
+                        Console.WriteLine($"ParseGeometries: Added {mesh.ControlPoints.Count} ControlPoints");
                     }
                 }
 
@@ -294,31 +313,56 @@ namespace Aspose.ThreeD.Formats
                 if (polygonElement?.Compound != null)
                 {
                     var aElem = polygonElement.Compound.GetFirstElement("a");
-                    if (aElem != null && aElem.Tokens.Count > 0)
+                    if (aElem != null)
                     {
-                        var indices = ParseIntArray(aElem.Tokens[0].Text);
+                        Console.WriteLine($"ParseGeometries: PolygonVertexIndex has {aElem.Tokens.Count} tokens");
+                        var indices = new List<int>();
+                        foreach (var t in aElem.Tokens)
+                        {
+                            var vals = ParseIntArray(t.Text);
+                            indices.AddRange(vals);
+                        }
+                        Console.WriteLine($"ParseGeometries: PolygonVertexIndex count: {indices.Count}");
+                        Console.WriteLine($"First few indices: {string.Join(",", indices.Take(20))}");
                         int polygonStart = 0;
                         for (int i = 0; i < indices.Count; i++)
                         {
                             var idx = indices[i];
                             if (idx < 0)
                             {
-                                int polygonSize = -idx;
+                                int polygonSize = i - polygonStart;
+                                Console.WriteLine($"  Polygon at i={i}, size={polygonSize}, start={polygonStart}, total available={indices.Count - polygonStart}");
+                                if (polygonSize < 3)
+                                {
+                                    Console.WriteLine($"    ERROR: Polygon must have at least 3 vertices (got {polygonSize})");
+                                    break;
+                                }
                                 int[] poly = new int[polygonSize];
                                 for (int j = 0; j < polygonSize; j++)
                                 {
                                     poly[j] = indices[polygonStart + j];
                                 }
-                                mesh.CreatePolygon(poly);
-                                polygonStart = i + 1;
+                                try
+                                {
+                                    mesh.CreatePolygon(poly);
+                                    polygonStart = i + 1;
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"    ERROR: {ex.Message}");
+                                    break;
+                                }
                             }
                         }
+                        Console.WriteLine($"ParseGeometries: Added {mesh.PolygonCount} polygons");
                     }
                 }
 
+                Console.WriteLine($"ParseGeometries: Mesh has {mesh.ControlPoints.Count} vertices and {mesh.PolygonCount} polygons");
                 if (mesh.ControlPoints.Count > 0 && mesh.PolygonCount > 0)
                 {
                     var meshNode = scene.RootNode.CreateChildNode(mesh.Name, mesh);
+                    Console.WriteLine($"ParseGeometries: Created mesh node '{meshNode.Name}'");
                 }
             }
         }
