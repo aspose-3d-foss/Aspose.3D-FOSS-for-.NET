@@ -120,6 +120,7 @@ dotnet test
 
 ## Notes
 
+- It's absolute not allowed to add new public class/members that are not existed in the result of `dump-csharp`
 - Always verify API signatures with `dump-csharp` before implementing
 - Tests must use test files from `testdata/` directory, absolute path is not allowed to use.
 - Stub implementations should be minimal but compilable

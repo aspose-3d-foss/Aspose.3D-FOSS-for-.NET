@@ -1,3 +1,5 @@
+using System;
+
 namespace Aspose.ThreeD.Formats
 {
     /// <summary>
@@ -6,20 +8,8 @@ namespace Aspose.ThreeD.Formats
     public abstract class SaveOptions : IOConfig
     {
         /// <summary>
-        /// Initializes a new instance of the SaveOptions class
+        /// Try to copy textures used in scene to output directory.
         /// </summary>
-        protected SaveOptions()
-        {
-        }
-
-        /// <summary>
-        /// Gets or sets the file system used for saving external resources
-        /// </summary>
-        public Utilities.FileSystem? FileSystem { get; set; }
-
-        /// <summary>
-        /// Gets the file format for these save options
-        /// </summary>
-        public FileFormat FileFormat { get; internal set; } = FileFormat.ObjFormat;
+        public bool ExportTextures { get; set; }
     }
 }
