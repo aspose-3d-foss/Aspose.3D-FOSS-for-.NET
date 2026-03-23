@@ -330,7 +330,10 @@ namespace Aspose.ThreeD.Formats
                             var idx = indices[i];
                             if (idx < 0)
                             {
-                                int polygonSize = i - polygonStart;
+                                // In FBX, negative values indicate end of polygon
+                                // The actual vertex index is idx XOR -1 (or ~idx)
+                                // The polygon size is number of vertices from polygonStart to i (inclusive)
+                                int polygonSize = i - polygonStart + 1;
                                 Console.WriteLine($"  Polygon at i={i}, size={polygonSize}, start={polygonStart}, total available={indices.Count - polygonStart}");
                                 if (polygonSize < 3)
                                 {
