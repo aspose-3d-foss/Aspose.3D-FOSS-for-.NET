@@ -120,6 +120,7 @@ dotnet test
 
 ## Notes
 
+- Always follow the skill foss-agent, if you don't know what it is, read it before doing anything.
 - It's absolute not allowed to add new public class/members that are not existed in the result of `dump-csharp`
 - Always verify API signatures with `dump-csharp` before implementing
 - Tests must use test files from `testdata/` directory, absolute path is not allowed to use.

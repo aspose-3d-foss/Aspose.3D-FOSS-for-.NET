@@ -25,11 +25,14 @@ namespace Aspose.ThreeD.Formats
             stream.Seek(0, SeekOrigin.Begin);
 
             var header = System.Text.Encoding.ASCII.GetString(buffer, 0, bytesRead);
+            
             if (header.Contains("Kaydara FBX Binary"))
             {
+                
                 return ReadBinaryFbx(stream, options);
             }
 
+            
             return ReadAsciiFbx(stream, options);
         }
 
@@ -64,6 +67,8 @@ namespace Aspose.ThreeD.Formats
                     break;
                 }
             }
+            
+            
 
             var parser = new FbxParser(tokens);
             ParseScene(parser.RootScope, scene, options);
