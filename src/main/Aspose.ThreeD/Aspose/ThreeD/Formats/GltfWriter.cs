@@ -223,6 +223,31 @@ namespace Aspose.ThreeD.Formats
                 };
                 accessors.Add(positionAccessor);
 
+                int? normalAccessorIdx = null;
+                int? tangentAccessorIdx = null;
+                int? texcoordAccessorIdx = null;
+                int? colorAccessorIdx = null;
+
+                foreach (var element in mesh.VertexElements)
+                {
+                    if (element.VertexElementType == VertexElementType.Normal)
+                    {
+                        normalAccessorIdx = WriteVertexElementData(element, binaryWriter, bufferViews, accessors);
+                    }
+                    else if (element.VertexElementType == VertexElementType.Tangent)
+                    {
+                        tangentAccessorIdx = WriteVertexElementData(element, binaryWriter, bufferViews, accessors);
+                    }
+                    else if (element.VertexElementType == VertexElementType.UV)
+                    {
+                        texcoordAccessorIdx = WriteVertexElementData(element, binaryWriter, bufferViews, accessors);
+                    }
+                    else if (element.VertexElementType == VertexElementType.VertexColor)
+                    {
+                        colorAccessorIdx = WriteVertexElementData(element, binaryWriter, bufferViews, accessors);
+                    }
+                }
+
                 foreach (var polygon in mesh.Polygons)
                 {
                     if (polygon.Length == 3)
@@ -392,6 +417,103 @@ namespace Aspose.ThreeD.Formats
             binaryWriter.Write((uint)jsonData.BinaryData.Length);
             binaryWriter.Write(0x004E4942);
             binaryWriter.Write(jsonData.BinaryData);
+        }
+
+
+        private static int? WriteVertexElementData(VertexElement element, BinaryWriter binaryWriter, List<Dictionary<string, object>> bufferViews, List<Dictionary<string, object>> accessors)
+        {
+            string? accessorType = null;
+            int componentType = 5126;
+            int componentsPerValue = 0;
+
+            if (element.VertexElementType == VertexElementType.UV)
+            {
+                accessorType = "VEC2";
+                componentsPerValue = 2;
+            }
+            else if (element.VertexElementType == VertexElementType.Normal || element.VertexElementType == VertexElementType.Tangent)
+            {
+                accessorType = "VEC3";
+                componentsPerValue = 3;
+            }
+            else if (element.VertexElementType == VertexElementType.VertexColor)
+            {
+                accessorType = "VEC4";
+                componentsPerValue = 4;
+            }
+            else
+            {
+                return null;
+            }
+
+            var data = new List<float>();
+            
+            if (element is VertexElementUV uvElement)
+            {
+                foreach (var uv in uvElement.Data)
+                {
+                    data.Add(uv.X);
+                    data.Add(uv.Y);
+                }
+            }
+            else if (element is VertexElementVector vectorElement)
+            {
+                foreach (var v in vectorElement.Data)
+                {
+                    data.Add(v.X);
+                    data.Add(v.Y);
+                    data.Add(v.Z);
+                    if (componentsPerValue == 4)
+                    {
+                        data.Add(v.W);
+                    }
+                }
+            }
+            else if (element is VertexElementVertexColor colorElement)
+            {
+                foreach (var c in colorElement.Data)
+                {
+                    data.Add(c.X);
+                    data.Add(c.Y);
+                    data.Add(c.Z);
+                    data.Add(c.W);
+                }
+            }
+
+            if (data.Count == 0)
+                return null;
+
+            var bufferOffset = (int)binaryWriter.BaseStream.Position;
+            foreach (var d in data)
+            {
+                binaryWriter.Write(d);
+            }
+            binaryWriter.Flush();
+
+            var byteStride = componentsPerValue * 4;
+
+            var bufferView = new Dictionary<string, object>
+            {
+                { "buffer", 0 },
+                { "byteOffset", bufferOffset },
+                { "byteLength", data.Count * 4 },
+                { "byteStride", byteStride },
+                { "target", 34962 }
+            };
+            bufferViews.Add(bufferView);
+
+            var accessorIdx = accessors.Count;
+            var accessor = new Dictionary<string, object>
+            {
+                { "bufferView", bufferViews.Count - 1 },
+                { "byteOffset", 0 },
+                { "componentType", componentType },
+                { "count", data.Count / componentsPerValue },
+                { "type", accessorType }
+            };
+            accessors.Add(accessor);
+
+            return accessorIdx;
         }
 
         private class GltfData

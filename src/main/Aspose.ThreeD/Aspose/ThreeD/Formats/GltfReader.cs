@@ -330,6 +330,7 @@ namespace Aspose.ThreeD.Formats
             int? normalAccessorIdx = null;
             int? texcoordAccessorIdx = null;
             int? colorAccessorIdx = null;
+            int? tangentAccessorIdx = null;
 
             foreach (JsonProperty attrProperty in attributesElement.EnumerateObject())
             {
@@ -369,7 +370,11 @@ namespace Aspose.ThreeD.Formats
                 var normals = ReadAccessorData(normalAccessor, bufferViews, buffers, "VEC3");
                 if (normals.Count >= positions.Count)
                 {
-                    var normalElement = new VertexElementVector(VertexElementType.Normal, MappingMode.ControlPoint, ReferenceMode.Direct);
+                                        var normalElement = new VertexElementVector(VertexElementType.Normal, MappingMode.ControlPoint, ReferenceMode.Direct);
+                    foreach (var n in normals)
+                    {
+                        normalElement.Data.Add(new FVector4(n[0], n[1], n[2], 0.0f));
+                    }
                     mesh.AddElement(normalElement);
                 }
             }
@@ -380,7 +385,12 @@ namespace Aspose.ThreeD.Formats
                 var uvs = ReadAccessorData(texcoordAccessor, bufferViews, buffers, "VEC2");
                 if (uvs.Count >= positions.Count)
                 {
-                    var uvElement = new VertexElementUV(TextureMapping.Diffuse, MappingMode.ControlPoint, ReferenceMode.Direct);
+                                        var uvElement = new VertexElementUV(TextureMapping.Diffuse, MappingMode.ControlPoint, ReferenceMode.Direct);
+                    foreach (var uv in uvs)
+                    {
+                        float v = options.FlipTexCoordV ? uv[1] : -uv[1];
+                        uvElement.Data.Add(new FVector2(uv[0], v));
+                    }
                     mesh.AddElement(uvElement);
                 }
             }
@@ -395,7 +405,18 @@ namespace Aspose.ThreeD.Formats
                 }
                 if (colors.Count >= positions.Count)
                 {
-                    var colorElement = new VertexElementVertexColor(MappingMode.ControlPoint, ReferenceMode.Direct);
+                                        var colorElement = new VertexElementVertexColor(MappingMode.ControlPoint, ReferenceMode.Direct);
+                    foreach (var color in colors)
+                    {
+                        if (color.Length == 3)
+                        {
+                            colorElement.Data.Add(new FVector4(color[0], color[1], color[2], 1.0f));
+                        }
+                        else
+                        {
+                            colorElement.Data.Add(new FVector4(color[0], color[1], color[2], color[3]));
+                        }
+                    }
                     mesh.AddElement(colorElement);
                 }
             }

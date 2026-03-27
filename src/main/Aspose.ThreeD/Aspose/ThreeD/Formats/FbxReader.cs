@@ -103,7 +103,10 @@ namespace Aspose.ThreeD.Formats
                 return false;
 
             if (endOffset > (ulong)streamLength)
-                return false;
+                throw new InvalidOperationException($"Block offset {endOffset} is out of range");
+
+            if (endOffset < (ulong)reader.BaseStream.Position)
+                throw new InvalidOperationException($"Block offset {endOffset} is negative");
 
             var propCount = (int)(is64Bit ? reader.ReadUInt64() : reader.ReadUInt32());
             var propLength = (int)(is64Bit ? reader.ReadUInt64() : reader.ReadUInt32());
@@ -112,6 +115,9 @@ namespace Aspose.ThreeD.Formats
             tokens.Add(new Token(name, TokenType.KEY));
 
             long beginCursor = reader.BaseStream.Position;
+
+            if (beginCursor + propLength > streamLength)
+                throw new InvalidOperationException("Property length out of bounds");
 
             for (int i = 0; i < propCount; i++)
             {
@@ -126,7 +132,8 @@ namespace Aspose.ThreeD.Formats
 
             if (reader.BaseStream.Position - beginCursor != propLength)
             {
-                reader.BaseStream.Seek(beginCursor + propLength - reader.BaseStream.Position, SeekOrigin.Current);
+                long remaining = beginCursor + propLength - reader.BaseStream.Position;
+                reader.BaseStream.Seek(remaining, SeekOrigin.Current);
             }
 
             int sentinelBlockLength = is64Bit ? 25 : 13;
@@ -134,15 +141,14 @@ namespace Aspose.ThreeD.Formats
             if (reader.BaseStream.Position < (long)endOffset)
             {
                 if ((long)endOffset - reader.BaseStream.Position < sentinelBlockLength)
-                    return false;
+                    throw new InvalidOperationException("Insufficient padding bytes at block end");
 
                 tokens.Add(new Token("{", TokenType.OPEN_BRACKET));
 
                 long end = (long)endOffset - sentinelBlockLength;
                 while (reader.BaseStream.Position < end)
                 {
-                    if (!ReadScope(reader, tokens, is64Bit, streamLength))
-                        break;
+                    ReadScope(reader, tokens, is64Bit, streamLength);
                 }
 
                 tokens.Add(new Token("}", TokenType.CLOSE_BRACKET));
@@ -155,9 +161,7 @@ namespace Aspose.ThreeD.Formats
             }
 
             if (reader.BaseStream.Position != (long)endOffset)
-            {
-                reader.BaseStream.Seek((long)endOffset - reader.BaseStream.Position, SeekOrigin.Current);
-            }
+                throw new InvalidOperationException("Scope length not reached");
 
             return true;
         }
@@ -173,8 +177,11 @@ namespace Aspose.ThreeD.Formats
             switch (typeChar)
             {
                 case 'Y':
-                    reader.BaseStream.Seek(2, SeekOrigin.Current);
-                    return reader.ReadInt16();
+                    {
+                        var value = reader.ReadInt16();
+                        reader.BaseStream.Seek(2, SeekOrigin.Current);
+                        return value;
+                    }
                 case 'C':
                     return reader.ReadByte() != 0;
                 case 'I':
@@ -186,54 +193,111 @@ namespace Aspose.ThreeD.Formats
                 case 'L':
                     return reader.ReadInt64();
                 case 'R':
-                    var length = reader.ReadInt32();
-                    return reader.ReadBytes(length);
+                    {
+                        var length = reader.ReadInt32();
+                        return reader.ReadBytes(length);
+                    }
                 case 'f':
                 case 'd':
                 case 'i':
                 case 'l':
                 case 'c':
-                    var arrayLength = reader.ReadInt32();
-                    var encoding = reader.ReadInt32();
-                    var compLength = reader.ReadInt32();
+                    {
+                        var arrayLength = reader.ReadInt32();
+                        var encoding = reader.ReadInt32();
+                        var compLength = reader.ReadInt32();
 
-                    var arrayData = reader.ReadBytes(compLength);
+                        var arrayData = reader.ReadBytes(compLength);
 
-                    int stride = 1;
-                    if (typeChar == 'f' || typeChar == 'i')
-                        stride = 4;
-                    else if (typeChar == 'd' || typeChar == 'l')
-                        stride = 8;
+                        if (encoding == 0)
+                        {
+                            int stride = typeChar == 'f' || typeChar == 'i' ? 4 : (typeChar == 'd' || typeChar == 'l' ? 8 : 1);
 
-                    if (typeChar == 'f' && arrayLength > 0)
-                    {
-                        var values = new float[arrayLength];
-                        Buffer.BlockCopy(arrayData, 0, values, 0, arrayLength * 4);
-                        return values;
+                            if (typeChar == 'f' && arrayLength > 0)
+                            {
+                                if (arrayData.Length != arrayLength * 4)
+                                    throw new InvalidOperationException($"Array length mismatch: type={typeChar}, length={arrayLength}, stride=4, expected_len={arrayLength * 4}, actual_len={arrayData.Length}");
+
+                                var values = new float[arrayLength];
+                                Buffer.BlockCopy(arrayData, 0, values, 0, arrayLength * 4);
+                                return values;
+                            }
+                            else if (typeChar == 'i' && arrayLength > 0)
+                            {
+                                if (arrayData.Length != arrayLength * 4)
+                                    throw new InvalidOperationException($"Array length mismatch: type={typeChar}, length={arrayLength}, stride=4, expected_len={arrayLength * 4}, actual_len={arrayData.Length}");
+
+                                var values = new int[arrayLength];
+                                Buffer.BlockCopy(arrayData, 0, values, 0, arrayLength * 4);
+                                return values;
+                            }
+                            else if (typeChar == 'd' && arrayLength > 0)
+                            {
+                                if (arrayData.Length != arrayLength * 8)
+                                    throw new InvalidOperationException($"Array length mismatch: type={typeChar}, length={arrayLength}, stride=8, expected_len={arrayLength * 8}, actual_len={arrayData.Length}");
+
+                                var values = new double[arrayLength];
+                                Buffer.BlockCopy(arrayData, 0, values, 0, arrayLength * 8);
+                                return values;
+                            }
+                            else if (typeChar == 'l' && arrayLength > 0)
+                            {
+                                if (arrayData.Length != arrayLength * 8)
+                                    throw new InvalidOperationException($"Array length mismatch: type={typeChar}, length={arrayLength}, stride=8, expected_len={arrayLength * 8}, actual_len={arrayData.Length}");
+
+                                var values = new long[arrayLength];
+                                Buffer.BlockCopy(arrayData, 0, values, 0, arrayLength * 8);
+                                return values;
+                            }
+                            else if (typeChar == 'c' && arrayLength > 0)
+                            {
+                                return arrayData;
+                            }
+                        }
+                        else if (encoding == 1)
+                        {
+                            var decompressed = new byte[0];
+                            using var ms = new System.IO.MemoryStream(arrayData, 2, arrayData.Length - 2);
+                            using var deflate = new System.IO.Compression.DeflateStream(ms, System.IO.Compression.CompressionMode.Decompress);
+                            using var decompressStream = new System.IO.MemoryStream();
+                            deflate.CopyTo(decompressStream);
+                            decompressed = decompressStream.ToArray();
+
+                            if (typeChar == 'f' && arrayLength > 0)
+                            {
+                                var values = new float[arrayLength];
+                                Buffer.BlockCopy(decompressed, 0, values, 0, arrayLength * 4);
+                                return values;
+                            }
+                            else if (typeChar == 'i' && arrayLength > 0)
+                            {
+                                var values = new int[arrayLength];
+                                Buffer.BlockCopy(decompressed, 0, values, 0, arrayLength * 4);
+                                return values;
+                            }
+                            else if (typeChar == 'd' && arrayLength > 0)
+                            {
+                                var values = new double[arrayLength];
+                                Buffer.BlockCopy(decompressed, 0, values, 0, arrayLength * 8);
+                                return values;
+                            }
+                            else if (typeChar == 'l' && arrayLength > 0)
+                            {
+                                var values = new long[arrayLength];
+                                Buffer.BlockCopy(decompressed, 0, values, 0, arrayLength * 8);
+                                return values;
+                            }
+                            else if (typeChar == 'c' && arrayLength > 0)
+                            {
+                                return decompressed;
+                            }
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException($"Unknown encoding {encoding}");
+                        }
+                        break;
                     }
-                    else if (typeChar == 'i' && arrayLength > 0)
-                    {
-                        var values = new int[arrayLength];
-                        Buffer.BlockCopy(arrayData, 0, values, 0, arrayLength * 4);
-                        return values;
-                    }
-                    else if (typeChar == 'd' && arrayLength > 0)
-                    {
-                        var values = new double[arrayLength];
-                        Buffer.BlockCopy(arrayData, 0, values, 0, arrayLength * 8);
-                        return values;
-                    }
-                    else if (typeChar == 'l' && arrayLength > 0)
-                    {
-                        var values = new long[arrayLength];
-                        Buffer.BlockCopy(arrayData, 0, values, 0, arrayLength * 8);
-                        return values;
-                    }
-                    else if (typeChar == 'c' && arrayLength > 0)
-                    {
-                        return arrayData;
-                    }
-                    break;
                 case 'S':
                     return ReadString(reader, longLength: true);
                 default:
@@ -293,77 +357,95 @@ namespace Aspose.ThreeD.Formats
                 objectMap[geomId] = mesh;
 
                 var verticesElement = geomScope.GetFirstElement("Vertices");
-                if (verticesElement?.Compound != null)
+                Console.WriteLine($"ParseGeometries: verticesElement={verticesElement}, Tokens.Count={verticesElement?.Tokens?.Count}");
+                
+                if (verticesElement != null && verticesElement.Tokens.Count > 0)
                 {
-                    var aElem = verticesElement.Compound.GetFirstElement("a");
-                    if (aElem != null)
+                    Console.WriteLine($"ParseGeometries: verticesElement has {verticesElement.Tokens.Count} tokens");
+                    var vertices = new List<double>();
+                    foreach (var t in verticesElement.Tokens)
                     {
-                        Console.WriteLine($"ParseGeometries: aElem has {aElem.Tokens.Count} tokens");
-                        var vertices = new List<double>();
-                        foreach (var t in aElem.Tokens)
+                        var textPreview = t.Text?.Length > 50 ? t.Text.Substring(0, 50) + "..." : t.Text;
+                        Console.WriteLine($"  Token type: {t.Value?.GetType().Name}, Text: {textPreview}");
+                        List<double> vals;
+                        if (t.Value is float[] floatArray)
                         {
-                            var vals = ParseFloatArray(t.Text);
-                            vertices.AddRange(vals);
+                            Console.WriteLine($"    Float array with {floatArray.Length} elements");
+                            vals = new List<double>(Array.ConvertAll(floatArray, x => (double)x));
                         }
-                        Console.WriteLine($"ParseGeometries: Vertices count: {vertices.Count}");
-                        for (int i = 0; i < vertices.Count - 2; i += 3)
+                        else if (t.Value is double[] doubleArray)
                         {
-                            mesh.ControlPoints.Add(new Vector4((float)vertices[i], (float)vertices[i + 1], (float)vertices[i + 2], 1.0f));
+                            Console.WriteLine($"    Double array with {doubleArray.Length} elements");
+                            vals = new List<double>(doubleArray);
                         }
-                        Console.WriteLine($"ParseGeometries: Added {mesh.ControlPoints.Count} ControlPoints");
+                        else
+                        {
+                            vals = ParseFloatArray(t.Text);
+                        }
+                        Console.WriteLine($"    Values count: {vals.Count}");
+                        vertices.AddRange(vals);
                     }
+                    Console.WriteLine($"ParseGeometries: Vertices count: {vertices.Count}");
+                    for (int i = 0; i < vertices.Count - 2; i += 3)
+                    {
+                        mesh.ControlPoints.Add(new Vector4((float)vertices[i], (float)vertices[i + 1], (float)vertices[i + 2], 1.0f));
+                    }
+                    Console.WriteLine($"ParseGeometries: Added {mesh.ControlPoints.Count} ControlPoints");
                 }
 
                 var polygonElement = geomScope.GetFirstElement("PolygonVertexIndex");
-                if (polygonElement?.Compound != null)
+                Console.WriteLine($"ParseGeometries: polygonElement={polygonElement}, Tokens.Count={polygonElement?.Tokens?.Count}");
+                
+                if (polygonElement != null && polygonElement.Tokens.Count > 0)
                 {
-                    var aElem = polygonElement.Compound.GetFirstElement("a");
-                    if (aElem != null)
+                    Console.WriteLine($"ParseGeometries: PolygonVertexIndex has {polygonElement.Tokens.Count} tokens");
+                    var indices = new List<int>();
+                    foreach (var t in polygonElement.Tokens)
                     {
-                        Console.WriteLine($"ParseGeometries: PolygonVertexIndex has {aElem.Tokens.Count} tokens");
-                        var indices = new List<int>();
-                        foreach (var t in aElem.Tokens)
+                        List<int> vals;
+                        if (t.Value is int[] intArray)
                         {
-                            var vals = ParseIntArray(t.Text);
-                            indices.AddRange(vals);
+                            vals = new List<int>(intArray);
                         }
-                        Console.WriteLine($"ParseGeometries: PolygonVertexIndex count: {indices.Count}");
-                        Console.WriteLine($"First few indices: {string.Join(",", indices.Take(20))}");
-                        int polygonStart = 0;
-                        for (int i = 0; i < indices.Count; i++)
+                        else
                         {
-                            var idx = indices[i];
-                            if (idx < 0)
+                            vals = ParseIntArray(t.Text);
+                        }
+                        indices.AddRange(vals);
+                    }
+                    Console.WriteLine($"ParseGeometries: PolygonVertexIndex count: {indices.Count}");
+                    Console.WriteLine($"First few indices: {string.Join(",", indices.Take(20))}");
+                    int polygonStart = 0;
+                    for (int i = 0; i < indices.Count; i++)
+                    {
+                        var idx = indices[i];
+                        if (idx < 0)
+                        {
+                            int polygonSize = i - polygonStart + 1;
+                            Console.WriteLine($"  Polygon at i={i}, size={polygonSize}, start={polygonStart}, total available={indices.Count - polygonStart}");
+                            if (polygonSize < 3)
                             {
-                                // In FBX, negative values indicate end of polygon
-                                // The actual vertex index is idx XOR -1 (or ~idx)
-                                // The polygon size is number of vertices from polygonStart to i (inclusive)
-                                int polygonSize = i - polygonStart + 1;
-                                Console.WriteLine($"  Polygon at i={i}, size={polygonSize}, start={polygonStart}, total available={indices.Count - polygonStart}");
-                                if (polygonSize < 3)
-                                {
-                                    Console.WriteLine($"    ERROR: Polygon must have at least 3 vertices (got {polygonSize})");
-                                    break;
-                                }
-                                int[] poly = new int[polygonSize];
-                                for (int j = 0; j < polygonSize; j++)
-                                {
-                                    poly[j] = indices[polygonStart + j];
-                                }
-                                try
-                                {
-                                    mesh.CreatePolygon(poly);
-                                    polygonStart = i + 1;
-                                }
-                                catch (Exception ex)
-                                {
-                                    Console.WriteLine($"    ERROR: {ex.Message}");
-                                    break;
-                                }
+                                Console.WriteLine($"    ERROR: Polygon must have at least 3 vertices (got {polygonSize})");
+                                break;
+                            }
+                            int[] poly = new int[polygonSize];
+                            for (int j = 0; j < polygonSize; j++)
+                            {
+                                poly[j] = indices[polygonStart + j];
+                            }
+                            try
+                            {
+                                mesh.CreatePolygon(poly);
+                                polygonStart = i + 1;
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"    ERROR: {ex.Message}");
+                                break;
                             }
                         }
-                        Console.WriteLine($"ParseGeometries: Added {mesh.PolygonCount} polygons");
                     }
+                    Console.WriteLine($"ParseGeometries: Added {mesh.PolygonCount} polygons");
                 }
 
                 // Parse vertex elements (normals, UVs)

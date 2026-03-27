@@ -133,7 +133,14 @@ namespace Aspose.ThreeD.Formats
         /// </summary>
         public GltfLoadOptions() : base()
         {
+            FlipTexCoordV = true;
         }
+
+        /// <summary>
+        /// Gets or sets whether to flip the V coordinate of texture coordinates during import.
+        /// Default value is true.
+        /// </summary>
+        public bool FlipTexCoordV { get; set; }
     }
 
     /// <summary>

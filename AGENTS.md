@@ -66,15 +66,32 @@ This is a FOSS (Free and Open Source) implementation of Aspose.3D for .NET 26.1.
 - FBX binary format reader/writer (FbxReader, FbxWriter - complete)
 - Scene.Open() method for OBJ/STL/gltF/FBX/Collada/PLY format loading
 - Scene.Save() method for OBJ/STL/gltF/PLY format saving
+- Vertex element parsing (normals, UVs, colors)
 
 ### Stub Implementations
 | API | Status | Notes |
 |-----|--------|-------|
 | Scene.Render() | Stub (throws exception) | Rendering not implemented in FOSS version |
-| Scene.Open() for FBX | Partial (binary parsing complete, scene graph needs work) | FBX importer structure exists but needs complete scene graph parsing |
 | Scene.Save() for FBX | Stub (throws exception) | FBX export (FbxWriter) |
 | Geometry.GetDeformers() | Stub (throws exception) | Not yet implemented |
 | Watermark encoding/decoding | Stub (throws exception) | Watermark functionality not implemented in FOSS version |
+
+### Recent Fixes (Binary FBX Importer)
+Fixed binary FBX importer to correctly parse FBX files:
+
+**Issues Fixed:**
+1. **Compression Method**: Changed from `GZipStream` (RFC1952) to `DeflateStream` (RFC1950/zlib) with proper header skipping
+2. **Array Token Parsing**: Changed from `verticesElement.Compound.GetFirstElement("a")` to using `verticesElement.Tokens` directly for binary format
+
+**Technical Details:**
+- FBX binary format uses zlib compression (encoding=1) with `78 01` or `78 9c` header
+- Array data in binary FBX is stored directly in element tokens, not in nested "a" elements
+- Properly reads end_offset, prop_count, prop_length for all nested scopes
+- Handles both 32-bit (version < 7500) and 64-bit (version >= 7500) FBX formats
+
+**Test Results:**
+- All 62 tests pass (including 2 new binary FBX tests)
+- Verified with FBX 7300 and 7500 binary files with normals and UVs
 
 ### Not Implemented (Throws Exception)
 | API | Reason |
@@ -87,21 +104,28 @@ This is a FOSS (Free and Open Source) implementation of Aspose.3D for .NET 26.1.
 
 Tests have been implemented:
 - SceneTests.cs - Tests for Scene class initialization and basic operations
-- FileIOTests.cs - Tests for OBJ and STL file I/O and primitive geometry
+- FileIOTests.cs - Tests for OBJ, STL, GLTF, FBX, PLY file I/O and primitive geometry
 - FormatDetectionTests.cs - Tests for format detection
 
-All 35 tests are passing.
+All 62 tests pass (including 2 new binary FBX tests).
 
 ## Test Data
 
-Sample files are located in `testdata/input/`:
-- `cube.obj` - Basic cube mesh
-- `stl_ascii.stl`, `stl_binary.stl` - STL files for testing
-- `cube.fbx` - FBX file for testing
-- GLTF test files in `testdata/gltf/`
+Sample files are located in `testdata/`:
+### ASCII FBX Tests
+- `testdata/fbx7400ascii/cube.fbx` - ASCII FBX with normals and UVs
+- `testdata/fbx7400ascii/fuel_tank6.fbx` - Complex ASCII FBX
 
-Expected outputs in `testdata/expected/`:
-- Will be populated as tests are added
+### Binary FBX Tests  
+- `testdata/fbx7300binary/camera.fbx` - FBX 7300 binary
+- `testdata/fbx7300binary/fuel_tank6.fbx` - FBX 7300 binary with normals and UVs
+- `testdata/fbx7500binary/camera.fbx` - FBX 7500 binary (64-bit)
+- `testdata/fbx7500binary/fuel_tank6.fbx` - FBX 7500 binary with normals and UVs
+
+### Other Formats
+- `testdata/input/cube.obj` - Basic cube mesh
+- `testdata/stl/stl_ascii.stl`, `testdata/stl/stl_binary.stl` - STL files
+- GLTF test files in `testdata/gltf/`
 
 ## Development Commands
 

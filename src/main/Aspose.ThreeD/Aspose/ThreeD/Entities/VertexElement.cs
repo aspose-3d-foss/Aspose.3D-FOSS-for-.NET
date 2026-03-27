@@ -143,13 +143,21 @@ namespace Aspose.ThreeD.Entities
     /// </summary>
     public class VertexElementVertexColor : VertexElement
     {
+        private readonly List<FVector4> _data;
+
         /// <summary>
         /// Initializes a new instance of the VertexElementVertexColor class
         /// </summary>
         public VertexElementVertexColor(MappingMode mappingMode, ReferenceMode referenceMode)
             : base(VertexElementType.VertexColor, mappingMode, referenceMode)
         {
+            _data = new List<FVector4>();
         }
+
+        /// <summary>
+        /// Gets the vertex color data
+        /// </summary>
+        public List<FVector4> Data => _data;
     }
 
     /// <summary>
