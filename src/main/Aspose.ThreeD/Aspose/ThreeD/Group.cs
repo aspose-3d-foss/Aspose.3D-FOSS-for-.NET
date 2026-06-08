@@ -1,5 +1,6 @@
 using System;
 using Aspose.ThreeD.Utilities;
+using Aspose.ThreeD.Render;
 
 namespace Aspose.ThreeD
 {
@@ -18,9 +19,9 @@ namespace Aspose.ThreeD
             return new BoundingBox();
         }
 
-        public override string GetEntityRendererKey()
+        public override EntityRendererKey GetEntityRendererKey()
         {
-            return "Group";
+            return new EntityRendererKey("Group");
         }
     }
 }

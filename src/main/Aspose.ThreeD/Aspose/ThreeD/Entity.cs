@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Aspose.ThreeD.Render;
 
 namespace Aspose.ThreeD
 {
@@ -66,6 +67,6 @@ namespace Aspose.ThreeD
         /// <summary>
         /// Gets the key of the entity renderer registered in the renderer
         /// </summary>
-        public abstract string GetEntityRendererKey();
+        public abstract EntityRendererKey GetEntityRendererKey();
     }
 }

@@ -1,4 +1,5 @@
 using Aspose.ThreeD.Utilities;
+using Aspose.ThreeD.Render;
 
 namespace Aspose.ThreeD.Entities
 {
@@ -50,9 +51,9 @@ namespace Aspose.ThreeD.Entities
             return new BoundingBox();
         }
 
-        public override string GetEntityRendererKey()
+        public override EntityRendererKey GetEntityRendererKey()
         {
-            return "Light";
+            return new EntityRendererKey("Light");
         }
     }
 }

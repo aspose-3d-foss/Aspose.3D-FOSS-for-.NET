@@ -1,4 +1,5 @@
 using Aspose.ThreeD.Utilities;
+using Aspose.ThreeD.Render;
 
 namespace Aspose.ThreeD.Entities
 {
@@ -45,9 +46,9 @@ namespace Aspose.ThreeD.Entities
         /// <summary>
         /// Gets the key of the entity renderer registered in the renderer
         /// </summary>
-        public override string GetEntityRendererKey()
+        public override EntityRendererKey GetEntityRendererKey()
         {
-            return "Camera";
+            return new EntityRendererKey("Camera");
         }
     }
 }

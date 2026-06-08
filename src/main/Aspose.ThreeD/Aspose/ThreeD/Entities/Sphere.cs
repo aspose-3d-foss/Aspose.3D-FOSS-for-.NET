@@ -1,5 +1,6 @@
 using System;
 using Vector4 = Aspose.ThreeD.Vector4;
+using Aspose.ThreeD.Render;
 
 namespace Aspose.ThreeD.Entities
 {
@@ -173,9 +174,9 @@ namespace Aspose.ThreeD.Entities
         /// <summary>
         /// Gets the key of the entity renderer registered in the renderer
         /// </summary>
-        public override string GetEntityRendererKey()
+        public override EntityRendererKey GetEntityRendererKey()
         {
-            return "Sphere";
+            return new EntityRendererKey("Sphere");
         }
     }
 }
