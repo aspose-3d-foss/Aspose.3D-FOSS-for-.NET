@@ -13,8 +13,5 @@
     <RepositoryUrl>https://github.com/aspose-3d/Aspose.3D-for-.NET</RepositoryUrl>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="9.0.0" />
-  </ItemGroup>
-
+  <ItemGroup />
 </Project>

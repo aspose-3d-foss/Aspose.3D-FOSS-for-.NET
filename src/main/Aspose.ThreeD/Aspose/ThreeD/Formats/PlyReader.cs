@@ -286,7 +286,7 @@ namespace Aspose.ThreeD.Formats
             }
         }
 
-        private static PlyProperty FindFaceProperty(PlyElement elem)
+        private static PlyProperty? FindFaceProperty(PlyElement elem)
         {
             foreach (var prop in elem.Properties)
             {

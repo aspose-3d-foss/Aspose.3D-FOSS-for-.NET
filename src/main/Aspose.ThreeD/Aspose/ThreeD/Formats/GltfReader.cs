@@ -330,7 +330,6 @@ namespace Aspose.ThreeD.Formats
             int? normalAccessorIdx = null;
             int? texcoordAccessorIdx = null;
             int? colorAccessorIdx = null;
-            int? tangentAccessorIdx = null;
 
             foreach (JsonProperty attrProperty in attributesElement.EnumerateObject())
             {

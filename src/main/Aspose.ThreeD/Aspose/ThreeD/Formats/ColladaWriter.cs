@@ -440,7 +440,7 @@ namespace Aspose.ThreeD.Formats
 
             foreach (var entity in node.Entities)
             {
-                string geometryRef = null;
+                string? geometryRef = null;
                 if (entity is Mesh entityMesh)
                 {
                     var key = $"mesh-{entity.GetHashCode()}";
