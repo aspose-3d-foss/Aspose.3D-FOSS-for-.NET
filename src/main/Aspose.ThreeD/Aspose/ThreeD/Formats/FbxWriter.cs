@@ -1006,9 +1006,9 @@ namespace Aspose.ThreeD.Formats
             WriteInt32(writer, 5);
             WriteInt32(writer, 24);
             WriteString(writer, "Lcl Scaling");
-            WriteDouble(writer, node.Transform.Scale.X);
-            WriteDouble(writer, node.Transform.Scale.Y);
-            WriteDouble(writer, node.Transform.Scale.Z);
+            WriteDouble(writer, node.Transform.Scaling.X);
+            WriteDouble(writer, node.Transform.Scaling.Y);
+            WriteDouble(writer, node.Transform.Scaling.Z);
 
             WriteInt32(writer, 0);
 

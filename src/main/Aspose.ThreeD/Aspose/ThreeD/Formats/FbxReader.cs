@@ -670,13 +670,13 @@ namespace Aspose.ThreeD.Formats
                 }
             }
 
-            node.Transform.Translation = translation;
+            node.Transform.Translation = new Vector3(translation);
             var radX = rotation.X * (float)Math.PI / 180.0f;
             var radY = rotation.Y * (float)Math.PI / 180.0f;
             var radZ = rotation.Z * (float)Math.PI / 180.0f;
             var q = FromEulerAngles(radX, radY, radZ);
             node.Transform.Rotation = q;
-            node.Transform.Scale = scale;
+            node.Transform.Scaling = new Vector3(scale.X, scale.Y, scale.Z);
         }
 
         private static void ParseConnections(FbxScope rootScope, Scene scene, Dictionary<ulong, object> objectMap)

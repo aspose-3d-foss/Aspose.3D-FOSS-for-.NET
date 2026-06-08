@@ -357,7 +357,7 @@ namespace Aspose.ThreeD.Formats
                 nodeData["rotation"] = new[] { rotation.X, rotation.Y, rotation.Z, rotation.W };
             }
 
-            var scale = node.Transform.Scale;
+            var scale = node.Transform.Scaling;
             if (scale.X != 1 || scale.Y != 1 || scale.Z != 1)
             {
                 nodeData["scale"] = new[] { scale.X, scale.Y, scale.Z };

@@ -429,11 +429,11 @@ namespace Aspose.ThreeD.Formats
                     nodeElement.Add(rotateElement);
                 }
 
-                if (transform.Scale.X != 1 || transform.Scale.Y != 1 || transform.Scale.Z != 1)
+                if (transform.Scaling.X != 1 || transform.Scaling.Y != 1 || transform.Scaling.Z != 1)
                 {
                     var scaleElement = new XElement(ns + "scale");
                     scaleElement.Add(new XAttribute("sid", "scale"));
-                    scaleElement.Value = $"{transform.Scale.X} {transform.Scale.Y} {transform.Scale.Z}";
+                    scaleElement.Value = $"{transform.Scaling.X} {transform.Scaling.Y} {transform.Scaling.Z}";
                     nodeElement.Add(scaleElement);
                 }
             }

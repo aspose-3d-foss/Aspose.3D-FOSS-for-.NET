@@ -277,11 +277,11 @@ namespace Aspose.ThreeD
         /// </summary>
         public Matrix4 EvaluateGlobalTransform(bool withGeometricTransform)
         {
-            var matrix = _transform.Matrix;
+            var matrix = _transform.TransformMatrix;
             var current = _parentNode;
             while (current != null)
             {
-                matrix = current._transform.Matrix * matrix;
+                matrix = current._transform.TransformMatrix * matrix;
                 current = current._parentNode;
             }
             return matrix;

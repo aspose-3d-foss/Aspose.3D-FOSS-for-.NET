@@ -787,7 +787,7 @@ namespace Aspose.ThreeD.Formats
                     else if (idx == 2) z = val.GetSingle();
                     idx++;
                 }
-                node.Transform.Translation = new FVector3(x, y, z);
+                node.Transform.Translation = new Vector3(new FVector3(x, y, z));
             }
 
             if (nodeElement.TryGetProperty("rotation", out var rotationElement) && rotationElement.ValueKind == JsonValueKind.Array)
@@ -816,7 +816,7 @@ namespace Aspose.ThreeD.Formats
                     else if (idx == 2) z = val.GetSingle();
                     idx++;
                 }
-                node.Transform.Scale = new FVector3(x, y, z);
+                node.Transform.Scaling = new Vector3(x, y, z);
             }
 
             return node;

@@ -498,8 +498,8 @@ namespace Aspose.ThreeD.Formats
         private static void ParseMatrixToTransform(Transform transform, Matrix4 matrix)
         {
             transform.Rotation = ConvertMatrixToQuaternion(matrix);
-            transform.Translation = new FVector3((float)matrix.m30, (float)matrix.m31, (float)matrix.m32);
-            transform.Scale = new FVector3(1, 1, 1);
+            transform.Translation = new Vector3(new FVector3((float)matrix.m30, (float)matrix.m31, (float)matrix.m32));
+            transform.Scaling = new Vector3(1, 1, 1);
         }
 
         private static Quaternion ConvertMatrixToQuaternion(Matrix4 matrix)
