@@ -2,7 +2,7 @@ using System;
 
 namespace Aspose.ThreeD.Utilities
 {
-    public struct Matrix4 : IEquatable<Matrix4>
+    public struct Matrix4
     {
         public double m00, m01, m02, m03;
         public double m10, m11, m12, m13;
@@ -68,24 +68,6 @@ namespace Aspose.ThreeD.Utilities
         public bool Decompose(out Vector3 translation, out Vector3 scaling, out Quaternion rotation)
         { translation = new Vector3(0,0,0); scaling = new Vector3(1,1,1); rotation = Quaternion.Identity; return true; }
 
-        
-        public double M11 { get => m00; set => m00 = value; }
-        public double M12 { get => m01; set => m01 = value; }
-        public double M13 { get => m02; set => m02 = value; }
-        public double M14 { get => m03; set => m03 = value; }
-        public double M21 { get => m10; set => m10 = value; }
-        public double M22 { get => m11; set => m11 = value; }
-        public double M23 { get => m12; set => m12 = value; }
-        public double M24 { get => m13; set => m13 = value; }
-        public double M31 { get => m20; set => m20 = value; }
-        public double M32 { get => m21; set => m21 = value; }
-        public double M33 { get => m22; set => m22 = value; }
-        public double M34 { get => m23; set => m23 = value; }
-        public double M41 { get => m30; set => m30 = value; }
-        public double M42 { get => m31; set => m31 = value; }
-        public double M43 { get => m32; set => m32 = value; }
-        public double M44 { get => m33; set => m33 = value; }
-
 public override string ToString() => $"[{m00}, {m01}, {m02}, {m03}; {m10}, {m11}, {m12}, {m13}; {m20}, {m21}, {m22}, {m23}; {m30}, {m31}, {m32}, {m33}]";
 
         public static Matrix4 Translate(Vector3 t) => new Matrix4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, t.X, t.Y, t.Z, 1);
@@ -128,19 +110,5 @@ public override string ToString() => $"[{m00}, {m01}, {m02}, {m03}; {m10}, {m11}
         public static Vector4 operator *(Matrix4 lhs, Vector4 v) => new Vector4(lhs.m00 * v.X + lhs.m01 * v.Y + lhs.m02 * v.Z + lhs.m03 * v.W, lhs.m10 * v.X + lhs.m11 * v.Y + lhs.m12 * v.Z + lhs.m13 * v.W, lhs.m20 * v.X + lhs.m21 * v.Y + lhs.m22 * v.Z + lhs.m23 * v.W, lhs.m30 * v.X + lhs.m31 * v.Y + lhs.m32 * v.Z + lhs.m33 * v.W);
 
         public static Matrix4 operator *(Matrix4 lhs, double v) => new Matrix4(lhs.m00 * v, lhs.m01 * v, lhs.m02 * v, lhs.m03 * v, lhs.m10 * v, lhs.m11 * v, lhs.m12 * v, lhs.m13 * v, lhs.m20 * v, lhs.m21 * v, lhs.m22 * v, lhs.m23 * v, lhs.m30 * v, lhs.m31 * v, lhs.m32 * v, lhs.m33 * v);
-
-        public override bool Equals(object? obj) => obj is Matrix4 other && Equals(other);
-
-        public bool Equals(Matrix4 other) => m00 == other.m00 && m01 == other.m01 && m02 == other.m02 && m03 == other.m03 && m10 == other.m10 && m11 == other.m11 && m12 == other.m12 && m13 == other.m13 && m20 == other.m20 && m21 == other.m21 && m22 == other.m22 && m23 == other.m23 && m30 == other.m30 && m31 == other.m31 && m32 == other.m32 && m33 == other.m33;
-
-        public override int GetHashCode()
-        {
-            var h = new HashCode();
-            h.Add(m00); h.Add(m01); h.Add(m02); h.Add(m03);
-            h.Add(m10); h.Add(m11); h.Add(m12); h.Add(m13);
-            h.Add(m20); h.Add(m21); h.Add(m22); h.Add(m23);
-            h.Add(m30); h.Add(m31); h.Add(m32); h.Add(m33);
-            return h.ToHashCode();
-        }
     }
 }
