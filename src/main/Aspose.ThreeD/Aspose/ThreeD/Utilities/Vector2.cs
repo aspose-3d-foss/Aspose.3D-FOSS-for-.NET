@@ -4,55 +4,55 @@ namespace Aspose.ThreeD.Utilities
 {
     public struct Vector2 : IComparable<Vector2>, IEquatable<Vector2>
     {
-        public double x;
-        public double y;
+        public double X;
+        public double Y;
 
         public Vector2(double s)
         {
-            x = s;
-            y = s;
+            X = s;
+            Y = s;
         }
 
         public Vector2(double x, double y)
         {
-            this.x = x;
-            this.y = y;
+            X = x;
+            Y = y;
         }
 
         public Vector2(Vector3 s)
         {
-            x = s.x;
-            y = s.y;
+            X = s.X;
+            Y = s.Y;
         }
 
         public Vector2(FVector2 vec)
         {
-            x = vec.X;
-            y = vec.Y;
+            X = vec.X;
+            Y = vec.Y;
         }
 
         public double U
         {
-            get => x;
-            set => x = value;
+            get => X;
+            set => X = value;
         }
 
         public double V
         {
-            get => y;
-            set => y = value;
+            get => Y;
+            set => Y = value;
         }
 
-        public double Length => Math.Sqrt(x * x + y * y);
+        public double Length => Math.Sqrt(X * X + Y * Y);
 
         public double Dot(Vector2 rhs)
         {
-            return x * rhs.x + y * rhs.y;
+            return X * rhs.X + Y * rhs.Y;
         }
 
         public bool Equals(Vector2 rhs)
         {
-            return x == rhs.x && y == rhs.y;
+            return X == rhs.X && Y == rhs.Y;
         }
 
         public override bool Equals(object? obj)
@@ -62,17 +62,17 @@ namespace Aspose.ThreeD.Utilities
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(x, y);
+            return HashCode.Combine(X, Y);
         }
 
         public override string ToString()
         {
-            return $"({x}, {y})";
+            return $"({X}, {Y})";
         }
 
         public double Cross(Vector2 v)
         {
-            return x * v.y - y * v.x;
+            return X * v.Y - Y * v.X;
         }
 
         public Vector2 Normalize()
@@ -80,16 +80,16 @@ namespace Aspose.ThreeD.Utilities
             double len = Length;
             if (len > 0)
             {
-                return new Vector2(x / len, y / len);
+                return new Vector2(X / len, Y / len);
             }
             return new Vector2(0, 0);
         }
 
         public int CompareTo(Vector2 other)
         {
-            int cmp = x.CompareTo(other.x);
+            int cmp = X.CompareTo(other.X);
             if (cmp != 0) return cmp;
-            return y.CompareTo(other.y);
+            return Y.CompareTo(other.Y);
         }
 
         public static explicit operator FVector2(Vector2 v)
@@ -99,27 +99,27 @@ namespace Aspose.ThreeD.Utilities
 
         public static Vector2 operator +(Vector2 lhs, Vector2 rhs)
         {
-            return new Vector2(lhs.x + rhs.x, lhs.y + rhs.y);
+            return new Vector2(lhs.X + rhs.X, lhs.Y + rhs.Y);
         }
 
         public static Vector2 operator -(Vector2 lhs, Vector2 rhs)
         {
-            return new Vector2(lhs.x - rhs.x, lhs.y - rhs.y);
+            return new Vector2(lhs.X - rhs.X, lhs.Y - rhs.Y);
         }
 
         public static Vector2 operator /(Vector2 lhs, double rhs)
         {
-            return new Vector2(lhs.x / rhs, lhs.y / rhs);
+            return new Vector2(lhs.X / rhs, lhs.Y / rhs);
         }
 
         public static Vector2 operator *(Vector2 lhs, double rhs)
         {
-            return new Vector2(lhs.x * rhs, lhs.y * rhs);
+            return new Vector2(lhs.X * rhs, lhs.Y * rhs);
         }
 
         public static Vector2 operator *(double lhs, Vector2 rhs)
         {
-            return new Vector2(lhs * rhs.x, lhs * rhs.y);
+            return new Vector2(lhs * rhs.X, lhs * rhs.Y);
         }
 
         public static bool operator ==(Vector2 lhs, Vector2 rhs)

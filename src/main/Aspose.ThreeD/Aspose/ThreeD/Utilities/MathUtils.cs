@@ -17,13 +17,13 @@ namespace Aspose.ThreeD.Utilities
 
         public static int FindIntersection(Vector2 p0, Vector2 d0, Vector2 p1, Vector2 d1, Vector2[] results)
         {
-            double det = d0.x * d1.y - d0.y * d1.x;
+            double det = d0.X * d1.Y - d0.Y * d1.X;
             if (det == 0)
                 return 0;
 
             Vector2 dp = p1 - p0;
-            double t = (dp.x * d1.y - dp.y * d1.x) / det;
-            double u = (dp.x * d0.y - dp.y * d0.x) / det;
+            double t = (dp.X * d1.Y - dp.Y * d1.X) / det;
+            double u = (dp.X * d0.Y - dp.Y * d0.X) / det;
 
             if (results != null && results.Length > 0)
             {
@@ -47,21 +47,21 @@ namespace Aspose.ThreeD.Utilities
 
         private static double Sign(Vector2 p1, Vector2 p2, Vector2 p3)
         {
-            return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
+            return (p1.X - p3.X) * (p2.Y - p3.Y) - (p2.X - p3.X) * (p1.Y - p3.Y);
         }
 
         public static Vector2? RayIntersect(Vector2 origin, Vector2 dir, Vector2 a, Vector2 b)
         {
             Vector2 v1 = origin - a;
             Vector2 v2 = b - a;
-            Vector2 v3 = new Vector2(-dir.y, dir.x);
+            Vector2 v3 = new Vector2(-dir.Y, dir.X);
 
-            double dot = v2.x * v3.x + v2.y * v3.y;
+            double dot = v2.X * v3.X + v2.Y * v3.Y;
             if (Math.Abs(dot) < 0.00001)
                 return null;
 
-            double t1 = (v2.x * v1.y - v2.y * v1.x) / dot;
-            double t2 = (v1.x * v3.x + v1.y * v3.y) / dot;
+            double t1 = (v2.X * v1.Y - v2.Y * v1.X) / dot;
+            double t2 = (v1.X * v3.X + v1.Y * v3.Y) / dot;
 
             if (t1 >= 0 && (t2 >= 0 && t2 <= 1))
                 return origin + dir * t1;
@@ -79,18 +79,18 @@ namespace Aspose.ThreeD.Utilities
         public static Vector3 ToDegree(Vector3 radian)
         {
             return new Vector3(
-                radian.x * 180.0 / Math.PI,
-                radian.y * 180.0 / Math.PI,
-                radian.z * 180.0 / Math.PI
+                radian.X * 180.0 / Math.PI,
+                radian.Y * 180.0 / Math.PI,
+                radian.Z * 180.0 / Math.PI
             );
         }
 
         public static Vector3 ToRadian(Vector3 degree)
         {
             return new Vector3(
-                degree.x * Math.PI / 180.0,
-                degree.y * Math.PI / 180.0,
-                degree.z * Math.PI / 180.0
+                degree.X * Math.PI / 180.0,
+                degree.Y * Math.PI / 180.0,
+                degree.Z * Math.PI / 180.0
             );
         }
 

@@ -58,7 +58,7 @@ namespace Aspose.ThreeD
         /// </summary>
         public TextureData()
         {
-            _size = Vector2.One;
+            _size = new Vector2(1, 1);
         }
 
         /// <summary>

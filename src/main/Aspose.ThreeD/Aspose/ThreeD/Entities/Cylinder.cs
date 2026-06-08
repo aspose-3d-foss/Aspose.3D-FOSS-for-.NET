@@ -1,5 +1,7 @@
 using System;
-using Vector4 = Aspose.ThreeD.Vector4;
+using Vector2 = Aspose.ThreeD.Utilities.Vector2;
+using Vector3 = Aspose.ThreeD.Utilities.Vector3;
+using Vector4 = Aspose.ThreeD.Utilities.Vector4;
 using Aspose.ThreeD.Render;
 
 namespace Aspose.ThreeD.Entities

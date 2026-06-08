@@ -612,7 +612,7 @@ namespace Aspose.ThreeD.Formats
 
             if (scale.HasValue)
             {
-                finalMatrix = finalMatrix * Matrix4.Scale(new FVector3(scale.Value.X, scale.Value.Y, scale.Value.Z));
+                finalMatrix = finalMatrix * Matrix4.Scale(new FVector3((float)scale.Value.X, (float)scale.Value.Y, (float)scale.Value.Z));
             }
 
             foreach (var rotation in rotations)
@@ -629,7 +629,7 @@ namespace Aspose.ThreeD.Formats
                     translated.Y = -translated.Z;
                     translated.Z = temp;
                 }
-                finalMatrix = finalMatrix * Matrix4.Translation(new FVector3(translated.X, translated.Y, translated.Z));
+                finalMatrix = finalMatrix * Matrix4.Translation(new FVector3((float)translated.X, (float)translated.Y, (float)translated.Z));
             }
 
             ParseMatrixToTransform(transform, finalMatrix);

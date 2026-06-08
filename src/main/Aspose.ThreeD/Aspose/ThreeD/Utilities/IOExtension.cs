@@ -67,23 +67,23 @@ namespace Aspose.ThreeD.Utilities
 
         public static void Write(BinaryWriter writer, Vector2 v)
         {
-            writer.Write((float)v.x);
-            writer.Write((float)v.y);
+            writer.Write((float)v.X);
+            writer.Write((float)v.Y);
         }
 
         public static void Write(BinaryWriter writer, Vector3 v)
         {
-            writer.Write((float)v.x);
-            writer.Write((float)v.y);
-            writer.Write((float)v.z);
+            writer.Write((float)v.X);
+            writer.Write((float)v.Y);
+            writer.Write((float)v.Z);
         }
 
         public static void Write(BinaryWriter writer, Vector4 v)
         {
-            writer.Write((float)v.x);
-            writer.Write((float)v.y);
-            writer.Write((float)v.z);
-            writer.Write((float)v.w);
+            writer.Write((float)v.X);
+            writer.Write((float)v.Y);
+            writer.Write((float)v.Z);
+            writer.Write((float)v.W);
         }
     }
 }

@@ -1,0 +1,1 @@
+The binary of FOSS version is `src/main/Aspose.ThreeD/bin/Debug/net10.0/Aspose.ThreeD.dll`

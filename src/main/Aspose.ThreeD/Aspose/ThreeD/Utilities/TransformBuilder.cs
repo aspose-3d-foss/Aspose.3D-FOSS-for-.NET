@@ -73,7 +73,7 @@ namespace Aspose.ThreeD.Utilities
 
         public TransformBuilder Scale(Vector3 s)
         {
-            Matrix4 scale = Matrix4.Scale(new FVector3((float)s.x, (float)s.y, (float)s.z));
+            Matrix4 scale = Matrix4.Scale(new FVector3((float)s.X, (float)s.Y, (float)s.Z));
             Compose(scale);
             return this;
         }
@@ -85,7 +85,7 @@ namespace Aspose.ThreeD.Utilities
 
         public TransformBuilder RotateRadian(double angle, Vector3 axis)
         {
-            Quaternion q = new Quaternion((float)axis.x, (float)axis.y, (float)axis.z, (float)Math.Cos(angle / 2));
+            Quaternion q = new Quaternion((float)axis.X, (float)axis.Y, (float)axis.Z, (float)Math.Cos(angle / 2));
             Matrix4 rotation = Matrix4.Rotation(q);
             Compose(rotation);
             return this;
@@ -123,7 +123,7 @@ namespace Aspose.ThreeD.Utilities
 
         public TransformBuilder Translate(Vector3 v)
         {
-            Matrix4 translation = Matrix4.Translation(new FVector3((float)v.x, (float)v.y, (float)v.z));
+            Matrix4 translation = Matrix4.Translation(new FVector3((float)v.X, (float)v.Y, (float)v.Z));
             Compose(translation);
             return this;
         }
@@ -135,14 +135,14 @@ namespace Aspose.ThreeD.Utilities
 
         public void RotateDegree(Vector3 rot, RotationOrder order)
         {
-            RotateRadian(new Vector3(rot.x * Math.PI / 180.0, rot.y * Math.PI / 180.0, rot.z * Math.PI / 180.0), order);
+            RotateRadian(new Vector3(rot.X * Math.PI / 180.0, rot.Y * Math.PI / 180.0, rot.Z * Math.PI / 180.0), order);
         }
 
         public void RotateRadian(Vector3 rot, RotationOrder order)
         {
-            Matrix4 rx = Matrix4.Rotation(new Quaternion((float)Math.Sin(rot.x / 2), 0, 0, (float)Math.Cos(rot.x / 2)));
-            Matrix4 ry = Matrix4.Rotation(new Quaternion(0, (float)Math.Sin(rot.y / 2), 0, (float)Math.Cos(rot.y / 2)));
-            Matrix4 rz = Matrix4.Rotation(new Quaternion(0, 0, (float)Math.Sin(rot.z / 2), (float)Math.Cos(rot.z / 2)));
+            Matrix4 rx = Matrix4.Rotation(new Quaternion((float)Math.Sin(rot.X / 2), 0, 0, (float)Math.Cos(rot.X / 2)));
+            Matrix4 ry = Matrix4.Rotation(new Quaternion(0, (float)Math.Sin(rot.Y / 2), 0, (float)Math.Cos(rot.Y / 2)));
+            Matrix4 rz = Matrix4.Rotation(new Quaternion(0, 0, (float)Math.Sin(rot.Z / 2), (float)Math.Cos(rot.Z / 2)));
 
             Matrix4 combined;
             switch (order)

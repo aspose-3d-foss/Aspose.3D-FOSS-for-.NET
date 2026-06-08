@@ -21,8 +21,8 @@ namespace Aspose.ThreeD.Utilities
 
         public FVector2(Vector2 vec)
         {
-            X = (float)vec.x;
-            Y = (float)vec.y;
+            X = (float)vec.X;
+            Y = (float)vec.Y;
         }
 
         public int CompareTo(FVector2 other)

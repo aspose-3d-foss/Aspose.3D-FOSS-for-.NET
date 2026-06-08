@@ -2,41 +2,47 @@ using System;
 
 namespace Aspose.ThreeD.Utilities
 {
-    public struct Vector3 : IComparable<Vector3>, IEquatable<Vector3>
+    public struct Vector3 : IComparable<Vector3>
     {
-        public double x;
-        public double y;
-        public double z;
+        public double X;
+        public double Y;
+        public double Z;
 
         public Vector3(double x, double y, double z)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            X = x;
+            Y = y;
+            Z = z;
         }
 
         public Vector3(FVector3 vec)
         {
-            x = vec.X;
-            y = vec.Y;
-            z = vec.Z;
+            X = vec.X;
+            Y = vec.Y;
+            Z = vec.Z;
         }
 
         public Vector3(double v)
         {
-            x = v;
-            y = v;
-            z = v;
+            X = v;
+            Y = v;
+            Z = v;
         }
 
         public Vector3(Vector4 vec4)
         {
-            x = vec4.x;
-            y = vec4.y;
-            z = vec4.z;
+            X = vec4.X;
+            Y = vec4.Y;
+            Z = vec4.Z;
         }
 
-        public double Length2 => x * x + y * y + z * z;
+        public double Item
+        {
+            get => X;
+            set => X = value;
+        }
+
+        public double Length2 => X * X + Y * Y + Z * Z;
         public double Length => Math.Sqrt(Length2);
 
         public static Vector3 Zero => new Vector3(0, 0, 0);
@@ -44,30 +50,6 @@ namespace Aspose.ThreeD.Utilities
         public static Vector3 UnitX => new Vector3(1, 0, 0);
         public static Vector3 UnitY => new Vector3(0, 1, 0);
         public static Vector3 UnitZ => new Vector3(0, 0, 1);
-
-        public double this[int index]
-        {
-            get
-            {
-                return index switch
-                {
-                    0 => x,
-                    1 => y,
-                    2 => z,
-                    _ => throw new IndexOutOfRangeException()
-                };
-            }
-            set
-            {
-                switch (index)
-                {
-                    case 0: x = value; break;
-                    case 1: y = value; break;
-                    case 2: z = value; break;
-                    default: throw new IndexOutOfRangeException();
-                }
-            }
-        }
 
         public static Vector3 Parse(string input)
         {
@@ -81,24 +63,19 @@ namespace Aspose.ThreeD.Utilities
             );
         }
 
-        public bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
-            return obj is Vector3 other && Equals(other);
-        }
-
-        public bool Equals(Vector3 rhs)
-        {
-            return x == rhs.x && y == rhs.y && z == rhs.z;
+            return obj is Vector3 other && X == other.X && Y == other.Y && Z == other.Z;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(x, y, z);
+            return HashCode.Combine(X, Y, Z);
         }
 
         public double Dot(Vector3 rhs)
         {
-            return x * rhs.x + y * rhs.y + z * rhs.z;
+            return X * rhs.X + Y * rhs.Y + Z * rhs.Z;
         }
 
         public Vector3 Normalize()
@@ -106,40 +83,40 @@ namespace Aspose.ThreeD.Utilities
             double len = Length;
             if (len > 0)
             {
-                return new Vector3(x / len, y / len, z / len);
+                return new Vector3(X / len, Y / len, Z / len);
             }
             return new Vector3(0, 0, 0);
         }
 
         public Vector3 Sin()
         {
-            return new Vector3(Math.Sin(x), Math.Sin(y), Math.Sin(z));
+            return new Vector3(Math.Sin(X), Math.Sin(Y), Math.Sin(Z));
         }
 
         public Vector3 Cos()
         {
-            return new Vector3(Math.Cos(x), Math.Cos(y), Math.Cos(z));
+            return new Vector3(Math.Cos(X), Math.Cos(Y), Math.Cos(Z));
         }
 
         public Vector3 Cross(Vector3 rhs)
         {
             return new Vector3(
-                y * rhs.z - z * rhs.y,
-                z * rhs.x - x * rhs.z,
-                x * rhs.y - y * rhs.x
+                Y * rhs.Z - Z * rhs.Y,
+                Z * rhs.X - X * rhs.Z,
+                X * rhs.Y - Y * rhs.X
             );
         }
 
         public void Set(double newX, double newY, double newZ)
         {
-            x = newX;
-            y = newY;
-            z = newZ;
+            X = newX;
+            Y = newY;
+            Z = newZ;
         }
 
         public override string ToString()
         {
-            return $"({x}, {y}, {z})";
+            return $"({X}, {Y}, {Z})";
         }
 
         public double AngleBetween(Vector3 dir, Vector3 up)
@@ -164,76 +141,66 @@ namespace Aspose.ThreeD.Utilities
 
         public int CompareTo(Vector3 other)
         {
-            int cmp = x.CompareTo(other.x);
+            int cmp = X.CompareTo(other.X);
             if (cmp != 0) return cmp;
-            cmp = y.CompareTo(other.y);
+            cmp = Y.CompareTo(other.Y);
             if (cmp != 0) return cmp;
-            return z.CompareTo(other.z);
+            return Z.CompareTo(other.Z);
         }
 
         public static explicit operator FVector3(Vector3 v)
         {
-            return new FVector3((float)v.x, (float)v.y, (float)v.z);
+            return new FVector3((float)v.X, (float)v.Y, (float)v.Z);
         }
 
         public static Vector3 operator -(Vector3 v)
         {
-            return new Vector3(-v.x, -v.y, -v.z);
+            return new Vector3(-v.X, -v.Y, -v.Z);
         }
 
         public static Vector3 operator -(Vector3 lhs, Vector3 rhs)
         {
-            return new Vector3(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
+            return new Vector3(lhs.X - rhs.X, lhs.Y - rhs.Y, lhs.Z - rhs.Z);
         }
 
         public static Vector3 operator +(Vector3 lhs, Vector3 rhs)
         {
-            return new Vector3(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
+            return new Vector3(lhs.X + rhs.X, lhs.Y + rhs.Y, lhs.Z + rhs.Z);
         }
 
         public static Vector3 operator *(Vector3 lhs, Vector3 rhs)
         {
-            return new Vector3(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z);
+            return new Vector3(lhs.X * rhs.X, lhs.Y * rhs.Y, lhs.Z * rhs.Z);
         }
 
-         public static Vector3 operator *(double lhs, Vector3 rhs)
-         {
-             return new Vector3(lhs * rhs.x, lhs * rhs.y, lhs * rhs.z);
-         }
+        public static Vector3 operator *(double lhs, Vector3 rhs)
+        {
+            return new Vector3(lhs * rhs.X, lhs * rhs.Y, lhs * rhs.Z);
+        }
 
-         public static Vector3 operator *(Vector3 lhs, double rhs)
-         {
-             return new Vector3(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
-         }
-
-         public static Vector3 operator *(float lhs, Vector3 rhs)
-         {
-             return new Vector3(lhs * rhs.x, lhs * rhs.y, lhs * rhs.z);
-         }
-
-         public static Vector3 operator *(Vector3 lhs, float rhs)
-         {
-             return new Vector3(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
-         }
+        public static Vector3 operator *(Vector3 lhs, double rhs)
+        {
+            return new Vector3(lhs.X * rhs, lhs.Y * rhs, lhs.Z * rhs);
+        }
 
         public static Vector3 operator /(Vector3 lhs, double rhs)
         {
-            return new Vector3(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
+            return new Vector3(lhs.X / rhs, lhs.Y / rhs, lhs.Z / rhs);
         }
 
         public static Vector3 operator /(Vector3 lhs, Vector3 rhs)
         {
-            return new Vector3(lhs.x / rhs.x, lhs.y / rhs.y, lhs.z / rhs.z);
+            return new Vector3(lhs.X / rhs.X, lhs.Y / rhs.Y, lhs.Z / rhs.Z);
         }
 
         public static bool operator ==(Vector3 lhs, Vector3 rhs)
         {
-            return lhs.Equals(rhs);
+            return lhs.X == rhs.X && lhs.Y == rhs.Y && lhs.Z == rhs.Z;
         }
 
         public static bool operator !=(Vector3 lhs, Vector3 rhs)
         {
-            return !lhs.Equals(rhs);
+            return lhs.X != rhs.X || lhs.Y != rhs.Y || lhs.Z != rhs.Z;
         }
     }
 }

@@ -1,0 +1,27 @@
+[
+  {
+    "content": "Create EntityRendererKey class in FOSS",
+    "status": "completed",
+    "priority": "1"
+  },
+  {
+    "content": "Update Entity.GetEntityRendererKey() return type from string to EntityRendererKey",
+    "status": "in_progress",
+    "priority": "1"
+  },
+  {
+    "content": "Update all entity implementations (Box, Camera, Cylinder, Mesh, Light, Sphere, Group)",
+    "status": "pending",
+    "priority": "1"
+  },
+  {
+    "content": "Change BoundingBox from class to struct and add missing constructors",
+    "status": "pending",
+    "priority": "2"
+  },
+  {
+    "content": "Run tests to verify all changes",
+    "status": "pending",
+    "priority": "3"
+  }
+]

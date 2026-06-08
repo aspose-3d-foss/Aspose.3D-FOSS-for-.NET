@@ -20,9 +20,9 @@ namespace Aspose.ThreeD.Utilities
 
         public FVector3(Vector3 vec)
         {
-            X = (float)vec.x;
-            Y = (float)vec.y;
-            Z = (float)vec.z;
+            X = (float)vec.X;
+            Y = (float)vec.Y;
+            Z = (float)vec.Z;
         }
 
         public static readonly FVector3 Zero = new FVector3(0, 0, 0);

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using Vector4 = Aspose.ThreeD.Utilities.Vector4;
 using Aspose.ThreeD.Entities;
 
 namespace Aspose.ThreeD.Formats

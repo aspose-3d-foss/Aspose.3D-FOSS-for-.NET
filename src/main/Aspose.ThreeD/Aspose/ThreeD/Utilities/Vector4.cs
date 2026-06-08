@@ -2,140 +2,120 @@ using System;
 
 namespace Aspose.ThreeD.Utilities
 {
-    public struct Vector4 : IComparable<Vector4>, IEquatable<Vector4>
+    public struct Vector4 : IComparable<Vector4>
     {
-        public double x;
-        public double y;
-        public double z;
-        public double w;
+        public double X;
+        public double Y;
+        public double Z;
+        public double W;
 
         public Vector4(Vector3 vec, double w)
         {
-            x = vec.x;
-            y = vec.y;
-            z = vec.z;
-            this.w = w;
+            X = vec.X;
+            Y = vec.Y;
+            Z = vec.Z;
+            this.W = w;
         }
 
         public Vector4(Vector3 vec)
         {
-            x = vec.x;
-            y = vec.y;
-            z = vec.z;
-            w = 1.0;
+            X = vec.X;
+            Y = vec.Y;
+            Z = vec.Z;
+            W = 1.0;
         }
 
         public Vector4(FVector4 vec)
         {
-            x = vec.X;
-            y = vec.Y;
-            z = vec.Z;
-            w = vec.W;
+            X = vec.X;
+            Y = vec.Y;
+            Z = vec.Z;
+            W = vec.W;
         }
 
         public Vector4(double x, double y, double z)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            w = 1.0;
+            X = x;
+            Y = y;
+            Z = z;
+            W = 1.0;
         }
 
         public Vector4(double x, double y, double z, double w)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.w = w;
+            X = x;
+            Y = y;
+            Z = z;
+            W = w;
         }
 
-        public double Length => Math.Sqrt(x * x + y * y + z * z + w * w);
+        public double Length => Math.Sqrt(X * X + Y * Y + Z * Z + W * W);
 
         public void Set(double newX, double newY, double newZ)
         {
-            x = newX;
-            y = newY;
-            z = newZ;
-            w = 1.0;
+            X = newX;
+            Y = newY;
+            Z = newZ;
+            W = 1.0;
         }
 
         public void Set(double newX, double newY, double newZ, double newW)
         {
-            x = newX;
-            y = newY;
-            z = newZ;
-            w = newW;
+            X = newX;
+            Y = newY;
+            Z = newZ;
+            W = newW;
         }
 
-        public bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
-            return obj is Vector4 other && Equals(other);
-        }
-
-        public bool Equals(Vector4 rhs)
-        {
-            return x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w;
+            return obj is Vector4 other && X == other.X && Y == other.Y && Z == other.Z && W == other.W;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(x, y, z, w);
+            return HashCode.Combine(X, Y, Z, W);
         }
 
         public override string ToString()
         {
-            return $"({x}, {y}, {z}, {w})";
+            return $"({X}, {Y}, {Z}, {W})";
         }
 
         public int CompareTo(Vector4 other)
         {
-            int cmp = x.CompareTo(other.x);
+            int cmp = X.CompareTo(other.X);
             if (cmp != 0) return cmp;
-            cmp = y.CompareTo(other.y);
+            cmp = Y.CompareTo(other.Y);
             if (cmp != 0) return cmp;
-            cmp = z.CompareTo(other.z);
+            cmp = Z.CompareTo(other.Z);
             if (cmp != 0) return cmp;
-            return w.CompareTo(other.w);
+            return W.CompareTo(other.W);
         }
 
         public static Vector4 operator +(Vector4 lhs, Vector4 rhs)
         {
-            return new Vector4(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z, lhs.w + rhs.w);
+            return new Vector4(lhs.X + rhs.X, lhs.Y + rhs.Y, lhs.Z + rhs.Z, lhs.W + rhs.W);
         }
 
         public static Vector4 operator -(Vector4 lhs, Vector4 rhs)
         {
-            return new Vector4(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z, lhs.w - rhs.w);
+            return new Vector4(lhs.X - rhs.X, lhs.Y - rhs.Y, lhs.Z - rhs.Z, lhs.W - rhs.W);
         }
 
         public static Vector4 operator *(Vector4 lhs, Vector4 rhs)
         {
-            return new Vector4(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z, lhs.w * rhs.w);
+            return new Vector4(lhs.X * rhs.X, lhs.Y * rhs.Y, lhs.Z * rhs.Z, lhs.W * rhs.W);
         }
 
-         public static Vector4 operator *(Vector4 lhs, double rhs)
-         {
-             return new Vector4(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs, lhs.w * rhs);
-         }
+        public static Vector4 operator *(Vector4 lhs, double rhs)
+        {
+            return new Vector4(lhs.X * rhs, lhs.Y * rhs, lhs.Z * rhs, lhs.W * rhs);
+        }
 
-         public static Vector4 operator *(double lhs, Vector4 rhs)
-         {
-             return new Vector4(rhs.x * lhs, rhs.y * lhs, rhs.z * lhs, rhs.w * lhs);
-         }
-
-         public static Vector4 operator *(Vector4 lhs, float rhs)
-         {
-             return new Vector4(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs, lhs.w * rhs);
-         }
-
-         public static Vector4 operator *(float lhs, Vector4 rhs)
-         {
-             return new Vector4(rhs.x * lhs, rhs.y * lhs, rhs.z * lhs, rhs.w * lhs);
-         }
-
-         public static explicit operator FVector4(Vector4 v)
-         {
-             return new FVector4(v);
-         }
-     }
- }
+        public static explicit operator FVector4(Vector4 v)
+        {
+            return new FVector4(v);
+        }
+    }
+}

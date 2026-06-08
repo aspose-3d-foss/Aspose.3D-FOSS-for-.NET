@@ -38,10 +38,10 @@ namespace Aspose.ThreeD.Utilities
             }
             else
             {
-                if (pt.x < _minimum.x) _minimum.x = pt.x;
-                if (pt.y < _minimum.y) _minimum.y = pt.y;
-                if (pt.x > _maximum.x) _maximum.x = pt.x;
-                if (pt.y > _maximum.y) _maximum.y = pt.y;
+                if (pt.X < _minimum.X) _minimum.X = pt.X;
+                if (pt.Y < _minimum.Y) _minimum.Y = pt.Y;
+                if (pt.X > _maximum.X) _maximum.X = pt.X;
+                if (pt.Y > _maximum.Y) _maximum.Y = pt.Y;
             }
         }
 
@@ -58,10 +58,10 @@ namespace Aspose.ThreeD.Utilities
             }
             else
             {
-                if (bb._minimum.x < _minimum.x) _minimum.x = bb._minimum.x;
-                if (bb._minimum.y < _minimum.y) _minimum.y = bb._minimum.y;
-                if (bb._maximum.x > _maximum.x) _maximum.x = bb._maximum.x;
-                if (bb._maximum.y > _maximum.y) _maximum.y = bb._maximum.y;
+                if (bb._minimum.X < _minimum.X) _minimum.X = bb._minimum.X;
+                if (bb._minimum.Y < _minimum.Y) _minimum.Y = bb._minimum.Y;
+                if (bb._maximum.X > _maximum.X) _maximum.X = bb._maximum.X;
+                if (bb._maximum.Y > _maximum.Y) _maximum.Y = bb._maximum.Y;
             }
         }
 
