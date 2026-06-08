@@ -3,18 +3,15 @@ using Aspose.ThreeD.Utilities;
 namespace Aspose.ThreeD.Shading
 {
     /// <summary>
-    /// Lambert material with diffuse lighting
+    /// Material for lambert shading model
     /// </summary>
     public class LambertMaterial : Material
     {
-        private Vector4 _ambient = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
-        private Vector4 _diffuse = new Vector4(0.5f, 0.5f, 0.5f, 1.0f);
-        private Vector4 _emissive = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
-        private Vector4 _reflective = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-        private float _reflectivity = 0.0f;
-        private float _transparency = 0.0f;
-        private float _indexOfRefraction = 0.0f;
-        private string _texture = string.Empty;
+        private Vector3 _emissiveColor = new Vector3(0, 0, 0);
+        private Vector3 _ambientColor = new Vector3(0, 0, 0);
+        private Vector3 _diffuseColor = new Vector3(0.5f, 0.5f, 0.5f);
+        private Vector3 _transparentColor = new Vector3(0, 0, 0);
+        private double _transparency = 0.0;
 
         /// <summary>
         /// Initializes a new instance of the LambertMaterial class
@@ -32,75 +29,52 @@ namespace Aspose.ThreeD.Shading
         }
 
         /// <summary>
+        /// Gets or sets the emissive color
+        /// </summary>
+        public Vector3 EmissiveColor
+        {
+            get => _emissiveColor;
+            set => _emissiveColor = value;
+        }
+
+        /// <summary>
         /// Gets or sets the ambient color
         /// </summary>
-        public Vector4 Ambient
+        public Vector3 AmbientColor
         {
-            get => _ambient;
-            set => _ambient = value;
+            get => _ambientColor;
+            set => _ambientColor = value;
         }
 
         /// <summary>
         /// Gets or sets the diffuse color
         /// </summary>
-        public Vector4 Diffuse
+        public Vector3 DiffuseColor
         {
-            get => _diffuse;
-            set => _diffuse = value;
+            get => _diffuseColor;
+            set => _diffuseColor = value;
         }
 
         /// <summary>
-        /// Gets or sets the emissive color
+        /// Gets or sets the transparent color.
+        /// The factor should be ranged between 0(0%, fully opaque) and 1(100%, fully transparent)
+        /// Any invalid factor value will be clamped.
         /// </summary>
-        public Vector4 Emissive
+        public Vector3 TransparentColor
         {
-            get => _emissive;
-            set => _emissive = value;
+            get => _transparentColor;
+            set => _transparentColor = value;
         }
 
         /// <summary>
-        /// Gets or sets the reflective color
+        /// Gets or sets the transparency factor.
+        /// The factor should be ranged between 0(0%, fully opaque) and 1(100%, fully transparent)
+        /// Any invalid factor value will be clamped.
         /// </summary>
-        public Vector4 Reflective
-        {
-            get => _reflective;
-            set => _reflective = value;
-        }
-
-        /// <summary>
-        /// Gets or sets the reflectivity factor (0-1)
-        /// </summary>
-        public float Reflectivity
-        {
-            get => _reflectivity;
-            set => _reflectivity = value;
-        }
-
-        /// <summary>
-        /// Gets or sets the transparency factor (0-1)
-        /// </summary>
-        public float Transparency
+        public double Transparency
         {
             get => _transparency;
             set => _transparency = value;
-        }
-
-        /// <summary>
-        /// Gets or sets the index of refraction
-        /// </summary>
-        public float IndexOfRefraction
-        {
-            get => _indexOfRefraction;
-            set => _indexOfRefraction = value;
-        }
-
-        /// <summary>
-        /// Gets or sets the texture URL
-        /// </summary>
-        public string Texture
-        {
-            get => _texture;
-            set => _texture = value;
         }
     }
 }

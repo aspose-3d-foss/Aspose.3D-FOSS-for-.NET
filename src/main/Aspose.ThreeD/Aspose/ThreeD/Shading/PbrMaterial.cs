@@ -2,78 +2,158 @@ using Aspose.ThreeD.Utilities;
 
 namespace Aspose.ThreeD.Shading
 {
+    /// <summary>
+    /// Material for physically based rendering based on albedo color/metallic/roughness
+    /// </summary>
     public class PbrMaterial : Material
     {
-        private Vector4 _baseColor = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-        private float _metallic = 0.0f;
-        private float _roughness = 0.5f;
-        private float _occlusion = 1.0f;
-        private string _emissiveTexture = string.Empty;
-        private string _metallicRoughnessTexture = string.Empty;
-        private string _occlusionTexture = string.Empty;
-        private string _normalTexture = string.Empty;
-        private string _baseColorTexture = string.Empty;
+        private double _transparency = 0.0;
+        private TextureBase _normalTexture;
+        private TextureBase _specularTexture;
+        private TextureBase _albedoTexture;
+        private Vector3 _albedo = new Vector3(1, 1, 1);
+        private TextureBase _occlusionTexture;
+        private double _occlusionFactor = 1.0;
+        private double _metallicFactor = 0.0;
+        private double _roughnessFactor = 0.5;
+        private TextureBase _metallicRoughness;
+        private TextureBase _emissiveTexture;
+        private Vector3 _emissiveColor = new Vector3(0, 0, 0);
 
+        /// <summary>
+        /// Construct a default PBR material instance
+        /// </summary>
         public PbrMaterial() : base()
         {
         }
 
-        public PbrMaterial(string name) : base(name)
+        /// <summary>
+        /// Construct a default PBR material with specified albedo color value.
+        /// </summary>
+        /// <param name="albedo">The albedo color</param>
+        public PbrMaterial(Vector3 albedo) : this()
         {
+            _albedo = albedo;
         }
 
-        public Vector4 BaseColor
+        /// <summary>
+        /// Gets or sets the transparency factor.
+        /// The factor should be ranged between 0(0%, fully opaque) and 1(100%, fully transparent)
+        /// Any invalid factor value will be clamped.
+        /// </summary>
+        public double Transparency
         {
-            get => _baseColor;
-            set => _baseColor = value;
+            get => _transparency;
+            set => _transparency = value;
         }
 
-        public float Metallic
-        {
-            get => _metallic;
-            set => _metallic = value;
-        }
-
-        public float Roughness
-        {
-            get => _roughness;
-            set => _roughness = value;
-        }
-
-        public float Occlusion
-        {
-            get => _occlusion;
-            set => _occlusion = value;
-        }
-
-        public string EmissiveTexture
-        {
-            get => _emissiveTexture;
-            set => _emissiveTexture = value;
-        }
-
-        public string MetallicRoughnessTexture
-        {
-            get => _metallicRoughnessTexture;
-            set => _metallicRoughnessTexture = value;
-        }
-
-        public string OcclusionTexture
-        {
-            get => _occlusionTexture;
-            set => _occlusionTexture = value;
-        }
-
-        public string NormalTexture
+        /// <summary>
+        /// Gets or sets the texture of normal mapping
+        /// </summary>
+        public TextureBase NormalTexture
         {
             get => _normalTexture;
             set => _normalTexture = value;
         }
 
-        public string BaseColorTexture
+        /// <summary>
+        /// Gets or sets the texture for specular color
+        /// </summary>
+        public TextureBase SpecularTexture
         {
-            get => _baseColorTexture;
-            set => _baseColorTexture = value;
+            get => _specularTexture;
+            set => _specularTexture = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the texture for albedo
+        /// </summary>
+        public TextureBase AlbedoTexture
+        {
+            get => _albedoTexture;
+            set => _albedoTexture = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the base color of the material
+        /// </summary>
+        public Vector3 Albedo
+        {
+            get => _albedo;
+            set => _albedo = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the texture for ambient occlusion
+        /// </summary>
+        public TextureBase OcclusionTexture
+        {
+            get => _occlusionTexture;
+            set => _occlusionTexture = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the factor of ambient occlusion
+        /// </summary>
+        public double OcclusionFactor
+        {
+            get => _occlusionFactor;
+            set => _occlusionFactor = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the metalness of the material, value of 1 means the material is a metal and value of 0 means the material is a dielectric.
+        /// </summary>
+        public double MetallicFactor
+        {
+            get => _metallicFactor;
+            set => _metallicFactor = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the roughness of the material, value of 1 means the material is completely rough and value of 0 means the material is completely smooth
+        /// </summary>
+        public double RoughnessFactor
+        {
+            get => _roughnessFactor;
+            set => _roughnessFactor = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the texture for metallic(in R channel) and roughness(in G channel)
+        /// </summary>
+        public TextureBase MetallicRoughness
+        {
+            get => _metallicRoughness;
+            set => _metallicRoughness = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the texture for emissive
+        /// </summary>
+        public TextureBase EmissiveTexture
+        {
+            get => _emissiveTexture;
+            set => _emissiveTexture = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the emissive color
+        /// </summary>
+        public Vector3 EmissiveColor
+        {
+            get => _emissiveColor;
+            set => _emissiveColor = value;
+        }
+
+        /// <summary>
+        /// Allow convert other material to PbrMaterial
+        /// </summary>
+        /// <param name="material">The source material</param>
+        /// <returns>A new PbrMaterial instance</returns>
+        public static PbrMaterial FromMaterial(Material material)
+        {
+            return new PbrMaterial();
         }
     }
 }

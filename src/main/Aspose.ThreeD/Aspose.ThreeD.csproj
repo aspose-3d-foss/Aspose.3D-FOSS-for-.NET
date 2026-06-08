@@ -5,6 +5,7 @@
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>Aspose.3D</AssemblyName>
     <PackageId>Aspose.3D</PackageId>
     <Version>26.1.0</Version>
     <Authors>Aspose</Authors>

@@ -1,8 +1,10 @@
 bin
 obj
 .opencode
+.asbote
 *.user
 target
 classes
 testdata
 foss.python
+*.dll

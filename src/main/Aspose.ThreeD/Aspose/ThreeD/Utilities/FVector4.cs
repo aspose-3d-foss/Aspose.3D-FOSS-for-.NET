@@ -2,7 +2,7 @@ using System;
 
 namespace Aspose.ThreeD.Utilities
 {
-    public struct FVector4 : IComparable<FVector4>, IEquatable<FVector4>
+    public struct FVector4 : IComparable<FVector4>
     {
         public float X;
         public float Y;
@@ -60,21 +60,6 @@ namespace Aspose.ThreeD.Utilities
         public override string ToString()
         {
             return $"({X}, {Y}, {Z}, {W})";
-        }
-
-        public bool Equals(FVector4 other)
-        {
-            return X == other.X && Y == other.Y && Z == other.Z && W == other.W;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            return obj is FVector4 other && Equals(other);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(X, Y, Z, W);
         }
 
         public int CompareTo(FVector4 other)

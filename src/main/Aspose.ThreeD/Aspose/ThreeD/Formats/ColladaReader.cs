@@ -322,7 +322,22 @@ namespace Aspose.ThreeD.Formats
             if (shaderType == null)
                 return null;
 
-            var material = new Shading.Material();
+            // Determine material type based on shader type
+            Shading.Material material;
+            var shaderTypeName = shaderType.Name.LocalName;
+            if (shaderTypeName == "phong")
+            {
+                material = new Shading.PhongMaterial();
+            }
+            else if (shaderTypeName == "lambert")
+            {
+                material = new Shading.LambertMaterial();
+            }
+            else
+            {
+                // Default to PhongMaterial for other shader types
+                material = new Shading.PhongMaterial();
+            }
 
             foreach (var property in shaderType.Elements())
             {
@@ -336,9 +351,25 @@ namespace Aspose.ThreeD.Formats
                             float.TryParse(values[1], out var g) &&
                             float.TryParse(values[2], out var b))
                         {
-                            if (property.Name.LocalName == "diffuse")
+                            if (property.Name.LocalName == "diffuse" && material is Shading.LambertMaterial lambert)
                             {
-                                material.Name = "DiffuseMaterial";
+                                lambert.DiffuseColor = new Vector3(r, g, b);
+                            }
+                            else if (property.Name.LocalName == "emissive" && material is Shading.LambertMaterial lambert2)
+                            {
+                                lambert2.EmissiveColor = new Vector3(r, g, b);
+                            }
+                            else if (property.Name.LocalName == "ambient" && material is Shading.LambertMaterial lambert3)
+                            {
+                                lambert3.AmbientColor = new Vector3(r, g, b);
+                            }
+                            else if (property.Name.LocalName == "transparent" && material is Shading.LambertMaterial lambert4)
+                            {
+                                lambert4.TransparentColor = new Vector3(r, g, b);
+                            }
+                            else if (property.Name.LocalName == "specular" && material is Shading.PhongMaterial phong)
+                            {
+                                phong.SpecularColor = new Vector3(r, g, b);
                             }
                         }
                     }

@@ -391,7 +391,7 @@ namespace Aspose.ThreeD.Formats
 
             if (transform != null)
             {
-                if (transform.Translation != FVector3.Zero)
+                if (transform.Translation.X != 0 || transform.Translation.Y != 0 || transform.Translation.Z != 0)
                 {
                     var translateElement = new XElement(ns + "translate");
                     translateElement.Add(new XAttribute("sid", "translate"));
@@ -429,7 +429,7 @@ namespace Aspose.ThreeD.Formats
                     nodeElement.Add(rotateElement);
                 }
 
-                if (transform.Scale != new FVector3(1, 1, 1))
+                if (transform.Scale.X != 1 || transform.Scale.Y != 1 || transform.Scale.Z != 1)
                 {
                     var scaleElement = new XElement(ns + "scale");
                     scaleElement.Add(new XAttribute("sid", "scale"));

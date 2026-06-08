@@ -26,25 +26,19 @@ namespace Aspose.ThreeD.Tests
         public void LambertMaterial_Properties_ShouldBeSettable()
         {
             var material = new LambertMaterial();
-            var color = new Vector4(0.5f, 0.5f, 0.5f, 1.0f);
+            var color = new Vector3(0.5f, 0.5f, 0.5f);
             
-            material.Ambient = color;
-            material.Diffuse = color;
-            material.Emissive = color;
-            material.Reflective = color;
-            material.Reflectivity = 0.5f;
-            material.Transparency = 0.3f;
-            material.IndexOfRefraction = 1.5f;
-            material.Texture = "texture.png";
+            material.EmissiveColor = color;
+            material.AmbientColor = color;
+            material.DiffuseColor = color;
+            material.TransparentColor = color;
+            material.Transparency = 0.3;
             
-            Assert.Equal(0.5f, material.Ambient.X);
-            Assert.Equal(0.5f, material.Diffuse.X);
-            Assert.Equal(0.5f, material.Emissive.X);
-            Assert.Equal(0.5f, material.Reflective.X);
-            Assert.Equal(0.5f, material.Reflectivity);
-            Assert.Equal(0.3f, material.Transparency);
-            Assert.Equal(1.5f, material.IndexOfRefraction);
-            Assert.Equal("texture.png", material.Texture);
+            Assert.Equal(0.5f, material.EmissiveColor.X);
+            Assert.Equal(0.5f, material.AmbientColor.X);
+            Assert.Equal(0.5f, material.DiffuseColor.X);
+            Assert.Equal(0.5f, material.TransparentColor.X);
+            Assert.Equal(0.3, material.Transparency);
         }
 
         [Fact]
@@ -67,15 +61,19 @@ namespace Aspose.ThreeD.Tests
         public void PhongMaterial_Properties_ShouldBeSettable()
         {
             var material = new PhongMaterial();
-            var specular = new Vector4(0.8f, 0.8f, 0.8f, 1.0f);
+            var specularColor = new Vector3(0.8f, 0.8f, 0.8f);
             
-            material.Specular = specular;
-            material.Shininess = 50.0f;
-            material.SpecularPower = 32.0f;
+            material.SpecularColor = specularColor;
+            material.Shininess = 50.0;
+            material.SpecularFactor = 1.0;
+            material.ReflectionColor = new Vector3(0.2f, 0.2f, 0.2f);
+            material.ReflectionFactor = 0.5;
             
-            Assert.Equal(0.8f, material.Specular.X);
-            Assert.Equal(50.0f, material.Shininess);
-            Assert.Equal(32.0f, material.SpecularPower);
+            Assert.Equal(0.8f, material.SpecularColor.X);
+            Assert.Equal(50.0, material.Shininess);
+            Assert.Equal(1.0, material.SpecularFactor);
+            Assert.Equal(0.2f, material.ReflectionColor.X);
+            Assert.Equal(0.5, material.ReflectionFactor);
         }
 
         [Fact]
@@ -87,38 +85,42 @@ namespace Aspose.ThreeD.Tests
         }
 
         [Fact]
-        public void PbrMaterial_NameConstructor_ShouldSetName()
+        public void PbrMaterial_AlbedoConstructor_ShouldCreateInstance()
         {
-            var material = new PbrMaterial("PbrMaterial");
+            var material = new PbrMaterial(new Vector3(1.0f, 0.5f, 0.2f));
             
-            Assert.Equal("PbrMaterial", material.Name);
+            Assert.NotNull(material);
+            Assert.Equal(1.0f, material.Albedo.X);
+            Assert.Equal(0.5f, material.Albedo.Y);
+            Assert.Equal(0.2f, material.Albedo.Z);
         }
 
         [Fact]
         public void PbrMaterial_Properties_ShouldBeSettable()
         {
             var material = new PbrMaterial();
-            var baseColor = new Vector4(1.0f, 0.5f, 0.2f, 1.0f);
+            var albedo = new Vector3(1.0f, 0.5f, 0.2f);
             
-            material.BaseColor = baseColor;
-            material.Metallic = 0.8f;
-            material.Roughness = 0.2f;
-            material.Occlusion = 0.9f;
-            material.EmissiveTexture = "emissive.png";
-            material.MetallicRoughnessTexture = "mrt.png";
-            material.OcclusionTexture = "occlusion.png";
-            material.NormalTexture = "normal.png";
-            material.BaseColorTexture = "base.png";
+            material.Albedo = albedo;
+            material.MetallicFactor = 0.8;
+            material.RoughnessFactor = 0.2;
+            material.OcclusionFactor = 0.9;
+            material.Transparency = 0.5;
             
-            Assert.Equal(1.0f, material.BaseColor.X);
-            Assert.Equal(0.8f, material.Metallic);
-            Assert.Equal(0.2f, material.Roughness);
-            Assert.Equal(0.9f, material.Occlusion);
-            Assert.Equal("emissive.png", material.EmissiveTexture);
-            Assert.Equal("mrt.png", material.MetallicRoughnessTexture);
-            Assert.Equal("occlusion.png", material.OcclusionTexture);
-            Assert.Equal("normal.png", material.NormalTexture);
-            Assert.Equal("base.png", material.BaseColorTexture);
+            Assert.Equal(1.0f, material.Albedo.X);
+            Assert.Equal(0.8, material.MetallicFactor);
+            Assert.Equal(0.2, material.RoughnessFactor);
+            Assert.Equal(0.9, material.OcclusionFactor);
+            Assert.Equal(0.5, material.Transparency);
+        }
+
+        [Fact]
+        public void PbrMaterial_FromMaterial_ShouldCreateInstance()
+        {
+            var material = new LambertMaterial();
+            var pbr = PbrMaterial.FromMaterial(material);
+            
+            Assert.NotNull(pbr);
         }
     }
 }
