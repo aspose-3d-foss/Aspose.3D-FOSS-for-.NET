@@ -6,42 +6,42 @@ namespace Aspose.ThreeD.Utilities
     {
         public static void Write(BinaryWriter writer, Matrix4 mat)
         {
-            writer.Write(mat.M11);
-            writer.Write(mat.M12);
-            writer.Write(mat.M13);
-            writer.Write(mat.M14);
-            writer.Write(mat.M21);
-            writer.Write(mat.M22);
-            writer.Write(mat.M23);
-            writer.Write(mat.M24);
-            writer.Write(mat.M31);
-            writer.Write(mat.M32);
-            writer.Write(mat.M33);
-            writer.Write(mat.M34);
-            writer.Write(mat.M41);
-            writer.Write(mat.M42);
-            writer.Write(mat.M43);
-            writer.Write(mat.M44);
+            writer.Write(mat.m00);
+            writer.Write(mat.m01);
+            writer.Write(mat.m02);
+            writer.Write(mat.m03);
+            writer.Write(mat.m10);
+            writer.Write(mat.m11);
+            writer.Write(mat.m12);
+            writer.Write(mat.m13);
+            writer.Write(mat.m20);
+            writer.Write(mat.m21);
+            writer.Write(mat.m22);
+            writer.Write(mat.m23);
+            writer.Write(mat.m30);
+            writer.Write(mat.m31);
+            writer.Write(mat.m32);
+            writer.Write(mat.m33);
         }
 
         public static void Write(BinaryWriter writer, FMatrix4 mat)
         {
-            writer.Write(mat.M00);
-            writer.Write(mat.M01);
-            writer.Write(mat.M02);
-            writer.Write(mat.M03);
-            writer.Write(mat.M10);
-            writer.Write(mat.M11);
-            writer.Write(mat.M12);
-            writer.Write(mat.M13);
-            writer.Write(mat.M20);
-            writer.Write(mat.M21);
-            writer.Write(mat.M22);
-            writer.Write(mat.M23);
-            writer.Write(mat.M30);
-            writer.Write(mat.M31);
-            writer.Write(mat.M32);
-            writer.Write(mat.M33);
+            writer.Write(mat.m00);
+            writer.Write(mat.m01);
+            writer.Write(mat.m02);
+            writer.Write(mat.m03);
+            writer.Write(mat.m10);
+            writer.Write(mat.m00);
+            writer.Write(mat.m01);
+            writer.Write(mat.m02);
+            writer.Write(mat.m20);
+            writer.Write(mat.m10);
+            writer.Write(mat.m11);
+            writer.Write(mat.m12);
+            writer.Write(mat.m30);
+            writer.Write(mat.m20);
+            writer.Write(mat.m21);
+            writer.Write(mat.m22);
         }
 
         public static void Write(BinaryWriter writer, FVector2 v)

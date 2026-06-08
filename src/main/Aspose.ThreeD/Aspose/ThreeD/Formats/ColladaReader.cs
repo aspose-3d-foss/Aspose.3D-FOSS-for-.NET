@@ -467,13 +467,13 @@ namespace Aspose.ThreeD.Formats
         private static void ParseMatrixToTransform(Transform transform, Matrix4 matrix)
         {
             transform.Rotation = ConvertMatrixToQuaternion(matrix);
-            transform.Translation = new FVector3((float)matrix.M41, (float)matrix.M42, (float)matrix.M43);
+            transform.Translation = new FVector3((float)matrix.m30, (float)matrix.m31, (float)matrix.m32);
             transform.Scale = new FVector3(1, 1, 1);
         }
 
         private static Quaternion ConvertMatrixToQuaternion(Matrix4 matrix)
         {
-            float trace = matrix.M11 + matrix.M22 + matrix.M33;
+            float trace = (float)(matrix.m00 + matrix.m11 + matrix.m22);
             float x, y, z, w;
 
             if (trace > 0)
@@ -481,36 +481,36 @@ namespace Aspose.ThreeD.Formats
                 float s = (float)Math.Sqrt(trace + 1.0);
                 w = s * 0.5f;
                 s = 0.5f / s;
-                x = (matrix.M32 - matrix.M23) * s;
-                y = (matrix.M13 - matrix.M31) * s;
-                z = (matrix.M21 - matrix.M12) * s;
+                x = (float)(matrix.m21 - matrix.m12) * s;
+                y = (float)(matrix.m02 - matrix.m20) * s;
+                z = (float)(matrix.m10 - matrix.m01) * s;
             }
-            else if (matrix.M11 > matrix.M22 && matrix.M11 > matrix.M33)
+            else if (matrix.m00 > matrix.m11 && matrix.m00 > matrix.m22)
             {
-                float s = (float)Math.Sqrt(1.0 + matrix.M11 - matrix.M22 - matrix.M33);
+                float s = (float)Math.Sqrt(1.0 + matrix.m00 - matrix.m11 - matrix.m22);
                 x = s * 0.5f;
                 s = 0.5f / s;
-                y = (matrix.M12 + matrix.M21) * s;
-                z = (matrix.M13 + matrix.M31) * s;
-                w = (matrix.M32 - matrix.M23) * s;
+                y = (float)(matrix.m01 + matrix.m10) * s;
+                z = (float)(matrix.m02 + matrix.m20) * s;
+                w = (float)(matrix.m21 - matrix.m12) * s;
             }
-            else if (matrix.M22 > matrix.M33)
+            else if (matrix.m11 > matrix.m22)
             {
-                float s = (float)Math.Sqrt(1.0 + matrix.M22 - matrix.M11 - matrix.M33);
+                float s = (float)Math.Sqrt(1.0 + matrix.m11 - matrix.m00 - matrix.m22);
                 y = s * 0.5f;
                 s = 0.5f / s;
-                x = (matrix.M12 + matrix.M21) * s;
-                z = (matrix.M23 + matrix.M32) * s;
-                w = (matrix.M13 - matrix.M31) * s;
+                x = (float)(matrix.m01 + matrix.m10) * s;
+                z = (float)(matrix.m12 + matrix.m21) * s;
+                w = (float)(matrix.m02 - matrix.m20) * s;
             }
             else
             {
-                float s = (float)Math.Sqrt(1.0 + matrix.M33 - matrix.M11 - matrix.M22);
+                float s = (float)Math.Sqrt(1.0 + matrix.m22 - matrix.m00 - matrix.m11);
                 z = s * 0.5f;
                 s = 0.5f / s;
-                x = (matrix.M13 + matrix.M31) * s;
-                y = (matrix.M23 + matrix.M32) * s;
-                w = (matrix.M21 - matrix.M12) * s;
+                x = (float)(matrix.m02 + matrix.m20) * s;
+                y = (float)(matrix.m12 + matrix.m21) * s;
+                w = (float)(matrix.m10 - matrix.m01) * s;
             }
 
             return new Quaternion(x, y, z, w);
@@ -536,7 +536,7 @@ namespace Aspose.ThreeD.Formats
             }
 
             var fmatrix = new FMatrix4(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8], m[9], m[10], m[11], m[12], m[13], m[14], m[15]);
-            var matrix = new Matrix4(fmatrix.M00, fmatrix.M01, fmatrix.M02, fmatrix.M03, fmatrix.M10, fmatrix.M11, fmatrix.M12, fmatrix.M13, fmatrix.M20, fmatrix.M21, fmatrix.M22, fmatrix.M23, fmatrix.M30, fmatrix.M31, fmatrix.M32, fmatrix.M33);
+            var matrix = new Matrix4(fmatrix.m00, fmatrix.m01, fmatrix.m02, fmatrix.m03, fmatrix.m10, fmatrix.m11, fmatrix.m12, fmatrix.m13, fmatrix.m20, fmatrix.m21, fmatrix.m22, fmatrix.m23, fmatrix.m30, fmatrix.m31, fmatrix.m32, fmatrix.m33);
 
             return matrix;
         }
@@ -612,12 +612,12 @@ namespace Aspose.ThreeD.Formats
 
             if (scale.HasValue)
             {
-                finalMatrix = finalMatrix * Matrix4.Scale(new FVector3((float)scale.Value.X, (float)scale.Value.Y, (float)scale.Value.Z));
+                finalMatrix = finalMatrix * Matrix4.Scale(new Vector3(scale.Value.X, scale.Value.Y, scale.Value.Z));
             }
 
             foreach (var rotation in rotations)
             {
-                finalMatrix = finalMatrix * Matrix4.Rotation(rotation);
+                finalMatrix = finalMatrix * Matrix4.Rotate(rotation);
             }
 
             if (translation.HasValue)
@@ -629,7 +629,7 @@ namespace Aspose.ThreeD.Formats
                     translated.Y = -translated.Z;
                     translated.Z = temp;
                 }
-                finalMatrix = finalMatrix * Matrix4.Translation(new FVector3((float)translated.X, (float)translated.Y, (float)translated.Z));
+                finalMatrix = finalMatrix * Matrix4.Translate(translated.X, translated.Y, translated.Z);
             }
 
             ParseMatrixToTransform(transform, finalMatrix);

@@ -1099,10 +1099,10 @@ namespace Aspose.ThreeD.Formats
 
         private static FVector3 ConvertQuaternionToEuler(Quaternion q)
         {
-            float x = q.X;
-            float y = q.Y;
-            float z = q.Z;
-            float w = q.W;
+            float x = (float)q.X;
+            float y = (float)q.Y;
+            float z = (float)q.Z;
+            float w = (float)q.W;
 
             float sinpitch = 2 * (w * y - z * x);
             float pitch;

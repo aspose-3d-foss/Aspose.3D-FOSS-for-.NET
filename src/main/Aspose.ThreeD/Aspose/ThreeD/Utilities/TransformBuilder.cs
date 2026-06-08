@@ -66,14 +66,14 @@ namespace Aspose.ThreeD.Utilities
 
         public TransformBuilder Scale(double x, double y, double z)
         {
-            Matrix4 scale = Matrix4.Scale(new FVector3((float)x, (float)y, (float)z));
+            Matrix4 scale = Matrix4.Scale(new Vector3(x, y, z));
             Compose(scale);
             return this;
         }
 
         public TransformBuilder Scale(Vector3 s)
         {
-            Matrix4 scale = Matrix4.Scale(new FVector3((float)s.X, (float)s.Y, (float)s.Z));
+            Matrix4 scale = Matrix4.Scale(s);
             Compose(scale);
             return this;
         }
@@ -85,15 +85,14 @@ namespace Aspose.ThreeD.Utilities
 
         public TransformBuilder RotateRadian(double angle, Vector3 axis)
         {
-            Quaternion q = new Quaternion((float)axis.X, (float)axis.Y, (float)axis.Z, (float)Math.Cos(angle / 2));
-            Matrix4 rotation = Matrix4.Rotation(q);
+            Matrix4 rotation = Matrix4.Rotate(angle, axis);
             Compose(rotation);
             return this;
         }
 
         public TransformBuilder Rotate(Quaternion q)
         {
-            Matrix4 rotation = Matrix4.Rotation(q);
+            Matrix4 rotation = Matrix4.Rotate(q);
             Compose(rotation);
             return this;
         }
@@ -116,14 +115,14 @@ namespace Aspose.ThreeD.Utilities
 
         public TransformBuilder Translate(double tx, double ty, double tz)
         {
-            Matrix4 translation = Matrix4.Translation(new FVector3((float)tx, (float)ty, (float)tz));
+            Matrix4 translation = Matrix4.Translate(tx, ty, tz);
             Compose(translation);
             return this;
         }
 
         public TransformBuilder Translate(Vector3 v)
         {
-            Matrix4 translation = Matrix4.Translation(new FVector3((float)v.X, (float)v.Y, (float)v.Z));
+            Matrix4 translation = Matrix4.Translate(v);
             Compose(translation);
             return this;
         }
@@ -140,9 +139,9 @@ namespace Aspose.ThreeD.Utilities
 
         public void RotateRadian(Vector3 rot, RotationOrder order)
         {
-            Matrix4 rx = Matrix4.Rotation(new Quaternion((float)Math.Sin(rot.X / 2), 0, 0, (float)Math.Cos(rot.X / 2)));
-            Matrix4 ry = Matrix4.Rotation(new Quaternion(0, (float)Math.Sin(rot.Y / 2), 0, (float)Math.Cos(rot.Y / 2)));
-            Matrix4 rz = Matrix4.Rotation(new Quaternion(0, 0, (float)Math.Sin(rot.Z / 2), (float)Math.Cos(rot.Z / 2)));
+            Matrix4 rx = Matrix4.RotateFromEuler(new Vector3(rot.X, 0, 0));
+            Matrix4 ry = Matrix4.RotateFromEuler(new Vector3(0, rot.Y, 0));
+            Matrix4 rz = Matrix4.RotateFromEuler(new Vector3(0, 0, rot.Z));
 
             Matrix4 combined;
             switch (order)

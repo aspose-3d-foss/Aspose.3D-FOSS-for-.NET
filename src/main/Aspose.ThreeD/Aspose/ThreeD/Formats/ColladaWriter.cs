@@ -415,7 +415,7 @@ namespace Aspose.ThreeD.Formats
                         float s = (float)Math.Sqrt(1.0 - q.W * q.W);
                         if (s > 1e-6f)
                         {
-                            axis = new FVector3(q.X / s, q.Y / s, q.Z / s);
+                            axis = new FVector3((float)(q.X / s), (float)(q.Y / s), (float)(q.Z / s));
                         }
                         else
                         {

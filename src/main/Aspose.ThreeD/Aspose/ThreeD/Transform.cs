@@ -56,9 +56,9 @@ namespace Aspose.ThreeD
             get
             {
                 var matrix = Matrix4.Identity;
-                var t = Matrix4.Translation(_translation);
-                var r = Matrix4.Rotation(_rotation);
-                var s = Matrix4.Scale(_scale);
+                var t = Matrix4.Translate(new Vector3(_translation.X, _translation.Y, _translation.Z));
+                var r = Matrix4.Rotate(_rotation);
+                var s = Matrix4.Scale(new Vector3((double)_scale.X, (double)_scale.Y, (double)_scale.Z));
                 return matrix * s * r * t;
             }
         }

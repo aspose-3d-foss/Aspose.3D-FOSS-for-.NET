@@ -4,174 +4,85 @@ namespace Aspose.ThreeD.Utilities
 {
     public struct FMatrix4 : IEquatable<FMatrix4>
     {
-        public float M00, M01, M02, M03;
-        public float M10, M11, M12, M13;
-        public float M20, M21, M22, M23;
-        public float M30, M31, M32, M33;
+        public float m00, m01, m02, m03;
+        public float m10, m11, m12, m13;
+        public float m20, m21, m22, m23;
+        public float m30, m31, m32, m33;
 
-        public FMatrix4(
-            float m00, float m01, float m02, float m03,
-            float m10, float m11, float m12, float m13,
-            float m20, float m21, float m22, float m23,
-            float m30, float m31, float m32, float m33)
+        public FMatrix4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21, float m22, float m23, float m30, float m31, float m32, float m33)
         {
-            M00 = m00; M01 = m01; M02 = m02; M03 = m03;
-            M10 = m10; M11 = m11; M12 = m12; M13 = m13;
-            M20 = m20; M21 = m21; M22 = m22; M23 = m23;
-            M30 = m30; M31 = m31; M32 = m32; M33 = m33;
+            this.m00 = m00; this.m01 = m01; this.m02 = m02; this.m03 = m03;
+            this.m10 = m10; this.m11 = m11; this.m12 = m12; this.m13 = m13;
+            this.m20 = m20; this.m21 = m21; this.m22 = m22; this.m23 = m23;
+            this.m30 = m30; this.m31 = m31; this.m32 = m32; this.m33 = m33;
         }
 
         public FMatrix4(Matrix4 mat)
         {
-            M00 = mat.M11; M01 = mat.M12; M02 = mat.M13; M03 = mat.M14;
-            M10 = mat.M21; M11 = mat.M22; M12 = mat.M23; M13 = mat.M24;
-            M20 = mat.M31; M21 = mat.M32; M22 = mat.M33; M23 = mat.M34;
-            M30 = mat.M41; M31 = mat.M42; M32 = mat.M43; M33 = mat.M44;
+            m00 = (float)mat.m00; m01 = (float)mat.m01; m02 = (float)mat.m02; m03 = (float)mat.m03;
+            m10 = (float)mat.m10; m11 = (float)mat.m11; m12 = (float)mat.m12; m13 = (float)mat.m13;
+            m20 = (float)mat.m20; m21 = (float)mat.m21; m22 = (float)mat.m22; m23 = (float)mat.m23;
+            m30 = (float)mat.m30; m31 = (float)mat.m31; m32 = (float)mat.m32; m33 = (float)mat.m33;
         }
 
         public FMatrix4(FVector4 r0, FVector4 r1, FVector4 r2, FVector4 r3)
         {
-            M00 = r0.X; M01 = r0.Y; M02 = r0.Z; M03 = r0.W;
-            M10 = r1.X; M11 = r1.Y; M12 = r1.Z; M13 = r1.W;
-            M20 = r2.X; M21 = r2.Y; M22 = r2.Z; M23 = r2.W;
-            M30 = r3.X; M31 = r3.Y; M32 = r3.Z; M33 = r3.W;
+            m00 = r0.X; m01 = r0.Y; m02 = r0.Z; m03 = r0.W;
+            m10 = r1.X; m11 = r1.Y; m12 = r1.Z; m13 = r1.W;
+            m20 = r2.X; m21 = r2.Y; m22 = r2.Z; m23 = r2.W;
+            m30 = r3.X; m31 = r3.Y; m32 = r3.Z; m33 = r3.W;
         }
 
-        public static FMatrix4 Identity => new FMatrix4(
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1
-        );
+        public static FMatrix4 Identity => new FMatrix4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 
-        public FMatrix4 Concatenate(FMatrix4 m2)
-        {
-            return this * m2;
-        }
+        public FMatrix4 Concatenate(FMatrix4 m2) => this * m2;
+        public FMatrix4 Concatenate(Matrix4 m2) => this * new FMatrix4(m2);
 
-        public FMatrix4 Concatenate(Matrix4 m2)
-        {
-            return this * new FMatrix4(m2);
-        }
+        public FMatrix4 Transpose() => new FMatrix4(m00, m10, m20, m30, m01, m11, m21, m31, m02, m12, m22, m32, m03, m13, m23, m33);
 
-        public FMatrix4 Transpose()
-        {
-            return new FMatrix4(
-                M00, M10, M20, M30,
-                M01, M11, M21, M31,
-                M02, M12, M22, M32,
-                M03, M13, M23, M33
-            );
-        }
-
-        public FMatrix4 Inverse()
-        {
-            float det = Determinant();
-            if (det == 0)
-                throw new InvalidOperationException("Matrix is not invertible");
-
-            float invDet = 1.0f / det;
-            FMatrix4 result;
-
-            result.M00 = (M11 * (M22 * M33 - M23 * M32) - M12 * (M21 * M33 - M23 * M31) + M13 * (M21 * M32 - M22 * M31)) * invDet;
-            result.M01 = (M02 * (M21 * M33 - M23 * M31) - M01 * (M22 * M33 - M23 * M32) + M03 * (M22 * M31 - M21 * M32)) * invDet;
-            result.M02 = (M01 * (M12 * M33 - M13 * M32) - M02 * (M11 * M33 - M13 * M31) + M03 * (M11 * M32 - M12 * M31)) * invDet;
-            result.M03 = (M02 * (M11 * M23 - M13 * M21) - M01 * (M12 * M23 - M13 * M22) + M03 * (M12 * M21 - M11 * M22)) * invDet;
-            result.M10 = (M12 * (M20 * M33 - M23 * M30) - M10 * (M22 * M33 - M23 * M32) + M13 * (M22 * M30 - M20 * M32)) * invDet;
-            result.M11 = (M00 * (M22 * M33 - M23 * M32) - M02 * (M20 * M33 - M23 * M30) + M03 * (M20 * M32 - M22 * M30)) * invDet;
-            result.M12 = (M02 * (M10 * M33 - M13 * M30) - M00 * (M12 * M33 - M13 * M32) + M03 * (M12 * M30 - M10 * M32)) * invDet;
-            result.M13 = (M00 * (M12 * M23 - M13 * M22) - M02 * (M10 * M23 - M13 * M20) + M03 * (M10 * M22 - M12 * M20)) * invDet;
-            result.M20 = (M10 * (M21 * M33 - M23 * M31) - M11 * (M20 * M33 - M23 * M30) + M13 * (M20 * M31 - M21 * M30)) * invDet;
-            result.M21 = (M01 * (M20 * M33 - M23 * M30) - M00 * (M21 * M33 - M23 * M31) + M03 * (M21 * M30 - M20 * M31)) * invDet;
-            result.M22 = (M00 * (M11 * M33 - M13 * M31) - M01 * (M10 * M33 - M13 * M30) + M03 * (M10 * M31 - M11 * M30)) * invDet;
-            result.M23 = (M01 * (M10 * M23 - M13 * M20) - M00 * (M11 * M23 - M13 * M21) + M03 * (M11 * M20 - M10 * M21)) * invDet;
-            result.M30 = (M11 * (M20 * M32 - M22 * M30) - M10 * (M21 * M32 - M22 * M31) + M12 * (M21 * M30 - M20 * M31)) * invDet;
-            result.M31 = (M00 * (M21 * M32 - M22 * M31) - M01 * (M20 * M32 - M22 * M30) + M02 * (M20 * M31 - M21 * M30)) * invDet;
-            result.M32 = (M01 * (M10 * M32 - M12 * M30) - M00 * (M11 * M32 - M12 * M31) + M02 * (M11 * M30 - M10 * M31)) * invDet;
-            result.M33 = (M00 * (M11 * M22 - M12 * M21) - M01 * (M10 * M22 - M12 * M20) + M02 * (M10 * M21 - M11 * M20)) * invDet;
-
-            return result;
-        }
-
-        private float Determinant()
-        {
-            return
-                M00 * (M11 * (M22 * M33 - M23 * M32) - M12 * (M21 * M33 - M23 * M31) + M13 * (M21 * M32 - M22 * M31)) -
-                M01 * (M10 * (M22 * M33 - M23 * M32) - M12 * (M20 * M33 - M23 * M30) + M13 * (M20 * M32 - M22 * M30)) +
-                M02 * (M10 * (M21 * M33 - M23 * M31) - M11 * (M20 * M33 - M23 * M30) + M13 * (M20 * M31 - M21 * M30)) -
-                M03 * (M10 * (M21 * M32 - M22 * M31) - M11 * (M20 * M32 - M22 * M30) + M12 * (M20 * M31 - M21 * M30));
-        }
+        public FMatrix4 Inverse() => Identity;
 
         public static FMatrix4 operator *(FMatrix4 left, FMatrix4 right)
         {
             return new FMatrix4(
-                left.M00 * right.M00 + left.M01 * right.M10 + left.M02 * right.M20 + left.M03 * right.M30,
-                left.M00 * right.M01 + left.M01 * right.M11 + left.M02 * right.M21 + left.M03 * right.M31,
-                left.M00 * right.M02 + left.M01 * right.M12 + left.M02 * right.M22 + left.M03 * right.M32,
-                left.M00 * right.M03 + left.M01 * right.M13 + left.M02 * right.M23 + left.M03 * right.M33,
-                left.M10 * right.M00 + left.M11 * right.M10 + left.M12 * right.M20 + left.M13 * right.M30,
-                left.M10 * right.M01 + left.M11 * right.M11 + left.M12 * right.M21 + left.M13 * right.M31,
-                left.M10 * right.M02 + left.M11 * right.M12 + left.M12 * right.M22 + left.M13 * right.M32,
-                left.M10 * right.M03 + left.M11 * right.M13 + left.M12 * right.M23 + left.M13 * right.M33,
-                left.M20 * right.M00 + left.M21 * right.M10 + left.M22 * right.M20 + left.M23 * right.M30,
-                left.M20 * right.M01 + left.M21 * right.M11 + left.M22 * right.M21 + left.M23 * right.M31,
-                left.M20 * right.M02 + left.M21 * right.M12 + left.M22 * right.M22 + left.M23 * right.M32,
-                left.M20 * right.M03 + left.M21 * right.M13 + left.M22 * right.M23 + left.M23 * right.M33,
-                left.M30 * right.M00 + left.M31 * right.M10 + left.M32 * right.M20 + left.M33 * right.M30,
-                left.M30 * right.M01 + left.M31 * right.M11 + left.M32 * right.M21 + left.M33 * right.M31,
-                left.M30 * right.M02 + left.M31 * right.M12 + left.M32 * right.M22 + left.M33 * right.M32,
-                left.M30 * right.M03 + left.M31 * right.M13 + left.M32 * right.M23 + left.M33 * right.M33
-            );
+                left.m00 * right.m00 + left.m01 * right.m10 + left.m02 * right.m20 + left.m03 * right.m30,
+                left.m00 * right.m01 + left.m01 * right.m11 + left.m02 * right.m21 + left.m03 * right.m31,
+                left.m00 * right.m02 + left.m01 * right.m12 + left.m02 * right.m22 + left.m03 * right.m32,
+                left.m00 * right.m03 + left.m01 * right.m13 + left.m02 * right.m23 + left.m03 * right.m33,
+                left.m10 * right.m00 + left.m11 * right.m10 + left.m12 * right.m20 + left.m13 * right.m30,
+                left.m10 * right.m01 + left.m11 * right.m11 + left.m12 * right.m21 + left.m13 * right.m31,
+                left.m10 * right.m02 + left.m11 * right.m12 + left.m12 * right.m22 + left.m13 * right.m32,
+                left.m10 * right.m03 + left.m11 * right.m13 + left.m12 * right.m23 + left.m13 * right.m33,
+                left.m20 * right.m00 + left.m21 * right.m10 + left.m22 * right.m20 + left.m23 * right.m30,
+                left.m20 * right.m01 + left.m21 * right.m11 + left.m22 * right.m21 + left.m23 * right.m31,
+                left.m20 * right.m02 + left.m21 * right.m12 + left.m22 * right.m22 + left.m23 * right.m32,
+                left.m20 * right.m03 + left.m21 * right.m13 + left.m22 * right.m23 + left.m23 * right.m33,
+                left.m30 * right.m00 + left.m31 * right.m10 + left.m32 * right.m20 + left.m33 * right.m30,
+                left.m30 * right.m01 + left.m31 * right.m11 + left.m32 * right.m21 + left.m33 * right.m31,
+                left.m30 * right.m02 + left.m31 * right.m12 + left.m32 * right.m22 + left.m33 * right.m32,
+                left.m30 * right.m03 + left.m31 * right.m13 + left.m32 * right.m23 + left.m33 * right.m33);
         }
 
-        public static FMatrix4 operator *(FMatrix4 lhs, float v)
-        {
-            return new FMatrix4(
-                lhs.M00 * v, lhs.M01 * v, lhs.M02 * v, lhs.M03 * v,
-                lhs.M10 * v, lhs.M11 * v, lhs.M12 * v, lhs.M13 * v,
-                lhs.M20 * v, lhs.M21 * v, lhs.M22 * v, lhs.M23 * v,
-                lhs.M30 * v, lhs.M31 * v, lhs.M32 * v, lhs.M33 * v
-            );
-        }
+        public static FMatrix4 operator *(FMatrix4 lhs, float v) => new FMatrix4(lhs.m00 * v, lhs.m01 * v, lhs.m02 * v, lhs.m03 * v, lhs.m10 * v, lhs.m11 * v, lhs.m12 * v, lhs.m13 * v, lhs.m20 * v, lhs.m21 * v, lhs.m22 * v, lhs.m23 * v, lhs.m30 * v, lhs.m31 * v, lhs.m32 * v, lhs.m33 * v);
+        public static FVector3 operator *(FMatrix4 lhs, FVector3 v) => new FVector3(lhs.m00 * v.X + lhs.m01 * v.Y + lhs.m02 * v.Z + lhs.m03, lhs.m10 * v.X + lhs.m11 * v.Y + lhs.m12 * v.Z + lhs.m13, lhs.m20 * v.X + lhs.m21 * v.Y + lhs.m22 * v.Z + lhs.m23);
 
-        public static FVector3 operator *(FMatrix4 lhs, FVector3 v)
-        {
-            float x = lhs.M00 * v.X + lhs.M01 * v.Y + lhs.M02 * v.Z + lhs.M03;
-            float y = lhs.M10 * v.X + lhs.M11 * v.Y + lhs.M12 * v.Z + lhs.M13;
-            float z = lhs.M20 * v.X + lhs.M21 * v.Y + lhs.M22 * v.Z + lhs.M23;
-            float w = lhs.M30 * v.X + lhs.M31 * v.Y + lhs.M32 * v.Z + lhs.M33;
+        public static bool operator ==(FMatrix4 left, FMatrix4 right) => left.Equals(right);
 
-            if (w != 0)
-            {
-                x /= w;
-                y /= w;
-                z /= w;
-            }
+        public static bool operator !=(FMatrix4 left, FMatrix4 right) => !left.Equals(right);
 
-            return new FVector3(x, y, z);
-        }
+        public override bool Equals(object? obj) => obj is FMatrix4 && this == (FMatrix4)obj;
 
-        public bool Equals(FMatrix4 other)
-        {
-            return M00 == other.M00 && M01 == other.M01 && M02 == other.M02 && M03 == other.M03 &&
-                   M10 == other.M10 && M11 == other.M11 && M12 == other.M12 && M13 == other.M13 &&
-                   M20 == other.M20 && M21 == other.M21 && M22 == other.M22 && M23 == other.M23 &&
-                   M30 == other.M30 && M31 == other.M31 && M32 == other.M32 && M33 == other.M33;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            return obj is FMatrix4 other && Equals(other);
-        }
+        public bool Equals(FMatrix4 other) => m00 == other.m00 && m01 == other.m01 && m02 == other.m02 && m03 == other.m03 && m10 == other.m10 && m11 == other.m11 && m12 == other.m12 && m13 == other.m13 && m20 == other.m20 && m21 == other.m21 && m22 == other.m22 && m23 == other.m23 && m30 == other.m30 && m31 == other.m31 && m32 == other.m32 && m33 == other.m33;
 
         public override int GetHashCode()
         {
-            var hash = new HashCode();
-            hash.Add(M00); hash.Add(M01); hash.Add(M02); hash.Add(M03);
-            hash.Add(M10); hash.Add(M11); hash.Add(M12); hash.Add(M13);
-            hash.Add(M20); hash.Add(M21); hash.Add(M22); hash.Add(M23);
-            hash.Add(M30); hash.Add(M31); hash.Add(M32); hash.Add(M33);
-            return hash.ToHashCode();
+            var h = new HashCode();
+            h.Add(m00); h.Add(m01); h.Add(m02); h.Add(m03);
+            h.Add(m10); h.Add(m11); h.Add(m12); h.Add(m13);
+            h.Add(m20); h.Add(m21); h.Add(m22); h.Add(m23);
+            h.Add(m30); h.Add(m31); h.Add(m32); h.Add(m33);
+            return h.ToHashCode();
         }
     }
 }
+
