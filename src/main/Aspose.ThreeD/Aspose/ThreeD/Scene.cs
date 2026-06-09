@@ -197,7 +197,7 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Open(Stream stream)
         {
-            var format = IOService.DetectFormat(stream, null);
+            var format = FileFormat.Detect(stream, null);
             Open(stream, format.CreateLoadOptions());
         }
 
@@ -206,7 +206,7 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Open(Stream stream, CancellationToken cancellationToken)
         {
-            var format = IOService.DetectFormat(stream, null);
+            var format = FileFormat.Detect(stream, null);
             Open(stream, format.CreateLoadOptions(), cancellationToken);
         }
 
@@ -215,7 +215,7 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Open(Stream stream, string fileName)
         {
-            var format = IOService.DetectFormat(stream, fileName);
+            var format = FileFormat.Detect(stream, fileName);
             Open(stream, format.CreateLoadOptions());
         }
 
@@ -224,7 +224,7 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Open(Stream stream, string fileName, CancellationToken cancellationToken)
         {
-            var format = IOService.DetectFormat(stream, fileName);
+            var format = FileFormat.Detect(stream, fileName);
             Open(stream, format.CreateLoadOptions(), cancellationToken);
         }
 
@@ -252,7 +252,7 @@ namespace Aspose.ThreeD
         {
             Clear();
 
-            var format = IOService.GetFormatByFileName(fileName);
+            var format = FileFormat.GetFormatByExtension(Path.GetExtension(fileName));
             var importer = Formats.IOService.Instance.CreateImporter(format);
 
             if (importer == null)
@@ -291,7 +291,7 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Open(string fileName)
         {
-            var format = IOService.GetFormatByFileName(fileName);
+            var format = FileFormat.GetFormatByExtension(Path.GetExtension(fileName));
             Open(fileName, format.CreateLoadOptions());
         }
 
@@ -447,7 +447,7 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Save(string fileName)
         {
-            var format = IOService.GetFormatByFileName(fileName);
+            var format = FileFormat.GetFormatByExtension(Path.GetExtension(fileName));
             var options = format.CreateSaveOptions();
             Save(fileName, options);
         }
@@ -465,10 +465,8 @@ namespace Aspose.ThreeD
         /// Saves the scene to specified path using specified file format.
         /// </summary>
         public void Save(string fileName, SaveOptions options)
-        {
-            var format = IOService.GetFormatByFileName(fileName);
+        {            var format = FileFormat.GetFormatByExtension(Path.GetExtension(fileName));
             var exporter = Formats.IOService.Instance.CreateExporter(format);
-
             if (exporter == null)
             {
                 throw new NotSupportedException($"Export not supported for {format.Extension}");

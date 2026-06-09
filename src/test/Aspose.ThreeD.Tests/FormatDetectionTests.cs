@@ -11,23 +11,21 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void DetectObjFormatFromStream_ShouldReturnObjFormat()
         {
-            var testFile = "../../../../../../../TestData/input/cube.obj";
+            var testFile = "../../../../../../testdata/input/cube.obj";
             
             if (!File.Exists(testFile))
             {
                 throw new FileNotFoundException($"Test file not found: {testFile}");
             }
-
-            using var stream = File.OpenRead(testFile);
-            var format = IOService.DetectFormat(stream, null);
-
+using var stream = File.OpenRead(testFile);
+             var format = FileFormat.Detect(stream, null);
             Assert.Equal(".obj", format.Extension);
         }
 
         [Fact]
         public void DetectStlFormatFromStream_ShouldReturnStlFormat()
         {
-            var testFile = Path.Combine("../../../../../../../TestData/stl", "stl_ascii.stl");
+            var testFile = Path.Combine("../../../../../../testdata/stl", "stl_ascii.stl");
 
             if (!File.Exists(testFile))
             {
@@ -35,7 +33,7 @@ namespace Aspose.ThreeD.Tests
             }
 
             using var stream = File.OpenRead(testFile);
-            var format = IOService.DetectFormat(stream, null);
+            var format = FileFormat.Detect(stream, null);
 
             Assert.Equal(".stl", format.Extension);
         }
@@ -43,7 +41,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void DetectGltfFormatFromStream_ShouldReturnGltfFormat()
         {
-            var testFile = "../../../../../../../TestData/gltf/simple_cube.gltf";
+            var testFile = "../../../../../../testdata/gltf/simple_cube.gltf";
             
             if (!File.Exists(testFile))
             {
@@ -51,7 +49,7 @@ namespace Aspose.ThreeD.Tests
             }
 
             using var stream = File.OpenRead(testFile);
-            var format = IOService.DetectFormat(stream, "test.gltf");
+            var format = FileFormat.Detect(stream, "test.gltf");
 
             Assert.Equal(".gltf", format.Extension);
         }
@@ -59,7 +57,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void OpenStreamWithAutoDetectionObj_ShouldLoadCorrectly()
         {
-            var testFile = "../../../../../../../TestData/input/cube.obj";
+            var testFile = "../../../../../../testdata/input/cube.obj";
             
             if (!File.Exists(testFile))
             {
@@ -87,7 +85,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void OpenStreamWithAutoDetectionStl_ShouldLoadCorrectly()
         {
-            var testFile = Path.Combine("../../../../../../../TestData/stl", "stl_ascii.stl");
+            var testFile = Path.Combine("../../../../../../testdata/stl", "stl_ascii.stl");
 
             if (!File.Exists(testFile))
             {
@@ -115,7 +113,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void OpenStreamWithAutoDetectionGltf_ShouldLoadCorrectly()
         {
-            var testFile = "../../../../../../../TestData/gltf/simple_cube.gltf";
+            var testFile = "../../../../../../testdata/gltf/simple_cube.gltf";
             
             if (!File.Exists(testFile))
             {
@@ -133,7 +131,7 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void OpenStreamWithFilename_ShouldDetectFormatFromFilename()
         {
-            var testFile = "../../../../../../../TestData/input/cube.obj";
+            var testFile = "../../../../../../testdata/input/cube.obj";
             
             if (!File.Exists(testFile))
             {
@@ -161,39 +159,33 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void DetectObjFormatFromStreamWithFilename_ShouldReturnObjFormat()
         {
-            var testFile = "../../../../../../../TestData/input/cube.obj";
+            var testFile = "../../../../../../testdata/input/cube.obj";
             
             if (!File.Exists(testFile))
             {
                 throw new FileNotFoundException($"Test file not found: {testFile}");
-            }
+            }using var stream = File.OpenRead(testFile);
+             var format = FileFormat.Detect(stream, "test.obj");
+             Assert.Equal(".obj", format.Extension);
+         }
 
-            using var stream = File.OpenRead(testFile);
-            var format = IOService.DetectFormat(stream, "test.obj");
+         [Fact]
+         public void DetectStlFormatFromStreamWithFilename_ShouldReturnStlFormat()
+         {
+             var testFile = Path.Combine("../../../../../../testdata/stl", "stl_ascii.stl");
 
-            Assert.Equal(".obj", format.Extension);
-        }
-
-        [Fact]
-        public void DetectStlFormatFromStreamWithFilename_ShouldReturnStlFormat()
-        {
-            var testFile = Path.Combine("../../../../../../../TestData/stl", "stl_ascii.stl");
-
-            if (!File.Exists(testFile))
-            {
-                throw new FileNotFoundException($"Test file not found: {testFile}");
-            }
-
-            using var stream = File.OpenRead(testFile);
-            var format = IOService.DetectFormat(stream, "test.stl");
-
-            Assert.Equal(".stl", format.Extension);
+             if (!File.Exists(testFile))
+             {
+                 throw new FileNotFoundException($"Test file not found: {testFile}");
+             }
+using var stream = File.OpenRead(testFile);
+             var format = FileFormat.Detect(stream, "test.");            Assert.Equal(".stl", format.Extension);
         }
 
         [Fact]
         public void DetectGltfFormatFromStreamWithFilename_ShouldReturnGltfFormat()
         {
-            var testFile = "../../../../../../../TestData/gltf/simple_cube.gltf";
+            var testFile = "../../../../../../testdata/gltf/simple_cube.gltf";
             
             if (!File.Exists(testFile))
             {
@@ -201,7 +193,7 @@ namespace Aspose.ThreeD.Tests
             }
 
             using var stream = File.OpenRead(testFile);
-            var format = IOService.DetectFormat(stream, "test.gltf");
+            var format = FileFormat.Detect(stream, "test.gltf");
 
             Assert.Equal(".gltf", format.Extension);
         }

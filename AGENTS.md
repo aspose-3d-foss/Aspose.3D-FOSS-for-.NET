@@ -100,6 +100,20 @@ Fixed binary FBX importer to correctly parse FBX files:
 | Metered.SetMeteredKey() | Trial/metering not applicable |
 | Scene.Render() | Rendering requires proprietary algorithms |
 
+### Recent Changes (IOService Merge)
+Merged two IOService classes into one internal `Aspose.ThreeD.Formats.IOService` class:
+
+**Changes:**
+1. Created internal `Aspose.ThreeD.Formats.IOService` class
+2. Made `IOService` internal to hide implementation details
+3. Added `FileFormat.Detect(Stream, string)` method to match On-Premise API
+4. Updated `ColladaFormat` extension from ".dae" to "dae" for consistency
+5. Updated all format extensions to include dot prefix (".obj", ".stl", etc.)
+
+**Status:**
+- Format detection (`FileFormat.Detect`) - fully implemented
+- Importer/Exporter creation (`IOService.CreateImporter/Exporter`) - stubs (throws `NotImplementedException`)
+
 ## Test Coverage
 
 Tests have been implemented:

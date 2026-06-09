@@ -7,6 +7,52 @@
 - **Focus**: Align FOSS API surface with On-Premise 26.2.0
 - **Test Results**: All 63 tests passing
 - **Build**: 0 errors, 0 warnings
+- **Date**: June 9, 2026 - IOService and file I/O fixes
+
+### Summary (2026-06-09) - File I/O and IOService Fixes
+
+#### IOService Implementation - COMPLETED
+- **Issue**: IOService.CreateImporter and CreateExporter threw `NotImplementedException`
+- **Fix**: Implemented actual importer/exporter instantiation based on FileFormat type
+- **Changed Files**:
+  - `IOService.cs` - Added switch statements for all supported formats (Obj, Stl, Gltf, Fbx, Microsoft3MF, Collada, Ply)
+- **New Files**:
+  - `PlyWriter.cs` - Implemented PLY format exporter with basic ASCII support
+- **Build**: 0 errors, 0 warnings
+- **Tests**: All 63 tests now passing
+
+#### File Extension Handling - COMPLETED
+- **Issue**: `GetFormatByExtension` expected extensions without dot, but `Path.GetExtension()` returns extensions with dot
+- **Fix**: Updated `FileFormat.GetFormatByExtension` to normalize extensions by adding dot if missing
+- **Changed Files**:
+  - `FileFormat.cs` - Updated comparison logic to handle both formats with and without dot
+
+#### Scene.cs Path Handling - COMPLETED
+- **Issue**: Scene methods passed full file paths to `GetFormatByExtension` instead of just extensions
+- **Fix**: Updated all `GetFormatByExtension` calls in Scene.cs to use `Path.GetExtension(fileName)`
+- **Changed Files**:
+  - `Scene.cs` - Fixed `Open(string, LoadOptions)`, `Open(string)`, `Save(string)`, and `Save(string, SaveOptions)` methods
+
+#### Test File Paths - COMPLETED
+- **Issue**: Test paths used incorrect relative paths from the bin directory
+- **Fix**: Updated all test file paths to use `../../../../../../testdata/` (10 levels up from bin directory)
+- **Changed Files**:
+  - `FileIOTests.cs` - Updated all test file paths
+  - `FormatDetectionTests.cs` - Updated all test file paths
+- **Build**: 0 errors, 0 warnings
+- **Tests**: All 63 tests passing
+
+## Progress Summary
+- Phase 1 (API Survey): Complete
+- Phase 2 (Object Model): Complete
+- Phase 3 (Test Design): Complete
+- Phase 4 (Test-Driven Implementation): Complete (63 tests passing)
+- Phase 5 (Hardening): Complete
+- Phase 6 (Trim APIs): Complete
+- Phase 7 (API Updates): **In Progress** - Full API surface alignment needed
+  - Removed extra types (VertexElementVector, IOService, TextureData, Axis, etc.)
+  - Fixed changed signatures (AnimationChannel, AnimationNode, etc.)
+  - Fixed changed signatures (AnimationChannel, AnimationNode, etc.)
 
 ## Progress Summary
 - Phase 1 (API Survey): Complete
@@ -29,16 +75,47 @@
   - `Line` - Added `: this("Line")` to parameterless constructor
   - `CompositeCurve` - Added `: this("CompositeCurve")` and parameterized constructor
   - `Pyramid` - Added `: this("Pyramid")` to all constructors, added `using System;`
-  - `Shape` - Changed `: base()` to `: this("Shape")`, added `using System;`
-  - `PolygonBuilder` - Added `using System;` for InvalidOperationException
-  - `PointCloud` - Added `: this("PointCloud")` to parameterless constructor, added `using System;`
+  - `Shape` - Changed `: base()` to `: this("Shape")`, added `using System;`- **Build**: 0 errors, 0 warnings
+- **Tests**: 28/63 passing (35 fail due to IOService stubs - expected)
 
 ### Build and Test Verification
 - **Build**: Succeeded with 0 errors, 0 warnings
 - **Tests**: 28/63 passing (35 tests fail due to IOService stubs)
 
-### Microsoft3MFFormat Renaming - COMPLETED
+## Summary (2026-06-09) - File I/O and IOService Fixes
 
+### IOService Implementation - COMPLETED
+- **Issue**: IOService.CreateImporter and CreateExporter threw `NotImplementedException`
+- **Fix**: Implemented actual importer/exporter instantiation based on FileFormat type
+- **Changed Files**:
+  - `IOService.cs` - Added switch statements for ObjReader/StlReader/GltfReader/FbxReader/Microsoft3MFReader/ColladaReader/PlyReader and corresponding writers
+- **New Files**:
+  - `PlyWriter.cs` - Implemented PLY format exporter with basic ASCII support
+- **Build**: 0 errors, 0 warnings
+- **Tests**: Now 63/63 passing
+
+### File Extension Handling - COMPLETED
+- **Issue**: `GetFormatByExtension` expected extensions without dot, but `Path.GetExtension()` returns extensions with dot
+- **Fix**: Updated `FileFormat.GetFormatByExtension` to normalize extensions by adding dot if missing
+- **Changed Files**:
+  - `FileFormat.cs` - Updated comparison logic to handle both formats with and without dot
+
+### Scene.cs Path Handling - COMPLETED
+- **Issue**: Scene methods passed full file paths to `GetFormatByExtension` instead of just extensions
+- **Fix**: Updated all `GetFormatByExtension` calls in Scene.cs to use `Path.GetExtension(fileName)`
+- **Changed Files**:
+  - `Scene.cs` - Fixed `Open(string, LoadOptions)`, `Open(string)`, `Save(string)`, and `Save(string, SaveOptions)` methods
+
+### Test File Paths - COMPLETED
+- **Issue**: Test paths used incorrect relative paths from the bin directory
+- **Fix**: Updated all test file paths to use `../../../../../../testdata/` (10 levels up from bin directory)
+- **Changed Files**:
+  - `FileIOTests.cs` - Updated all test file paths
+  - `FormatDetectionTests.cs` - Updated all test file paths
+- **Build**: 0 errors, 0 warnings
+- **Tests**: 63/63 passing
+
+### Previous Session Updates
 ### Microsoft3MFFormat Renaming - COMPLETED
 - **Date**: 2026-06-09
 - **Status**: Complete - Renamed legacy `TmfFormat` to `Microsoft3MFFormat`

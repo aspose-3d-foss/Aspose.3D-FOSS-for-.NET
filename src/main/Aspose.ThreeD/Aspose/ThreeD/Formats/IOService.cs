@@ -1,10 +1,14 @@
+using System;
+using System.IO;
+using System.Linq;
+
 namespace Aspose.ThreeD.Formats;
 
 /// <summary>
 /// IO service for importing and exporting files.
 /// This is a stub implementation for FOSS version.
 /// </summary>
-public class IOService
+internal class IOService
 {
     private static IOService? _instance;
 
@@ -19,9 +23,34 @@ public class IOService
     /// <param name="stream">The stream to read from.</param>
     /// <param name="fileName">The file name.</param>
     /// <returns>The detected file format.</returns>
-    public static FileFormat DetectFormat(System.IO.Stream stream, string? fileName)
+    public static FileFormat DetectFormat(Stream stream, string? fileName)
     {
-        throw new System.NotImplementedException("Format detection is not yet implemented");
+        if (stream.CanRead && stream.CanSeek)
+        {
+            var position = stream.Position;
+            try
+            {
+                foreach (var format in FileFormat.Formats)
+                {
+                    if (format.CanDetect(stream, fileName))
+                    {
+                        return format;
+                    }
+                }
+            }
+            finally
+            {
+                stream.Position = position;
+            }
+        }
+
+        if (fileName != null)
+        {
+            var ext = Path.GetExtension(fileName);
+            return FileFormat.GetFormatByExtension(ext);
+        }
+
+        throw new ArgumentException("Cannot detect file format without file name or stream data");
     }
 
     /// <summary>
@@ -31,7 +60,8 @@ public class IOService
     /// <returns>The file format.</returns>
     public static FileFormat GetFormatByFileName(string fileName)
     {
-        throw new System.NotImplementedException("Format detection by file name is not yet implemented");
+        var ext = Path.GetExtension(fileName);
+        return FileFormat.GetFormatByExtension(ext);
     }
 
     /// <summary>
@@ -41,7 +71,17 @@ public class IOService
     /// <returns>The importer.</returns>
     internal IImporter CreateImporter(FileFormat format)
     {
-        throw new System.NotImplementedException("Importer creation is not yet implemented");
+        return format switch
+        {
+            FileFormat f when f == FileFormat.ObjFormat => new ObjReader(),
+            FileFormat f when f == FileFormat.StlFormat => new StlReader(),
+            FileFormat f when f == FileFormat.GltfFormat => new GltfReader(),
+            FileFormat f when f == FileFormat.FbxFormat => new FbxReader(),
+            FileFormat f when f == FileFormat.Microsoft3MFFormat => new Microsoft3MFReader(),
+            FileFormat f when f == FileFormat.ColladaFormat => new ColladaReader(),
+            FileFormat f when f == FileFormat.PlyFormat => new PlyReader(),
+            _ => throw new NotSupportedException($"Import not supported for {format.Extension}")
+        };
     }
 
     /// <summary>
@@ -51,6 +91,16 @@ public class IOService
     /// <returns>The exporter.</returns>
     internal IExporter CreateExporter(FileFormat format)
     {
-        throw new System.NotImplementedException("Exporter creation is not yet implemented");
+        return format switch
+        {
+            FileFormat f when f == FileFormat.ObjFormat => new ObjWriter(),
+            FileFormat f when f == FileFormat.StlFormat => new StlWriter(),
+            FileFormat f when f == FileFormat.GltfFormat => new GltfWriter(),
+            FileFormat f when f == FileFormat.FbxFormat => new FbxWriter(),
+            FileFormat f when f == FileFormat.Microsoft3MFFormat => new Microsoft3MFWriter(),
+            FileFormat f when f == FileFormat.ColladaFormat => new ColladaWriter(),
+            FileFormat f when f == FileFormat.PlyFormat => new PlyWriter(),
+            _ => throw new NotSupportedException($"Export not supported for {format.Extension}")
+        };
     }
 }

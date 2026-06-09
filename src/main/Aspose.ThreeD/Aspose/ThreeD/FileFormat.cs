@@ -97,24 +97,31 @@ namespace Aspose.ThreeD
         }
 
 
-
         /// <summary>
         /// Gets the preferred file format from the file extension name
         /// The extension name should starts with a dot('.').
         /// </summary>
         public static FileFormat GetFormatByExtension(string extensionName)
         {
+            // Ensure the extension starts with a dot for comparison
+            if (string.IsNullOrEmpty(extensionName))
+                throw new ArgumentException("Extension name cannot be null or empty", nameof(extensionName));
+            
+            // Normalize the extension to start with a dot
+            var normalizedExt = extensionName.StartsWith(".") ? extensionName : "." + extensionName;
+            
             foreach (var format in _formats)
             {
                 foreach (var ext in format._extensions)
                 {
-                    if (ext.Equals(extensionName, StringComparison.OrdinalIgnoreCase))
+                    // Compare extensions (both with and without dot are supported)
+                    var formatExt = ext.StartsWith(".") ? ext : "." + ext;
+                    if (formatExt.Equals(normalizedExt, StringComparison.OrdinalIgnoreCase))
                         return format;
                 }
             }
             throw new ArgumentException($"Unsupported file format: {extensionName}");
         }
-
         /// <summary>
         /// Detects file format from file name, file must be readable so Aspose.3D can detect file format through file header.
         /// </summary>
@@ -122,6 +129,39 @@ namespace Aspose.ThreeD
         {
             var ext = Path.GetExtension(fileName);
             return GetFormatByExtension(ext);
+        }
+
+        /// <summary>
+        /// Detects file format from data stream, file name is optional for guessing types that has no magic header.
+        /// </summary>
+        public static FileFormat Detect(Stream stream, string fileName)
+        {
+            if (stream.CanRead && stream.CanSeek)
+            {
+                var position = stream.Position;
+                try
+                {
+                    foreach (var format in FileFormat.Formats)
+                    {
+                        if (format.CanDetect(stream, fileName))
+                        {
+                            return format;
+                        }
+                    }
+                }
+                finally
+                {
+                    stream.Position = position;
+                }
+            }
+
+            if (fileName != null)
+            {
+                var ext = Path.GetExtension(fileName);
+                return GetFormatByExtension(ext);
+            }
+
+            throw new ArgumentException("Cannot detect file format without file name or stream data");
         }
 
         /// <summary>
@@ -516,7 +556,7 @@ namespace Aspose.ThreeD
                 if (bytesRead > 0)
                 {
                     var content = System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    if (content.Contains("ply") && content.Contains("format") && content.Contains("element"))
+                    if (content.Contains(".ply") && content.Contains("format") && content.Contains("element"))
                         return true;
                 }
             }
