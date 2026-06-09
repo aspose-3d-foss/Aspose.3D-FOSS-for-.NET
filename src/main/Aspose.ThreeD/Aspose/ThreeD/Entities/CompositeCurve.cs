@@ -36,27 +36,27 @@ public class CompositeCurve : Curve, INamedObject
     {
         segments.Add(new Segment { Curve = curve, SameDirection = sameDirection });
     }
-}
 
-/// <summary>
-/// A segment in composite curve.
-/// </summary>
-public class Segment
-{
     /// <summary>
-    /// Constructor of
+    /// A segment in composite curve.
     /// </summary>
-    public Segment()
+    public class Segment
     {
+        /// <summary>
+        /// Constructor of
+        /// </summary>
+        public Segment()
+        {
+        }
+
+        /// <summary>
+        /// The curve of the segment.
+        /// </summary>
+        public Curve Curve { get; set; }
+
+        /// <summary>
+        /// Whether the curve has the same direction as the composite curve.
+        /// </summary>
+        public bool SameDirection { get; set; }
     }
-
-    /// <summary>
-    /// The curve of the segment.
-    /// </summary>
-    public Curve Curve { get; set; }
-
-    /// <summary>
-    /// Whether the curve has the same direction as the composite curve.
-    /// </summary>
-    public bool SameDirection { get; set; }
 }

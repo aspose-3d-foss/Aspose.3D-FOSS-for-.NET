@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using Aspose.ThreeD.Utilities;
 using Aspose.ThreeD.Formats;
+using Aspose.ThreeD.Animation;
 
 namespace Aspose.ThreeD
 {
