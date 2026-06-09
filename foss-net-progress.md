@@ -35,7 +35,12 @@
 
 ### Build and Test Verification
 - **Build**: Succeeded with 0 errors, 0 warnings
-- **Tests**: 63/63 passing
+- **Tests**: 28/63 passing (35 tests fail due to IOService stubs)
+
+### Known Issues
+- `IOService` stubs throw `NotImplementedException` for file I/O operations
+- Tests relying on file format detection and loading are failing
+- This is expected - full file I/O implementation requires significant additional work
 
 ### FOSS API Surface Analysis
 - **On-Premise 26.2.0**: 297 types
