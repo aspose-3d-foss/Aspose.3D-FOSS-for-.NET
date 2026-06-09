@@ -226,16 +226,16 @@ namespace Aspose.ThreeD.Formats
         public bool FlipCoordinateSystem { get; set; }
     }
 
-    public class TmfLoadOptions : LoadOptions
+    public class Microsoft3MFLoadOptions : LoadOptions
     {
-        public TmfLoadOptions() : base()
+        public Microsoft3MFLoadOptions() : base()
         {
         }
     }
 
-    public class TmfSaveOptions : SaveOptions
+    public class Microsoft3MFSaveOptions : SaveOptions
     {
-        public TmfSaveOptions() : base()
+        public Microsoft3MFSaveOptions() : base()
         {
         }
     }

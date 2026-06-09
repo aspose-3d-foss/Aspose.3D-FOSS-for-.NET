@@ -22,7 +22,7 @@ namespace Aspose.ThreeD
         internal static FileFormat StlFormat { get;	private set; } = null!;
         internal static FileFormat GltfFormat { get;	private set; } = null!;
         internal static FileFormat FbxFormat { get;	private set; } = null!;
-        internal static FileFormat TmfFormat { get;	private set; } = null!;
+        internal static FileFormat Microsoft3MFFormat { get;	private set; } = null!;
         internal static FileFormat ColladaFormat { get;	private set; } = null!;
         internal static FileFormat PlyFormat { get;	private set; } = null!;
 
@@ -154,7 +154,7 @@ namespace Aspose.ThreeD
             StlFormat = new StlFormat();
             GltfFormat = new GltfFormat();
             FbxFormat = new FbxFormat();
-            TmfFormat = new TmfFormat();
+            Microsoft3MFFormat = new Microsoft3MFFormat();
             ColladaFormat = new ColladaFormat();
             PlyFormat = new PlyFormat();
 
@@ -162,7 +162,7 @@ namespace Aspose.ThreeD
             _formats.Add(StlFormat);
             _formats.Add(GltfFormat);
             _formats.Add(FbxFormat);
-            _formats.Add(TmfFormat);
+            _formats.Add(Microsoft3MFFormat);
             _formats.Add(ColladaFormat);
             _formats.Add(PlyFormat);
         }
@@ -383,20 +383,20 @@ namespace Aspose.ThreeD
         }
     }
 
-    internal class TmfFormat : FileFormat
+    internal class Microsoft3MFFormat : FileFormat
     {
-        public TmfFormat() : base(".3mf", new[] { ".3mf" }, new Version(1, 0), true, true, FileContentType.Binary, new FileFormatType(".3mf"))
+        public Microsoft3MFFormat() : base(".3mf", new[] { ".3mf" }, new Version(1, 0), true, true, FileContentType.Binary, new FileFormatType(".3mf"))
         {
         }
 
         public override Formats.LoadOptions CreateLoadOptions()
         {
-            return new Formats.TmfLoadOptions();
+            return new Formats.Microsoft3MFLoadOptions();
         }
 
         public override Formats.SaveOptions CreateSaveOptions()
         {
-            return new Formats.TmfSaveOptions();
+            return new Formats.Microsoft3MFSaveOptions();
         }
 
         public override bool CanDetect(Stream stream, string? fileName)

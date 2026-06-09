@@ -161,7 +161,7 @@ namespace Aspose.ThreeD
                 Formats.StlLoadOptions => FileFormat.StlFormat,
                 Formats.GltfLoadOptions => FileFormat.GltfFormat,
                 Formats.FbxLoadOptions => FileFormat.FbxFormat,
-                Formats.TmfLoadOptions => FileFormat.TmfFormat,
+                Formats.Microsoft3MFLoadOptions => FileFormat.Microsoft3MFFormat,
                 Formats.PlyLoadOptions => FileFormat.PlyFormat,
                 _ => null
             };
@@ -408,7 +408,7 @@ namespace Aspose.ThreeD
                 Formats.GltfSaveOptions => FileFormat.GltfFormat,
                 Formats.FbxSaveOptions => FileFormat.FbxFormat,
                 Formats.ColladaSaveOptions => FileFormat.ColladaFormat,
-                Formats.TmfSaveOptions => FileFormat.TmfFormat,
+                Formats.Microsoft3MFSaveOptions => FileFormat.Microsoft3MFFormat,
                 _ => null
             };
 

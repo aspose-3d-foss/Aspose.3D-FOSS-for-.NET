@@ -1,16 +1,16 @@
 namespace Aspose.ThreeD.Formats
 {
-    internal class TmfPlugin : Plugin
+    internal class Microsoft3MFPlugin : Plugin
     {
         private readonly FileFormat _format;
         private readonly IImporter _importer;
         private readonly IExporter _exporter;
 
-        public TmfPlugin()
+        public Microsoft3MFPlugin()
         {
-            _format = FileFormat.TmfFormat;
+            _format = FileFormat.Microsoft3MFFormat;
             _importer = new Microsoft3MFReader();
-            _exporter = new TmfWriter();
+            _exporter = new Microsoft3MFWriter();
         }
 
         public override FileFormat GetFileFormat()
@@ -35,12 +35,12 @@ namespace Aspose.ThreeD.Formats
 
         public override LoadOptions CreateLoadOptions()
         {
-            return new TmfLoadOptions();
+            return new Microsoft3MFLoadOptions();
         }
 
         public override SaveOptions CreateSaveOptions()
         {
-            return new TmfSaveOptions();
+            return new Microsoft3MFSaveOptions();
         }
     }
 }

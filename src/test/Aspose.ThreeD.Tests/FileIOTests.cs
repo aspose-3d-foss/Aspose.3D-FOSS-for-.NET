@@ -389,7 +389,7 @@ namespace Aspose.ThreeD.Tests
 
             using var stream = File.OpenRead(testFile);
             var scene = new Scene();
-            var options = new Formats.TmfLoadOptions();
+            var options = new Formats.Microsoft3MFLoadOptions();
             scene.Open(stream, options);
 
             Assert.NotNull(scene);
@@ -469,7 +469,7 @@ namespace Aspose.ThreeD.Tests
             scene.RootNode.CreateChildNode("BoxNode", box);
 
             using var stream = new MemoryStream();
-            var options = new Formats.TmfSaveOptions();
+            var options = new Formats.Microsoft3MFSaveOptions();
             scene.Save(stream, options);
 
             stream.Seek(0, SeekOrigin.Begin);
@@ -527,7 +527,7 @@ namespace Aspose.ThreeD.Tests
             scene.RootNode.CreateChildNode("SphereNode", sphere);
 
             using var stream = new MemoryStream();
-            var options = new Formats.TmfSaveOptions();
+            var options = new Formats.Microsoft3MFSaveOptions();
             scene.Save(stream, options);
 
             stream.Seek(0, SeekOrigin.Begin);
@@ -553,7 +553,7 @@ namespace Aspose.ThreeD.Tests
             scene.RootNode.CreateChildNode("SphereNode", sphere);
 
             using var stream = new MemoryStream();
-            var options = new Formats.TmfSaveOptions();
+            var options = new Formats.Microsoft3MFSaveOptions();
             scene.Save(stream, options);
 
             stream.Seek(0, SeekOrigin.Begin);

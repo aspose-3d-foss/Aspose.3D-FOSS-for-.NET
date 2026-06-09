@@ -9,21 +9,21 @@ using Aspose.ThreeD.Utilities;
 
 namespace Aspose.ThreeD.Formats
 {
-    internal class TmfWriter : IExporter
+    internal class Microsoft3MFWriter : IExporter
     {
         public void Export(Scene scene, Stream stream, SaveOptions options)
         {
-            if (options is TmfSaveOptions tmfOptions)
+            if (options is Microsoft3MFSaveOptions tmfOptions)
             {
                 Write(stream, scene, tmfOptions);
             }
             else
             {
-                throw new ArgumentException("Options must be TmfSaveOptions", nameof(options));
+                throw new ArgumentException("Options must be Microsoft3MFSaveOptions", nameof(options));
             }
         }
 
-        private static void Write(Stream stream, Scene scene, TmfSaveOptions options)
+        private static void Write(Stream stream, Scene scene, Microsoft3MFSaveOptions options)
         {
             using var zip = new ZipArchive(stream, ZipArchiveMode.Create, leaveOpen: true);
 
@@ -50,7 +50,7 @@ namespace Aspose.ThreeD.Formats
             }
         }
 
-        private static string Generate3DModelXml(Scene scene, TmfSaveOptions options)
+        private static string Generate3DModelXml(Scene scene, Microsoft3MFSaveOptions options)
         {
             var ns = XNamespace.Get("http://schemas.microsoft.com/3dmanufacturing/core/2015/02");
             var modelElement = new XElement(ns + "model");
