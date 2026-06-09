@@ -224,4 +224,86 @@ namespace Aspose.ThreeD.Entities
         /// </summary>
         Periodic,
     }
+
+    /// <summary>
+    /// Patch direction's types.
+    /// </summary>
+    public enum PatchDirectionType
+    {
+        Bezier,
+        QuadraticBezier,
+        CardinalSpline,
+        BasisSpline,
+        Linear,
+    }
+
+    /// <summary>
+    /// Boolean operand types.
+    /// </summary>
+    public enum BooleanOperand
+    {
+        /// <summary>
+        /// First operand
+        /// </summary>
+        First,
+
+        /// <summary>
+        /// Second operand
+        /// </summary>
+        Second
+    }
+
+    /// <summary>
+    /// Boolean operator types.
+    /// </summary>
+    public enum BooleanOperator
+    {
+        /// <summary>
+        /// Union operator
+        /// </summary>
+        Union,
+
+        /// <summary>
+        /// Subtract operator
+        /// </summary>
+        Subtract,
+
+        /// <summary>
+        /// Intersection operator
+        /// </summary>
+        Intersection
+    }
+
+    /// <summary>
+    /// Split mesh policy.
+    /// </summary>
+    public enum SplitMeshPolicy
+    {
+        /// <summary>
+        /// Split by materials
+        /// </summary>
+        ByMaterials,
+
+        /// <summary>
+        /// Split by polygons
+        /// </summary>
+        ByPolygons
+    }
+
+    /// <summary>
+    /// Skeleton type.
+    /// </summary>
+    public enum SkeletonType
+    {
+        /// <summary>
+        /// Limb node
+        /// </summary>
+        LimbNode,
+
+        /// <summary>
+        /// Root
+        /// </summary>
+        Root
+    }
+
 }
