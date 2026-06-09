@@ -8,18 +8,26 @@ namespace Aspose.ThreeD.Utilities
         private Vector2 _maximum;
         private BoundingBoxExtent _extent;
 
+        /// <summary>
+        /// The null bounding box
+        /// </summary>
+        public static readonly BoundingBox2D Null = new BoundingBox2D(new Vector2(0, 0), new Vector2(0, 0));
+
+        /// <summary>
+        /// The infinite bounding box
+        /// </summary>
+        public static readonly BoundingBox2D Infinite = new BoundingBox2D(
+            new Vector2(double.NegativeInfinity, double.NegativeInfinity),
+            new Vector2(double.PositiveInfinity, double.PositiveInfinity));
+
+        /// <summary>
+        /// Initialize a finite bounding box with given minimum and maximum corner
+        /// </summary>
         public BoundingBox2D(Vector2 minimum, Vector2 maximum)
         {
             _minimum = minimum;
             _maximum = maximum;
             _extent = BoundingBoxExtent.Finite;
-        }
-
-        public BoundingBox2D()
-        {
-            _minimum = new Vector2(0, 0);
-            _maximum = new Vector2(0, 0);
-            _extent = BoundingBoxExtent.Null;
         }
 
         public BoundingBoxExtent Extent => _extent;

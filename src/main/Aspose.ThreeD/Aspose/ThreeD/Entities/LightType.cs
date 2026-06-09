@@ -1,24 +1,33 @@
 namespace Aspose.ThreeD.Entities
 {
-    public class LightType
+    /// <summary>
+    /// Light types.
+    /// </summary>
+    public enum LightType
     {
-        public static readonly LightType POINT = new LightType("Point");
-        public static readonly LightType SPOT = new LightType("Spot");
-        public static readonly LightType DIRECTIONAL = new LightType("Directional");
-        public static readonly LightType AMBIENT = new LightType("Ambient");
+        /// <summary>
+        /// Point light
+        /// </summary>
+        Point,
 
-        private readonly string _name;
+        /// <summary>
+        /// Directional light
+        /// </summary>
+        Directional,
 
-        private LightType(string name)
-        {
-            _name = name;
-        }
+        /// <summary>
+        /// Spot light
+        /// </summary>
+        Spot,
 
-        public string Name => _name;
+        /// <summary>
+        /// Area light
+        /// </summary>
+        Area,
 
-        public override string ToString()
-        {
-            return _name;
-        }
+        /// <summary>
+        /// Volume light
+        /// </summary>
+        Volume,
     }
 }

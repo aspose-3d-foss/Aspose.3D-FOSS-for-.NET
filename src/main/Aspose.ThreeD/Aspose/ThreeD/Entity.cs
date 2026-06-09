@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Aspose.ThreeD.Render;
+using Aspose.ThreeD.Utilities;
 
 namespace Aspose.ThreeD
 {
@@ -16,7 +17,7 @@ namespace Aspose.ThreeD
         /// <summary>
         /// Initializes a new instance of the Entity class.
         /// </summary>
-        protected Entity(string name) : base(name)
+        public Entity(string name) : base(name)
         {
             _parentNodes = new List<Node>();
             _excluded = false;
@@ -39,7 +40,7 @@ namespace Aspose.ThreeD
         /// <summary>
         /// Gets or sets the first parent node, if set the first parent node, this entity will be detached from other parent nodes.
         /// </summary>
-        public Node? ParentNode
+        public Node ParentNode
         {
             get
             {
@@ -62,11 +63,17 @@ namespace Aspose.ThreeD
         /// <summary>
         /// Gets the bounding box of current entity in its object space coordinate system.
         /// </summary>
-        public abstract Utilities.BoundingBox GetBoundingBox();
+        public virtual BoundingBox GetBoundingBox()
+        {
+            return BoundingBox.Null;
+        }
 
         /// <summary>
         /// Gets the key of the entity renderer registered in the renderer
         /// </summary>
-        public abstract EntityRendererKey GetEntityRendererKey();
+        public virtual EntityRendererKey GetEntityRendererKey()
+        {
+            return new EntityRendererKey(this.GetType().Name);
+        }
     }
 }

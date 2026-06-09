@@ -33,7 +33,19 @@ namespace Aspose.ThreeD
         /// <summary>
         /// Z axis
         /// </summary>
-        ZAxis
+        ZAxis,
+        /// <summary>
+        /// Negative X axis
+        /// </summary>
+        NegativeXAxis,
+        /// <summary>
+        /// Negative Y axis
+        /// </summary>
+        NegativeYAxis,
+        /// <summary>
+        /// Negative Z axis
+        /// </summary>
+        NegativeZAxis
     }
 
     /// <summary>

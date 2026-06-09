@@ -1,8 +1,18 @@
 namespace Aspose.ThreeD.Entities
 {
-    public class ProjectionType
+    /// <summary>
+    /// Camera's projection types.
+    /// </summary>
+    public enum ProjectionType
     {
-        public static readonly string PERSPECTIVE = "PERSPECTIVE";
-        public static readonly string ORTHOGRAPHIC = "ORTHOGRAPHIC";
+        /// <summary>
+        /// Perspective projection
+        /// </summary>
+        Perspective,
+
+        /// <summary>
+        /// Orthographic projection
+        /// </summary>
+        Orthographic,
     }
 }

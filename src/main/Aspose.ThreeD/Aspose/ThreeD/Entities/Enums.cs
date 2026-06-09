@@ -187,4 +187,41 @@ namespace Aspose.ThreeD.Entities
         /// </summary>
         Intersection
     }
+
+    /// <summary>
+    /// The dimension of the curves.
+    /// </summary>
+    public enum CurveDimension
+    {
+        /// <summary>
+        /// Two dimensional curve
+        /// </summary>
+        TwoDimensional,
+
+        /// <summary>
+        /// Three dimensional curve
+        /// </summary>
+        ThreeDimensional,
+    }
+
+    /// <summary>
+    /// NURBS types.
+    /// </summary>
+    public enum NurbsType
+    {
+        /// <summary>
+        /// Open NURBS curve
+        /// </summary>
+        Open,
+
+        /// <summary>
+        /// Closed NURBS curve
+        /// </summary>
+        Closed,
+
+        /// <summary>
+        /// Periodic NURBS curve
+        /// </summary>
+        Periodic,
+    }
 }
