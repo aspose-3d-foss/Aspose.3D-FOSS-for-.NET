@@ -87,7 +87,7 @@ namespace Aspose.ThreeD
             }
             else
             {
-                _properties.Add(new Property(property, value));
+                _properties.Add(new DynamicProperty(property, value));
             }
         }
 
