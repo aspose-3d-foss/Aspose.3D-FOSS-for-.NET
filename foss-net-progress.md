@@ -3,26 +3,43 @@
 ## Current Phase: Phase 7 - API Verification and Cleanup
 
 ### Phase 7 Update (2026-06-10)
-- **Status**: **COMPLETE** - API Surface Alignment (Cycle 3)
+- **Status**: **COMPLETE** - API Surface Alignment (Cycle 4)
 - **Focus**: Align FOSS API surface with On-Premise 26.2.0
 - **Test Results**: All 63 tests passing
 - **Build**: 0 errors, 0 warnings
-- **Date**: June 10, 2026 - Enum fixes and INamedObject interface fix
+- **Date**: June 10, 2026 - AnimationNode/BindPoint updates
 
-#### Enum Fixes - COMPLETED
-Fixed several enum types to match On-Premise 26.2.0 API:
+#### AnimationNode and BindPoint Updates - COMPLETED
+Updated AnimationNode and BindPoint classes to match On-Premise 26.2.0 API:
 
-1. **BooleanOperation** - Changed values to match On-Premise:
-   - Changed `Union/Subtract/Intersection` to `Add/Sub/Intersect`
-   - **Changed Files**: `Entities/Enums.cs`
+1. **AnimationNode** - Complete rewrite to match On-Premise:
+   - Now inherits from `A3DObject` and implements `INamedObject`
+   - Added `BindPoints` (read-only `IList<BindPoint>`)
+   - Added `SubAnimations` (read-only `IList<AnimationNode>`)
+   - Added `FindBindPoint(A3DObject, string)` method
+   - Added `GetBindPoint(A3DObject, string, bool)` method
+   - Added `GetKeyframeSequence(A3DObject, string, string, bool)` method
+   - Added `GetKeyframeSequence(A3DObject, string, bool)` method
+   - Added `CreateBindPoint(A3DObject, string)` method
+   - **Changed Files**: `Animation/AnimationNode.cs`
 
-2. **Interpolation** - Updated to match On-Premise 26.2.0:
-   - Changed `CONSTANT=0, LINEAR=1, BEZIER=2` to `Constant, Linear, Bezier, BSpline, CardinalSpline, TCBSpline`
-   - **Changed Files**: `Animation/Interpolation.cs`, `Animation/KeyFrame.cs`, `Animation/KeyframeSequence.cs`
+2. **BindPoint** - Complete rewrite to match On-Premise:
+   - Now inherits from `A3DObject` and implements `INamedObject`
+   - Added `Property` property (read-only `Property`)
+   - Added indexer for `AnimationChannel`
+   - Added `ChannelsCount` property
+   - Added `GetKeyframeSequence(string)` method
+   - Added `CreateKeyframeSequence(string)` method
+   - Added `BindKeyframeSequence(string, KeyframeSequence)` method
+   - Added `GetChannel(string)` method
+   - Added `AddChannel<T>` generic method
+   - Added `AddChannel(string, object)` method
+   - Added `AddChannel(string, Type, object)` method
+   - Added `ResetChannels()` method
+   - **Changed Files**: `Animation/BindPoint.cs`
 
-3. **ExtrapolationType** - Updated to match On-Premise 26.2.0:
-   - Added `Gradient`, `CycleRelative` values
-   - Changed `CONSTANT=0, CYCLE=1, CYCLE_WITH_OFFSET=2, OSCILLATE=3` to `Constant, Gradient, Cycle, CycleRelative, Oscillate`
+- **Build**: 0 errors, 0 warnings
+- **Tests**: All 63 tests passing
    - **Changed Files**: `Animation/ExtrapolationType.cs`, `Animation/Extrapolation.cs`
 
 - **Build**: 0 errors, 0 warnings
