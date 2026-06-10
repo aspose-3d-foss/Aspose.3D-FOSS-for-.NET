@@ -1,13 +1,32 @@
-# FOSS .NET Progress Tracking - June 9, 2026
+# FOSS .NET Progress Tracking - June 10, 2026
 
 ## Current Phase: Phase 7 - API Verification and Cleanup
 
-### Phase 7 Update (2026-06-09)
-- **Status**: In Progress - API Surface Alignment
+### Phase 7 Update (2026-06-10)
+- **Status**: **COMPLETE** - API Surface Alignment (Cycle 3)
 - **Focus**: Align FOSS API surface with On-Premise 26.2.0
 - **Test Results**: All 63 tests passing
 - **Build**: 0 errors, 0 warnings
-- **Date**: June 9, 2026 - IOService and file I/O fixes
+- **Date**: June 10, 2026 - Enum fixes and INamedObject interface fix
+
+#### Enum Fixes - COMPLETED
+Fixed several enum types to match On-Premise 26.2.0 API:
+
+1. **BooleanOperation** - Changed values to match On-Premise:
+   - Changed `Union/Subtract/Intersection` to `Add/Sub/Intersect`
+   - **Changed Files**: `Entities/Enums.cs`
+
+2. **Interpolation** - Updated to match On-Premise 26.2.0:
+   - Changed `CONSTANT=0, LINEAR=1, BEZIER=2` to `Constant, Linear, Bezier, BSpline, CardinalSpline, TCBSpline`
+   - **Changed Files**: `Animation/Interpolation.cs`, `Animation/KeyFrame.cs`, `Animation/KeyframeSequence.cs`
+
+3. **ExtrapolationType** - Updated to match On-Premise 26.2.0:
+   - Added `Gradient`, `CycleRelative` values
+   - Changed `CONSTANT=0, CYCLE=1, CYCLE_WITH_OFFSET=2, OSCILLATE=3` to `Constant, Gradient, Cycle, CycleRelative, Oscillate`
+   - **Changed Files**: `Animation/ExtrapolationType.cs`, `Animation/Extrapolation.cs`
+
+- **Build**: 0 errors, 0 warnings
+- **Tests**: All 63 tests passing
 
 ### Summary (2026-06-09) - File I/O and IOService Fixes
 
@@ -53,20 +72,29 @@
   - Removed extra types (VertexElementVector, IOService, TextureData, Axis, etc.)
   - Fixed changed signatures (AnimationChannel, AnimationNode, etc.)
   - Fixed changed signatures (AnimationChannel, AnimationNode, etc.)
+## Current Session Tasks (2026-06-10)
 
-## Progress Summary
-- Phase 1 (API Survey): Complete
-- Phase 2 (Object Model): Complete
-- Phase 3 (Test Design): Complete
-- Phase 4 (Test-Driven Implementation): Complete (63 tests passing)
-- Phase 5 (Hardening): Complete
-- Phase 6 (Trim APIs): Complete
-- Phase 7 (API Updates): **In Progress** - Full API surface alignment needed
-  - Removed extra types (VertexElementVector, IOService, TextureData, Axis, etc.)
-  - Fixed changed signatures (AnimationChannel, AnimationNode, etc.)
-  - Fixed file I/O to use FileFormat.Detect instead of IOService
-### Current Session Tasks (2026-06-09)
+### High Priority - Core API Alignment
+1. **Remove `GetName()` from A3DObject** - Match On-Premise 26.2.0 API
+2. **Add `IArrayList<T>` interface** - Required for On-Premise compatibility
+3. **Update `Mesh` class**:
+   - Add `TextureData` constructors
+   - Change `Edges` from `IList<int>` to `IArrayList<int>`
+   - Add `CreatePolygon(int[] indices, int offset, int length)` overload
+   - Add implicit operators for boolean operations (|, -, &)
+4. **Fix `AnimationChannel`, `AnimationNode`, `BindPoint` signatures**
 
+### Medium Priority - Missing Types
+1. **Add missing Entity types** (NurbsSurface, PointCloud, Pyramid, etc.)
+2. **Add missing Deformer types** (Bone, BoneLinkMode, Deformer, etc.)
+3. **Add missing Format types** (DracoFormat, PdfFormat, RvmFormat, etc.)
+4. **Add missing Animation types** (KeyFrame, KeyframeSequence, etc.)
+
+### Verification
+- Build and test after each change
+- Update `foss-net-progress.md` after each task
+
+### Summary (2026-06-09) - File I/O and IOService Fixes
 ### Microsoft3MFFormat Renaming - COMPLETED- **Date**: 2026-06-09
 - **Status**: Complete - All Entity constructors now properly call base constructors
 - **Fixed Classes**:
@@ -423,28 +451,60 @@ The full API diff shows the following gaps:
   - `Formats/TmfPlugin.cs` → `Microsoft3MFPlugin.cs`
   - `Formats/TmfWriter.cs` → `Microsoft3MFWriter.cs`
   - `Tests/FileIOTests.cs` - Updated test references
-- **Build**: 0 errors, 0 warnings
-- **Tests**: 28/63 passing (35 fail due to IOService stubs - expected)
+- **Build**: 0 errors, 0 warnings- **Tests**: 28/63 passing (35 tests fail due to IOService stubs)
 
-### Previous Session Updates
-- **Constructor Fixes**: All Entity constructors properly call base constructors
-- **Build**: Succeeded with 0 errors, 0 warnings
-- **Tests**: 28/63 passing (35 tests fail due to IOService stubs)**
-## Summary (2026-06-09)
+## Next Cycle Plan (June 10, 2026)
 
-### Microsoft3MFFormat Legacy Fix - COMPLETED
-- **Issue**: The FOSS version had a legacy `TmfFormat` class (mistaken name from months ago)
-- **Fix**: Renamed to `Microsoft3MFFormat` to match On-Premise API
-- **Files Changed**:
-  - `FileFormat.cs` - Renamed `TmfFormat` to `Microsoft3MFFormat`, updated property reference
-  - `Formats/FormatOptions.cs` - Added `Microsoft3MFLoadOptions`, `Microsoft3MFSaveOptions`
-  - `Scene.cs` - Updated switch cases to use `Microsoft3MFFormat`
-  - `Formats/TmfPlugin.cs` → `Microsoft3MFPlugin.cs`
-  - `Formats/TmfWriter.cs` → `Microsoft3MFWriter.cs`
-  - `Tests/FileIOTests.cs` - Updated test references
-- **Build**: 0 errors, 0 warnings
-- **Tests**: 28/63 passing (35 fail due to IOService stubs - expected)
+### Current State
+- **Phase**: Phase 7 - API Surface Alignment (Cycle 3) - **COMPLETE**
+- **Build**: ✅ 0 errors, 0 warnings
+- **Tests**: ✅ 63/63 passing
+- **Status**: Ready to commit and prepare for next cycle
 
-### Build and Test Verification
-- **Build**: Succeeded with 0 errors, 0 warnings
-- **Tests**: 28/63 passing (35 tests fail due to IOService stubs)
+### Completed This Cycle
+1. **INamedObject Interface Fix**
+   - Changed from `string Name { get; set; }` to `string Name { get; }` (read-only)
+   - Removed `GetName()` method (not in On-Premise 26.2.0)
+
+### Pending for Next Cycle (Phase 7 - Cycle 4)
+Based on `aspose-cli api diff`, the FOSS version is missing these types from On-Premise 26.2.0:
+
+#### Priority 1: Importers/Exporters (High Impact)
+These are the main missing pieces for file I/O functionality:
+
+1. **Microsoft3MF Importer** (`Microsoft3MFLoadOptions`)
+   - Missing format options for 3MF loading
+   - FOSS has `Microsoft3MFFormat` (exporter) but not the load options
+
+2. **FBX Binary Exporter** (`FbxWriter`)
+   - Currently stubbed (throws `NotImplementedException`)
+   - Binary FBX export is important for production use
+
+3. **PDF Exporter** (`PdfFormat`, `PdfSaveOptions`)
+   - PDF export is a common requirement
+
+4. **Draco Compression** (`DracoFormat`, `DracoSaveOptions`)
+   - Draco compression for 3D meshes
+
+#### Priority 2: Missing Entity Types
+1. **PolygonModifier** - Mesh polygon modification
+2. **SkeletonType** - Skeleton entity type
+
+#### Priority 3: Animation Enhancements
+1. **KeyframeSequence** - Animation keyframe sequence
+2. **AnimationChannel** - Animation channel with `ComponentType` property
+3. **AnimationNode** - Animation node with `BindPoints` and `SubAnimations`
+
+#### Priority 4: Render/API Surface Alignment
+1. **BonePose** - Bone pose for animations
+2. **PoseType** - Pose type enum
+3. **Render types** - Various render-related classes
+
+### Recommended Next Steps
+1. **Start with Microsoft3MF Importer** (most impactful for 3MF support)
+2. **Then FBX binary exporter** (important for industrial workflows)
+3. **Continue with other importers/exporters** based on test requirements
+
+### Files to Review for Next Cycle
+- Check `testdata/` for missing test files that require new importers
+- Plan which importer/exporter to implement next based on test coverage

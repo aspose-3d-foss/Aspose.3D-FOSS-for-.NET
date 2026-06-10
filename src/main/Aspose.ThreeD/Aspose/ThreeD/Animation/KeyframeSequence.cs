@@ -111,10 +111,10 @@ namespace Aspose.ThreeD.Animation
 
             switch (prevFrame.Interpolation)
             {
-                case Interpolation.CONSTANT:
+                case Interpolation.Constant:
                     return prevFrame.Value;
 
-                case Interpolation.LINEAR:
+                case Interpolation.Linear:
                     var v0 = prevFrame.Value;
                     var v1 = nextFrame.Value;
                     var diffX = v1.X - v0.X;
@@ -129,7 +129,7 @@ namespace Aspose.ThreeD.Animation
                     );
                     return result;
 
-                case Interpolation.BEZIER:
+                case Interpolation.Bezier:
                     return InterpolateBezier(prevFrame, nextFrame, t);
 
                 default:

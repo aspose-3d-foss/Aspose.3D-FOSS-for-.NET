@@ -6,6 +6,11 @@ namespace Aspose.ThreeD.Entities
     public enum VertexElementType
     {
         /// <summary>
+        /// Unknown type
+        /// </summary>
+        Unknown,
+
+        /// <summary>
         /// Vertex normal
         /// </summary>
         Normal,
@@ -56,9 +61,14 @@ namespace Aspose.ThreeD.Entities
         Material,
 
         /// <summary>
-        /// Polygon size
+        /// Polygon group
         /// </summary>
-        PolygonSize,
+        PolygonGroup,
+
+        /// <summary>
+        /// Smoothing group
+        /// </summary>
+        SmoothingGroup,
 
         /// <summary>
         /// Hole
@@ -68,7 +78,17 @@ namespace Aspose.ThreeD.Entities
         /// <summary>
         /// User data
         /// </summary>
-        UserData
+        UserData,
+
+        /// <summary>
+        /// Visibility
+        /// </summary>
+        Visibility,
+
+        /// <summary>
+        /// Specular
+        /// </summary>
+        Specular
     }
 
     /// <summary>
@@ -175,17 +195,19 @@ namespace Aspose.ThreeD.Entities
     public enum BooleanOperation
     {
         /// <summary>
-        /// Union operation
+        /// Add operation
         /// </summary>
-        Union,
+        Add,
+        
         /// <summary>
         /// Subtract operation
         /// </summary>
-        Subtract,
+        Sub,
+        
         /// <summary>
-        /// Intersection operation
+        /// Intersect operation
         /// </summary>
-        Intersection
+        Intersect
     }
 
     /// <summary>

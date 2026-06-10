@@ -3,19 +3,13 @@ using System;
 namespace Aspose.ThreeD
 {
     /// <summary>
-    /// Interface for named objects
+    /// Object that has a name
     /// </summary>
     public interface INamedObject
     {
         /// <summary>
-        /// Gets or sets the name
+        /// Gets the name of the object
         /// </summary>
-        string Name { get; set; }
-
-        /// <summary>
-        /// Gets the name
-        /// </summary>
-        /// <returns>The name of the object</returns>
-        string GetName();
+        string Name { get; }
     }
 }

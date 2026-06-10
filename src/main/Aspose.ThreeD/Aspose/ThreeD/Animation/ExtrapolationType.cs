@@ -1,10 +1,33 @@
 namespace Aspose.ThreeD.Animation
 {
+    /// <summary>
+    /// Extrapolation type.
+    /// </summary>
     public enum ExtrapolationType
     {
-        CONSTANT = 0,
-        CYCLE = 1,
-        CYCLE_WITH_OFFSET = 2,
-        OSCILLATE = 3
+        /// <summary>
+        /// Constant extrapolation
+        /// </summary>
+        Constant,
+
+        /// <summary>
+        /// Gradient extrapolation
+        /// </summary>
+        Gradient,
+
+        /// <summary>
+        /// Cycle extrapolation
+        /// </summary>
+        Cycle,
+
+        /// <summary>
+        /// CycleRelative extrapolation
+        /// </summary>
+        CycleRelative,
+
+        /// <summary>
+        /// Oscillate extrapolation
+        /// </summary>
+        Oscillate
     }
 }

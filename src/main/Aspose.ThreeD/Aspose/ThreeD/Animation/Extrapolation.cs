@@ -7,7 +7,7 @@ namespace Aspose.ThreeD.Animation
 
         public Extrapolation()
         {
-            _type = ExtrapolationType.CONSTANT;
+            _type = ExtrapolationType.Constant;
             _repeatCount = 0;
         }
 

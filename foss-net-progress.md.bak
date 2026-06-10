@@ -1,0 +1,132 @@
+# FOSS .NET Progress Tracking - June 10, 2026
+
+## Current Phase: Phase 7 - API Verification and Cleanup
+
+### Phase 7 Update (2026-06-10)
+- **Status**: In Progress - API Surface Alignment (Cycle 2)
+- **Focus**: Align FOSS API surface with On-Premise 26.2.0
+- **Test Results**: All 63 tests passing
+- **Build**: 0 errors, 0 warnings
+- **Date**: June 10, 2026 - A3DObject GetName() removal and Mesh API alignment
+
+### Current Session Tasks (2026-06-10)
+
+#### API Differences Identified
+The full API diff shows the following gaps:
+
+##### Removed Types (FOSS has extra APIs not in On-Premise 26.2.0):
+1. `Aspose.ThreeD.Entities.VertexElementVector` - Removed in 26.2.0, replaced by `VertexElementVector4`
+2. `Aspose.ThreeD.Formats.ColladaLoadOptions` - Removed
+3. `Aspose.ThreeD.Formats.Microsoft3MFLoadOptions` - Removed
+4. `Aspose.ThreeD.TextureData` - Moved to `Aspose.ThreeD.Render.TextureData`
+5. `Aspose.ThreeD.Utilities.Axis` - Removed from Utilities namespace
+
+##### Changed Types (Need signature fixes):
+- `A3DObject` - Removed `GetName()` method
+- `AnimationChannel` - Added `KeyframeSequence` property, `ComponentType` property; removed constructor, `Target`, `Apply()`
+- `AnimationNode` - Added `BindPoints`, `SubAnimations`, `CreateBindPoint()`, `FindBindPoint()`, etc.; removed `Name`, `Children`, `Channels`, etc.
+- `BindPoint` - Changed constructor, added many new methods
+- `Extrapolation` - Removed constructor
+- `ExtrapolationType` - Enum values renamed (CONSTANT → Constant, CYCLE → Cycle, etc.)
+- `Interpolation` - Enum values renamed
+- `KeyFrame` - Changed constructor, many new properties
+- `KeyframeSequence` - Changed
+- `Deformer` - Constructor changed
+- `Mesh` - Added `TextureData` constructors, changed `Edges` to `IArrayList<int>`, added `CreatePolygon(offset, length)` overload, added implicit operators
+
+##### Added Types (Need implementation in FOSS):
+- Animation types: `AnimationClip`, `BonePose`, `KeyFrame`, `KeyframeSequence`, `ExtrapolationType`, `Interpolation`, `StepMode`, `WeightedMode`
+- Entity types: `Circle`, `Curve`, `Dish`, `Ellipse`, `LinearExtrusion`, `NurbsCurve`, `NurbsSurface`, `Plane`, `Pyramid`, `RevolvedAreaSolid`, `SweptAreaSolid`, `Torus`, `TriMesh`, etc.
+- Deformer types: `Bone`, `BoneLinkMode`, `Deformer`, `MorphTargetChannel`, `MorphTargetDeformer`, `SkinDeformer`
+- Format types: `A3dwSaveOptions`, `AmfSaveOptions`, `Discreet3dsLoadOptions`, `Discreet3dsSaveOptions`, `DracoFormat`, `DracoCompressionLevel`, `DracoSaveOptions`, `PdfFormat`, `RvmFormat`, `U3dFormat`, `Microsoft3MFFormat`, etc.
+- Profile types: `CircleShape`, `EllipseShape`, `RectangleShape`, `CShape`, `HShape`, `LShape`, `TShape`, `UShape`, `ZShape`, etc.
+- Render types: `BlendFactor`, `CompareFunction`, `CubeFace`, `CullFaceMode`, `EntityRenderer`, `IPipeline`, `IRenderTarget`, etc.
+
+#### Next Tasks for This Session:
+
+##### High Priority - Core API Alignment
+1. **Remove `GetName()` from A3DObject** - Match On-Premise 26.2.0 API
+2. **Add `IArrayList<T>` interface** - Required for On-Premise compatibility
+3. **Update `Mesh` class**:
+   - Add `TextureData` constructors
+   - Change `Edges` from `IList<int>` to `IArrayList<int>`
+   - Add `CreatePolygon(int[] indices, int offset, int length)` overload
+   - Add implicit operators for boolean operations (|, -, &)
+4. **Fix `AnimationChannel`, `AnimationNode`, `BindPoint` signatures**
+
+##### Medium Priority - Missing Types
+1. **Add missing Entity types** (NurbsSurface, PointCloud, Pyramid, etc.)
+2. **Add missing Deformer types** (Bone, BoneLinkMode, Deformer, etc.)
+3. **Add missing Format types** (DracoFormat, PdfFormat, RvmFormat, etc.)
+4. **Add missing Animation types** (KeyFrame, KeyframeSequence, etc.)
+
+##### Verification
+- Build and test after each change
+- Update `foss-net-progress.md` after each task
+
+### Previous Session Updates (2026-06-09)
+
+#### Microsoft3MFFormat Legacy Fix - COMPLETED
+- **Issue**: The FOSS version had a legacy `TmfFormat` class (mistaken name from months ago)
+- **Fix**: Renamed to `Microsoft3MFFormat` to match On-Premise API
+- **Files Changed**:
+  - `FileFormat.cs` - Renamed `TmfFormat` to `Microsoft3MFFormat`, updated property reference
+  - `Formats/FormatOptions.cs` - Added `Microsoft3MFLoadOptions`, `Microsoft3MFSaveOptions`
+  - `Scene.cs` - Updated switch cases to use `Microsoft3MFFormat`
+  - `Formats/TmfPlugin.cs` → `Microsoft3MFPlugin.cs`
+  - `Formats/TmfWriter.cs` → `Microsoft3MFWriter.cs`
+  - `Tests/FileIOTests.cs` - Updated test references
+- **Build**: 0 errors, 0 warnings
+- **Tests**: 63/63 passing
+
+#### Entity Type Implementation - COMPLETED (2026-06-09 - Session 2)
+- **Added Entity Types**:
+  - `Dish` - Parameterized dish
+  - `Ellipse` - Ellipse curve (2D shape)
+  - `EndPoint` - Struct for curve trimming end points
+  - `HalfSpace` - Infinity space split by a plane
+  - `LinearExtrusion` - 2D shape extrusion in 3D
+  - `RectangularTorus` - Rectangular torus primitive
+  - `RevolvedAreaSolid` - Solid model by revolving profile
+  - `Skeleton` - Skeleton entity for CAD
+  - `SweptAreaSolid` - Geometry by sweeping profile
+  - `Torus` - Parameterized torus
+  - `TransformedCurve` - Curve with transformation matrix
+  - `TriMesh` - GPU-ready raw mesh data
+  - `TrimmedCurve` - Bounded curve trimmed at ends
+- **Fixed Issues**:
+  - `Ellipse` - Removed non-existent `ToMesh()` method to match On-Premise API
+  - `TriMesh` - Fixed `GetVertexSize()` to use correct `VertexFieldDataType` enum values
+  - `Torus` - Fixed constructor signatures to match On-Premise API (6 parameters)
+  - Added `using System.IO;` for Stream types
+- **Build**: 0 errors, 0 warnings
+- **Tests**: 63/63 passing
+
+#### VertexElement Implementation - COMPLETED (2026-06-09 - Session 2)
+- **Added Template Classes**:
+  - `VertexElementTemplate<T>` - Generic base class for concrete implementations
+  - `VertexElementDoublesTemplate` - Template for double arrays
+  - `VertexElementFVector` - Template for FVector4 arrays
+  - `VertexElementIntsTemplate` - Template for int arrays
+  - `VertexElementVector4` - Template for Vector4 arrays
+- **Added Concrete Types**:
+  - `VertexElementEdgeCrease` - Edge crease data
+  - `VertexElementHole` - Hole polygon data
+  - `VertexElementPolygonGroup` - Polygon group data
+  - `VertexElementSmoothingGroup` - Smoothing group data
+  - `VertexElementSpecular` - Specular color data
+  - `VertexElementUserData` - Custom user data
+  - `VertexElementVertexCrease` - Vertex crease data
+  - `VertexElementVisibility` - Visibility data
+  - `VertexElementWeight` - Blend weight data
+- **Fixed**:
+  - Added `VertexElementType.Unknown` to enum
+  - Added missing `FVector4` constructors (from `FVector3`, `Vector4`, `Vector3`)
+  - Added `Unknown` enum value to `VertexElementType`
+  - Added missing enum values: `PolygonGroup`, `SmoothingGroup`, `Visibility`, `Specular`
+- **Build**: 0 errors, 0 warnings
+- **Tests**: 63/63 passing
+
+#### IOService Implementation - COMPLETED
+- **Issue**: IOService.CreateImporter and CreateExporter threw `NotImplementedException`
+- **Fix**: Implemented actual

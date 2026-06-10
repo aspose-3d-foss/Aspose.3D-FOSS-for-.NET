@@ -16,7 +16,7 @@ namespace Aspose.ThreeD.Animation
         {
             _time = 0.0f;
             _value = new Aspose.ThreeD.Utilities.Vector4(0, 0, 0, 0);
-            _interpolation = Interpolation.LINEAR;
+            _interpolation = Interpolation.Linear;
             _tangentIn = new Aspose.ThreeD.Utilities.Vector3(0, 0, 0);
             _tangentOut = new Aspose.ThreeD.Utilities.Vector3(0, 0, 0);
             _tangentWeightMode = WeightedMode.NONE;
@@ -27,7 +27,7 @@ namespace Aspose.ThreeD.Animation
         {
             _time = time;
             _value = value;
-            _interpolation = Interpolation.LINEAR;
+            _interpolation = Interpolation.Linear;
             _tangentIn = new Aspose.ThreeD.Utilities.Vector3(0, 0, 0);
             _tangentOut = new Aspose.ThreeD.Utilities.Vector3(0, 0, 0);
             _tangentWeightMode = WeightedMode.NONE;
