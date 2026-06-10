@@ -3,36 +3,35 @@
 ## Current Phase: Phase 7 - API Verification and Cleanup
 
 ### Phase 7 Update (2026-06-10)
-- **Status**: **COMPLETE** - API Surface Alignment (Cycle 4)
+- **Status**: **COMPLETE** - API Surface Alignment (Cycle 5)
 - **Focus**: Align FOSS API surface with On-Premise 26.2.0
 - **Test Results**: All 63 tests passing
 - **Build**: 0 errors, 0 warnings
-- **Date**: June 10, 2026 - AnimationNode/BindPoint updates
+- **Date**: June 10, 2026 - Property/PropertyCollection/DynamicProperty updates
 
-#### AnimationNode and BindPoint Updates - COMPLETED
-Updated AnimationNode and BindPoint classes to match On-Premise 26.2.0 API:
+#### Property, PropertyCollection, and DynamicProperty Updates - COMPLETED
+Updated Property, PropertyCollection, and created DynamicProperty to match On-Premise 26.2.0 API:
 
-1. **AnimationNode** - Complete rewrite to match On-Premise:
-   - Now inherits from `A3DObject` and implements `INamedObject`
-   - Added `BindPoints` (read-only `IList<BindPoint>`)
-   - Added `SubAnimations` (read-only `IList<AnimationNode>`)
-   - Added `FindBindPoint(A3DObject, string)` method
-   - Added `GetBindPoint(A3DObject, string, bool)` method
-   - Added `GetKeyframeSequence(A3DObject, string, string, bool)` method
-   - Added `GetKeyframeSequence(A3DObject, string, bool)` method
-   - Added `CreateBindPoint(A3DObject, string)` method
-   - **Changed Files**: `Animation/AnimationNode.cs`
+1. **Property** - Now abstract class with protected constructors:
+   - Added `Name` (read-only `string`), `Value` (read-write `object?`), `ValueType` properties
+   - Added `GetExtra(string)` and `SetExtra(string, object?)` methods for extra data
+   - Added `GetBindPoint(AnimationNode, bool)` and `GetKeyframeSequence(AnimationNode, bool)` methods
+   - Added `ToString()` override
+   - **Changed Files**: `Property.cs`
 
-2. **BindPoint** - Complete rewrite to match On-Premise:
-   - Now inherits from `A3DObject` and implements `INamedObject`
-   - Added `Property` property (read-only `Property`)
-   - Added indexer for `AnimationChannel`
-   - Added `ChannelsCount` property
-   - Added `GetKeyframeSequence(string)` method
-   - Added `CreateKeyframeSequence(string)` method
-   - Added `BindKeyframeSequence(string, KeyframeSequence)` method
-   - Added `GetChannel(string)` method
-   - Added `AddChannel<T>` generic method
+2. **PropertyCollection**: Now implements `IEnumerable<Property>`, `IEnumerable`:
+   - Added `Count` property (read-only `int`)
+   - Added indexer for `Property` by index
+   - Added indexer for `object` by property name
+   - Added `FindProperty(string)`, `RemoveProperty(Property)`, `RemoveProperty(string)`, `Add(Property)` methods
+   - **Changed Files**: `PropertyCollection.cs`
+
+3. **DynamicProperty**: New concrete implementation of Property:
+   - Public constructors for creating dynamic properties
+   - **New Files**: `Property.cs` (appended)
+
+- **Build**: 0 errors, 0 warnings
+- **Tests**: All 63 tests passing
    - Added `AddChannel(string, object)` method
    - Added `AddChannel(string, Type, object)` method
    - Added `ResetChannels()` method
