@@ -117,29 +117,7 @@ namespace Aspose.ThreeD.Entities
     }
 
     /// <summary>
-    /// Vertex element with vector data (normals, tangents, etc.)
-    /// </summary>
-    public class VertexElementVector : VertexElement
-    {
-        private readonly List<FVector4> _data;
-
-        /// <summary>
-        /// Initializes a new instance of the VertexElementVector class
-        /// </summary>
-        public VertexElementVector(VertexElementType type, MappingMode mappingMode, ReferenceMode referenceMode)
-            : base(type, mappingMode, referenceMode)
-        {
-            _data = new List<FVector4>();
-        }
-
-        /// <summary>
-        /// Gets the vertex data
-        /// </summary>
-        public List<FVector4> Data => _data;
-    }
-
-    /// <summary>
-    /// Vertex element with color data
+    /// Vertex element with vector data (normals, tangents, etc.)    /// <summary>    /// Vertex element with color data
     /// </summary>
     public class VertexElementVertexColor : VertexElement
     {

@@ -104,30 +104,12 @@ namespace Aspose.ThreeD.Entities
                 _lookAt = value;
             }
         }
-
-        /// <summary>
-        /// Gets or sets the target that the camera is looking at.
-        /// If the user supports this property, it should be prior to Direction property.
-        /// </summary>
-        public Node Target { get; set; }
-
-        /// <summary>
-        /// Gets the bounding box of current entity in its object space coordinate system.
-        /// </summary>
-        public override Utilities.BoundingBox GetBoundingBox()
-        {
-            return Utilities.BoundingBox.Null;
-        }
-
-        /// <summary>
-        /// Gets the key of the entity renderer registered in the renderer
-        /// </summary>
-        public override EntityRendererKey GetEntityRendererKey()
-        {
-            return new EntityRendererKey("Frustum");
-        }
-    }
-
+         /// <summary>
+         /// Gets or sets the target that the camera is looking at.
+         /// If the user supports this property, it should be prior to Direction property.
+         /// </summary>
+         public Node Target { get; set; }
+     }
     /// <summary>
     /// The camera describes the eye point of the viewer looking at the scene.
     /// </summary>

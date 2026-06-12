@@ -207,33 +207,6 @@ namespace Aspose.ThreeD.Formats
         /// </summary>
         public ColladaTransformStyle TransformStyle { get; set; }
     }
-
-    /// <summary>
-    /// Load options for Collada format
-    /// </summary>
-    public class ColladaLoadOptions : LoadOptions
-    {
-        /// <summary>
-        /// Initializes a new instance of the ColladaLoadOptions class
-        /// </summary>
-        public ColladaLoadOptions() : base()
-        {
-            FlipCoordinateSystem = false;
-        }
-
-        /// <summary>
-        /// Gets or sets whether flip coordinate system of control points/normal during importing
-        /// </summary>
-        public bool FlipCoordinateSystem { get; set; }
-    }
-
-    public class Microsoft3MFLoadOptions : LoadOptions
-    {
-        public Microsoft3MFLoadOptions() : base()
-        {
-        }
-    }
-
     public class Microsoft3MFSaveOptions : SaveOptions
     {
         public Microsoft3MFSaveOptions() : base()

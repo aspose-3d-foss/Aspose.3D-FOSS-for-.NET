@@ -155,28 +155,7 @@ namespace Aspose.ThreeD.Entities
                     mesh.CreatePolygon(first, second, second + 1, first + 1);
                 }
             }
-
-            return mesh;
-        }
-
-        /// <summary>
-        /// Gets the bounding box of current entity in its object space coordinate system.
-        /// </summary>
-        public override Utilities.BoundingBox GetBoundingBox()
-        {
-            var radius = (float)_radius;
-            var min = new Utilities.FVector3(-radius, -radius, -radius);
-            var max = new Utilities.FVector3(radius, radius, radius);
-
-            return new Utilities.BoundingBox(min, max);
-        }
-
-        /// <summary>
-        /// Gets the key of the entity renderer registered in the renderer
-        /// </summary>
-        public override EntityRendererKey GetEntityRendererKey()
-        {
-            return new EntityRendererKey("Sphere");
+             return mesh;
         }
     }
 }

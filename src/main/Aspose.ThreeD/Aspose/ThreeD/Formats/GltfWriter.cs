@@ -456,7 +456,7 @@ namespace Aspose.ThreeD.Formats
                     data.Add(uv.Y);
                 }
             }
-            else if (element is VertexElementVector vectorElement)
+            else if (element is VertexElementFVector vectorElement)
             {
                 foreach (var v in vectorElement.Data)
                 {

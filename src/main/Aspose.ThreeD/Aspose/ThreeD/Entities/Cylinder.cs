@@ -259,29 +259,7 @@ namespace Aspose.ThreeD.Entities
                     mesh.CreatePolygon(bottomIndex, bottomStart + i + 1, bottomStart + i);
                 }
             }
-
-            return mesh;
-        }
-
-        /// <summary>
-        /// Gets the bounding box of current entity in its object space coordinate system.
-        /// </summary>
-        public override Utilities.BoundingBox GetBoundingBox()
-        {
-            var maxRadius = (float)Math.Max(_radiusTop, _radiusBottom);
-            var halfHeight = (float)_height / 2;
-            var min = new Utilities.FVector3(-maxRadius, -halfHeight, -maxRadius);
-            var max = new Utilities.FVector3(maxRadius, halfHeight, maxRadius);
-
-            return new Utilities.BoundingBox(min, max);
-        }
-
-        /// <summary>
-        /// Gets the key of the entity renderer registered in the renderer
-        /// </summary>
-        public override EntityRendererKey GetEntityRendererKey()
-        {
-            return new EntityRendererKey("Cylinder");
+             return mesh;
         }
     }
 }

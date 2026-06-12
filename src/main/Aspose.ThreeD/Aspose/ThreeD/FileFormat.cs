@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Aspose.ThreeD.Formats;
 
 namespace Aspose.ThreeD
 {
@@ -463,7 +464,7 @@ namespace Aspose.ThreeD
 
         public override Formats.LoadOptions CreateLoadOptions()
         {
-            return new Formats.Microsoft3MFLoadOptions();
+            return new BasicLoadOptions();
         }
 
         public override Formats.SaveOptions CreateSaveOptions()
@@ -511,12 +512,12 @@ namespace Aspose.ThreeD
 
         public override Formats.LoadOptions CreateLoadOptions()
         {
-            return new Formats.ColladaLoadOptions();
+            return new BasicLoadOptions();
         }
 
         public override Formats.SaveOptions CreateSaveOptions()
         {
-            return new Formats.ColladaSaveOptions();
+            return new ColladaSaveOptions();
         }
 
         public override bool CanDetect(Stream stream, string? fileName)

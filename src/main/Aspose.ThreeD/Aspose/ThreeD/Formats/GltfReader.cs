@@ -369,10 +369,10 @@ namespace Aspose.ThreeD.Formats
                 var normals = ReadAccessorData(normalAccessor, bufferViews, buffers, "VEC3");
                 if (normals.Count >= positions.Count)
                 {
-                                        var normalElement = new VertexElementVector(VertexElementType.Normal, MappingMode.ControlPoint, ReferenceMode.Direct);
+                                        var normalElement = new VertexElementNormal(MappingMode.ControlPoint, ReferenceMode.Direct);
                     foreach (var n in normals)
                     {
-                        normalElement.Data.Add(new FVector4(n[0], n[1], n[2], 0.0f));
+                        normalElement.Normals.Add(new Vector4(n[0], n[1], n[2], 0.0f));
                     }
                     mesh.AddElement(normalElement);
                 }

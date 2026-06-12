@@ -75,27 +75,5 @@ namespace Aspose.ThreeD.Entities
             // TODO: Implement mesh conversion
             return new Mesh();
         }
-
-        /// <summary>
-        /// Gets the bounding box of current entity in its object space coordinate system.
-        /// </summary>
-        public override BoundingBox GetBoundingBox()
-        {
-            var halfLength = (float)Length / 2;
-            var halfWidth = (float)Width / 2;
-
-            var min = new FVector3(-halfWidth, 0, -halfLength);
-            var max = new FVector3(halfWidth, 0, halfLength);
-
-            return new BoundingBox(min, max);
-        }
-
-        /// <summary>
-        /// Gets the key of the entity renderer registered in the renderer
-        /// </summary>
-        public override EntityRendererKey GetEntityRendererKey()
-        {
-            return new EntityRendererKey("Plane");
-        }
     }
 }

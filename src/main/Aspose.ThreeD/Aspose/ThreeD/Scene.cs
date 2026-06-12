@@ -154,18 +154,15 @@ namespace Aspose.ThreeD
         public void Open(Stream stream, LoadOptions options, CancellationToken cancellationToken)
         {
             Clear();
-
             FileFormat? format = options switch
             {
                 Formats.ObjLoadOptions => FileFormat.ObjFormat,
                 Formats.StlLoadOptions => FileFormat.StlFormat,
                 Formats.GltfLoadOptions => FileFormat.GltfFormat,
                 Formats.FbxLoadOptions => FileFormat.FbxFormat,
-                Formats.Microsoft3MFLoadOptions => FileFormat.Microsoft3MFFormat,
                 Formats.PlyLoadOptions => FileFormat.PlyFormat,
                 _ => null
             };
-
             if (format == null)
             {
                 throw new NotSupportedException($"Import not supported for the provided options type");
@@ -516,21 +513,20 @@ namespace Aspose.ThreeD
                 "This feature is not available in the FOSS version. " +
                 "Consider using Aspose.3D's commercial On-Premise API for full functionality.");
         }
-
-        /// <summary>
+        /// \u003Csummary>
         /// Render the scene into bitmap from given camera's perspective.
-        /// </summary>
-        public void Render(Entities.Camera camera, TextureData bitmap)
+        /// \u003C/summary>
+        public void Render(Entities.Camera camera, object bitmap)
         {
             throw new NotImplementedException(
                 "This feature is not available in the FOSS version. " +
                 "Consider using Aspose.3D's commercial On-Premise API for full functionality.");
         }
 
-        /// <summary>
+        /// \u003Csummary>
         /// Render the scene into bitmap from given camera's perspective.
-        /// </summary>
-        public void Render(Entities.Camera camera, TextureData bitmap, ImageRenderOptions options)
+        /// \u003C/summary>
+        public void Render(Entities.Camera camera, object bitmap, ImageRenderOptions options)
         {
             throw new NotImplementedException(
                 "This feature is not available in the FOSS version. " +

@@ -99,7 +99,7 @@ namespace Aspose.ThreeD.Formats
 
             // Write normals
             var normalElement = mesh.GetElement(VertexElementType.Normal);
-            if (normalElement is VertexElementVector normalVector && normalVector.Data.Count > 0)
+            if (normalElement is VertexElementFVector normalVector && normalVector.Data.Count > 0)
             {
                 foreach (var normal in normalVector.Data)
                 {

@@ -45,29 +45,4 @@ namespace Aspose.ThreeD
         /// </summary>
         public string Name { get; set; } = string.Empty;
     }
-
-    /// <summary>
-    /// Texture data
-    /// </summary>
-    public class TextureData
-    {
-        private Vector2 _size;
-
-        /// <summary>
-        /// Initializes a new instance of the TextureData class
-        /// </summary>
-        public TextureData()
-        {
-            _size = new Vector2(1, 1);
-        }
-
-        /// <summary>
-        /// Gets or sets the size
-        /// </summary>
-        public Vector2 Size
-        {
-            get => _size;
-            set => _size = value;
-        }
-    }
 }

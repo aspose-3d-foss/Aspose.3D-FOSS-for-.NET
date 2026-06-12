@@ -501,7 +501,7 @@ namespace Aspose.ThreeD.Formats
                         // Create vertex element for normals
                         var vertexElement = mesh.CreateElement(VertexElementType.Normal, mappingMode, referenceMode);
                         
-                        if (vertexElement is VertexElementVector vectorElement)
+                        if (vertexElement is VertexElementFVector vectorElement)
                         {
                             // Parse normals - 4 floats per normal (x, y, z, w)
                             for (int i = 0; i < normals.Count - 3; i += 4)

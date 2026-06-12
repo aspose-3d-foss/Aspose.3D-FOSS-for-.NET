@@ -63,7 +63,7 @@ namespace Aspose.ThreeD
         /// <summary>
         /// Gets the bounding box of current entity in its object space coordinate system.
         /// </summary>
-        public virtual BoundingBox GetBoundingBox()
+        public BoundingBox GetBoundingBox()
         {
             return BoundingBox.Null;
         }

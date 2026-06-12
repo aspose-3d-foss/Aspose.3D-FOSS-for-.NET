@@ -169,52 +169,7 @@ namespace Aspose.ThreeD.Entities
             {
                 result.CreatePolygon(polygon);
             }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Gets the bounding box of current entity in its object space coordinate system.
-        /// </summary>
-        public override BoundingBox GetBoundingBox()
-        {
-            if (ControlPoints.Count == 0)
-                return new BoundingBox();
-
-            var min = new FVector3((float)ControlPoints[0].X, (float)ControlPoints[0].Y, (float)ControlPoints[0].Z);
-            var max = min;
-
-            for (int i = 1; i < ControlPoints.Count; i++)
-            {
-                var cp = ControlPoints[i];
-                var x = (float)cp.X;
-                var y = (float)cp.Y;
-                var z = (float)cp.Z;
-                if (x < min.X) min.X = x;
-                if (y < min.Y) min.Y = y;
-                if (z < min.Z) min.Z = z;
-                if (x > max.X) max.X = x;
-                if (y > max.Y) max.Y = y;
-                if (z > max.Z) max.Z = z;
-            }
-
-            return new BoundingBox(min, max);
-        }
-
-        /// <summary>
-        /// Gets the key of the entity renderer registered in the renderer
-        /// </summary>
-        public override EntityRendererKey GetEntityRendererKey()
-        {
-            return new EntityRendererKey("Mesh");
-        }
-
-        /// <summary>
-        /// Perform boolean operation between two meshes
-        /// </summary>
-        public static Mesh DoBoolean(BooleanOperation op, Mesh a, Matrix4? transformA, Mesh b, Matrix4? transformB)
-        {
-            throw new NotImplementedException("Boolean operations are not yet implemented");
+             return result;
         }
     }
 }

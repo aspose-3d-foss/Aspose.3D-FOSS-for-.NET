@@ -38,8 +38,7 @@ namespace Aspose.ThreeD.Entities
         /// <param name="height">Height of the dish</param>
         /// <param name="widthSegments">Width segments</param>
         /// <param name="heightSegments">Height segments</param>
-        public Dish(string name, double radius, double height, int widthSegments, int heightSegments)
-            : base(name)
+        public Dish(string name, double radius, double height, int widthSegments, int heightSegments) : base(name)
         {
             _radius = radius;
             _height = height;
@@ -140,29 +139,6 @@ namespace Aspose.ThreeD.Entities
             }
 
             return mesh;
-        }
-
-        /// <summary>
-        /// Gets the bounding box of current entity in its object space coordinate system.
-        /// </summary>
-        public override BoundingBox GetBoundingBox()
-        {
-            var radius = (float)_radius;
-            var height = (float)_height;
-
-            // Bounding box for the dish
-            var min = new FVector3(-radius, -radius, 0);
-            var max = new FVector3(radius, radius, height);
-
-            return new BoundingBox(min, max);
-        }
-
-        /// <summary>
-        /// Gets the key of the entity renderer registered in the renderer
-        /// </summary>
-        public override EntityRendererKey GetEntityRendererKey()
-        {
-            return new EntityRendererKey("Dish");
         }
     }
 }

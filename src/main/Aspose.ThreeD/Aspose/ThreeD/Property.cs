@@ -111,9 +111,9 @@ namespace Aspose.ThreeD
             return $"Property: {Name}";
         }
     }
-        /// \u003Csummary\u003E
+        /// <summary>
         /// Default implementation of Property for dynamic properties.
-        /// \u003C/summary\u003E
+        /// </summary>
         internal class DynamicProperty : Property    {
         /// <summary>
         /// Initializes a new instance of the DynamicProperty class.

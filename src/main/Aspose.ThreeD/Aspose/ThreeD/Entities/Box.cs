@@ -126,28 +126,5 @@ namespace Aspose.ThreeD.Entities
 
             return mesh;
         }
-
-        /// <summary>
-        /// Gets the bounding box of current entity in its object space coordinate system.
-        /// </summary>
-        public override BoundingBox GetBoundingBox()
-        {
-            var halfLength = (float)_length / 2;
-            var halfWidth = (float)_width / 2;
-            var halfHeight = (float)_height / 2;
-
-            var min = new FVector3(-halfWidth, -halfHeight, -halfLength);
-            var max = new FVector3(halfWidth, halfHeight, halfLength);
-
-            return new BoundingBox(min, max);
-        }
-
-        /// <summary>
-        /// Gets the key of the entity renderer registered in the renderer
-        /// </summary>
-        public override EntityRendererKey GetEntityRendererKey()
-        {
-            return new EntityRendererKey("Box");
-        }
     }
 }
