@@ -4,76 +4,43 @@ namespace Aspose.ThreeD.Animation
 {
     public class KeyFrame
     {
-        private float _time;
-        private Aspose.ThreeD.Utilities.Vector4 _value;
-        private Interpolation _interpolation;
-        private Aspose.ThreeD.Utilities.Vector3 _tangentIn;
-        private Aspose.ThreeD.Utilities.Vector3 _tangentOut;
-        private WeightedMode _tangentWeightMode;
-        private StepMode _stepMode;
-
-        public KeyFrame()
+        public KeyFrame(KeyframeSequence curve, double time)
         {
-            _time = 0.0f;
-            _value = new Aspose.ThreeD.Utilities.Vector4(0, 0, 0, 0);
-            _interpolation = Interpolation.Linear;
-            _tangentIn = new Aspose.ThreeD.Utilities.Vector3(0, 0, 0);
-            _tangentOut = new Aspose.ThreeD.Utilities.Vector3(0, 0, 0);
-            _tangentWeightMode = WeightedMode.NONE;
-            _stepMode = StepMode.PREVIOUS_VALUE;
         }
 
-        public KeyFrame(float time, Aspose.ThreeD.Utilities.Vector4 value)
-        {
-            _time = time;
-            _value = value;
-            _interpolation = Interpolation.Linear;
-            _tangentIn = new Aspose.ThreeD.Utilities.Vector3(0, 0, 0);
-            _tangentOut = new Aspose.ThreeD.Utilities.Vector3(0, 0, 0);
-            _tangentWeightMode = WeightedMode.NONE;
-            _stepMode = StepMode.PREVIOUS_VALUE;
-        }
+        public double Time { get; set; }
 
-        public float Time
-        {
-            get => _time;
-            set => _time = value;
-        }
+        public float Value { get; set; }
 
-        public Aspose.ThreeD.Utilities.Vector4 Value
-        {
-            get => _value;
-            set => _value = value;
-        }
+        public Interpolation Interpolation { get; set; }
 
-        public Interpolation Interpolation
-        {
-            get => _interpolation;
-            set => _interpolation = value;
-        }
+        public WeightedMode TangentWeightMode { get; set; }
 
-        public Aspose.ThreeD.Utilities.Vector3 TangentIn
-        {
-            get => _tangentIn;
-            set => _tangentIn = value;
-        }
+        public StepMode StepMode { get; set; }
 
-        public Aspose.ThreeD.Utilities.Vector3 TangentOut
-        {
-            get => _tangentOut;
-            set => _tangentOut = value;
-        }
+        public Vector2 NextInTangent { get; set; }
 
-        public WeightedMode TangentWeightMode
-        {
-            get => _tangentWeightMode;
-            set => _tangentWeightMode = value;
-        }
+        public Vector2 OutTangent { get; set; }
 
-        public StepMode StepMode
+        public float OutWeight { get; set; }
+
+        public float NextInWeight { get; set; }
+
+        public float Tension { get; set; }
+
+        public float Continuity { get; set; }
+
+        public float Bias { get; set; }
+
+        public bool IndependentTangent { get; set; }
+
+        public bool Flat { get; set; }
+
+        public bool TimeIndependentTangent { get; set; }
+
+        public string ToString()
         {
-            get => _stepMode;
-            set => _stepMode = value;
+            return $"KeyFrame: Time={Time}, Value={Value}";
         }
     }
 }

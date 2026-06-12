@@ -4,34 +4,23 @@ namespace Aspose.ThreeD.Animation
 {
     public class AnimationChannel : KeyframeSequence
     {
-        private string _target;
-        private object _defaultValue;
+        private object? _defaultValue;
 
-        public AnimationChannel() : base()
+        public object? DefaultValue
         {
-            _target = string.Empty;
+            get;
+            set;
         }
 
-        public AnimationChannel(string target) : base()
+        public KeyframeSequence KeyframeSequence
         {
-            _target = target;
+            get;
+            set;
         }
 
-        public string Target
+        public Type ComponentType
         {
-            get => _target;
-            set => _target = value;
-        }
-
-        public object DefaultValue
-        {
-            get => _defaultValue;
-            set => _defaultValue = value;
-        }
-
-        public void Apply(float time)
-        {
-            var value = Interpolate(time);
+            get;
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using Aspose.ThreeD.Profiles;
 using Aspose.ThreeD.Render;
 using Aspose.ThreeD.Utilities;
 
@@ -9,8 +10,8 @@ namespace Aspose.ThreeD.Entities
     /// </summary>
     public class SweptAreaSolid : Entity, INamedObject, IMeshConvertible
     {
-        private object _shape;
-        private object _directrix;
+        private Profile _shape;
+        private Curve _directrix;
         private EndPoint _startPoint;
         private EndPoint _endPoint;
 
@@ -36,7 +37,7 @@ namespace Aspose.ThreeD.Entities
         /// <summary>
         /// The base profile to construct the geometry.
         /// </summary>
-        public object Shape
+        public Profile Shape
         {
             get => _shape;
             set => _shape = value;
@@ -45,7 +46,7 @@ namespace Aspose.ThreeD.Entities
         /// <summary>
         /// The directrix that the swept area sweeping along with.
         /// </summary>
-        public object Directrix
+        public Curve Directrix
         {
             get => _directrix;
             set => _directrix = value;

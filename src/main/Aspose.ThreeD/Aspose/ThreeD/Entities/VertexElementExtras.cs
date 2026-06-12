@@ -4,14 +4,7 @@ using Aspose.ThreeD.Utilities;
 
 namespace Aspose.ThreeD.Entities
 {
-    public interface IIndexedVertexElement
-    {
-        int[] Indices { get; }
-        int GetIndex(int i);
-        void SetIndices(int[] indices);
-    }
-
-    public class VertexElementNormal : VertexElementVector
+    public class VertexElementNormal : VertexElement
     {
         private readonly List<Vector4> _normals;
 
@@ -28,7 +21,7 @@ namespace Aspose.ThreeD.Entities
         public List<Vector4> Normals => _normals;
     }
 
-    public class VertexElementTangent : VertexElementVector
+    public class VertexElementTangent : VertexElement
     {
         private readonly List<Vector4> _tangents;
 
@@ -45,7 +38,7 @@ namespace Aspose.ThreeD.Entities
         public List<Vector4> Tangents => _tangents;
     }
 
-    public class VertexElementBinormal : VertexElementVector
+    public class VertexElementBinormal : VertexElement
     {
         private readonly List<Vector4> _binormals;
 

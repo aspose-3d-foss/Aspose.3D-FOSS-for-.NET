@@ -10,12 +10,10 @@ namespace Aspose.ThreeD.Deformers;
 public abstract class Deformer : A3DObject, INamedObject
 {
     private Geometry? owner;
-
-    /// <summary>
+    /// \u003Csummary\u003E
     /// Initializes a new instance of the  class.
-    /// </summary>
-    protected Deformer(string name) : base(name)
-    {
+    /// \u003C/summary\u003E
+    public Deformer(string name) : base(name)    {
     }
 
     /// <summary>

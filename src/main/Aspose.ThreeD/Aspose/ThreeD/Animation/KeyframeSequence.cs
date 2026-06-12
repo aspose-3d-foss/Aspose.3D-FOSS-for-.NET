@@ -1,171 +1,61 @@
 using System.Collections.Generic;
-using Aspose.ThreeD.Utilities;
 
 namespace Aspose.ThreeD.Animation
 {
-    public class KeyframeSequence
+    public class KeyframeSequence : A3DObject
     {
-        private List<KeyFrame> _keyFrames;
-        private string _propertyName;
-        private Extrapolation _preExtrapolation;
-        private Extrapolation _postExtrapolation;
+        private readonly List<KeyFrame> _keyFrames;
 
         public KeyframeSequence()
         {
             _keyFrames = new List<KeyFrame>();
-            _propertyName = string.Empty;
-            _preExtrapolation = new Extrapolation();
-            _postExtrapolation = new Extrapolation();
         }
 
-        public KeyframeSequence(string propertyName)
+        public KeyframeSequence(string name) : base(name)
         {
             _keyFrames = new List<KeyFrame>();
-            _propertyName = propertyName;
-            _preExtrapolation = new Extrapolation();
-            _postExtrapolation = new Extrapolation();
         }
 
-        public string PropertyName
+        public BindPoint BindPoint
         {
-            get => _propertyName;
-            set => _propertyName = value;
+            get;
         }
 
-        public List<KeyFrame> KeyFrames => _keyFrames;
+        public IList<KeyFrame> KeyFrames => _keyFrames;
 
-        public Extrapolation PreExtrapolation
+        public Extrapolation PostBehavior
         {
-            get => _preExtrapolation;
-            set => _preExtrapolation = value;
+            get;
         }
 
-        public Extrapolation PostExtrapolation
+        public Extrapolation PreBehavior
         {
-            get => _postExtrapolation;
-            set => _postExtrapolation = value;
+            get;
         }
 
-        public KeyFrame GetKeyFrameAtTime(float time)
+        public void Add(double time, float value)
         {
-            foreach (var frame in _keyFrames)
-            {
-                if (frame.Time == time)
-                {
-                    return frame;
-                }
-            }
-            return null!;
+            var frame = new KeyFrame(this, time);
+            frame.Value = value;
+            _keyFrames.Add(frame);
         }
 
-        public void AddKeyFrame(KeyFrame keyFrame)
+        public void Add(double time, float value, Interpolation interpolation)
         {
-            _keyFrames.Add(keyFrame);
-            _keyFrames.Sort((a, b) => a.Time.CompareTo(b.Time));
+            var frame = new KeyFrame(this, time);
+            frame.Value = value;
+            frame.Interpolation = interpolation;
+            _keyFrames.Add(frame);
         }
 
-        public void RemoveKeyFrame(KeyFrame keyFrame)
+        public void Reset()
         {
-            _keyFrames.Remove(keyFrame);
+            _keyFrames.Clear();
         }
 
-        public Aspose.ThreeD.Utilities.Vector4 Interpolate(float time)
+        public IEnumerator<KeyFrame> GetEnumerator()
         {
-            if (_keyFrames.Count == 0)
-            {
-                return new Aspose.ThreeD.Utilities.Vector4(0, 0, 0, 0);
-            }
-
-            if (_keyFrames.Count == 1)
-            {
-                return _keyFrames[0].Value;
-            }
-
-            var prevFrame = _keyFrames[0];
-            var nextFrame = _keyFrames[_keyFrames.Count - 1];
-
-            foreach (var frame in _keyFrames)
-            {
-                if (frame.Time <= time && frame.Time >= prevFrame.Time)
-                {
-                    prevFrame = frame;
-                }
-                if (frame.Time > time)
-                {
-                    nextFrame = frame;
-                    break;
-                }
-            }
-
-            if (prevFrame.Time >= time)
-            {
-                return prevFrame.Value;
-            }
-
-            if (nextFrame.Time <= time)
-            {
-                return nextFrame.Value;
-            }
-
-            float t = (time - prevFrame.Time) / (nextFrame.Time - prevFrame.Time);
-
-            switch (prevFrame.Interpolation)
-            {
-                case Interpolation.Constant:
-                    return prevFrame.Value;
-
-                case Interpolation.Linear:
-                    var v0 = prevFrame.Value;
-                    var v1 = nextFrame.Value;
-                    var diffX = v1.X - v0.X;
-                    var diffY = v1.Y - v0.Y;
-                    var diffZ = v1.Z - v0.Z;
-                    var diffW = v1.W - v0.W;
-                    var result = new Aspose.ThreeD.Utilities.Vector4(
-                        v0.X + diffX * t,
-                        v0.Y + diffY * t,
-                        v0.Z + diffZ * t,
-                        v0.W + diffW * t
-                    );
-                    return result;
-
-                case Interpolation.Bezier:
-                    return InterpolateBezier(prevFrame, nextFrame, t);
-
-                default:
-                    return prevFrame.Value;
-            }
-        }
-
-        private Aspose.ThreeD.Utilities.Vector4 InterpolateBezier(KeyFrame prevFrame, KeyFrame nextFrame, float t)
-        {
-            float t2 = t * t;
-            float t3 = t2 * t;
-
-            float h1 = 2 * t3 - 3 * t2 + 1;
-            float h2 = -2 * t3 + 3 * t2;
-            float h3 = t3 - 2 * t2 + t;
-            float h4 = t3 - t2;
-
-            Aspose.ThreeD.Utilities.Vector4 p0 = prevFrame.Value;
-            Aspose.ThreeD.Utilities.Vector4 p3 = nextFrame.Value;
-
-            float duration = nextFrame.Time - prevFrame.Time;
-            Aspose.ThreeD.Utilities.Vector4 m0 = new Aspose.ThreeD.Utilities.Vector4(
-                prevFrame.TangentOut.X * duration,
-                prevFrame.TangentOut.Y * duration,
-                prevFrame.TangentOut.Z * duration,
-                0
-            );
-            Aspose.ThreeD.Utilities.Vector4 m1 = new Aspose.ThreeD.Utilities.Vector4(
-                nextFrame.TangentIn.X * duration,
-                nextFrame.TangentIn.Y * duration,
-                nextFrame.TangentIn.Z * duration,
-                0
-            );
-
-            Aspose.ThreeD.Utilities.Vector4 result = p0 * h1 + m0 * h3 + p3 * h2 + m1 * h4;
-            return result;
+            return _keyFrames.GetEnumerator();
         }
     }
 }

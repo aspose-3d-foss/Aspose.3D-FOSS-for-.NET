@@ -12,7 +12,7 @@ namespace Aspose.ThreeD.Entities
     public class Mesh : Geometry, INamedObject, IEnumerable<int[]>, IEnumerable, IMeshConvertible
     {
         private readonly List<int[]> _polygons;
-        private readonly List<int> _edges;
+        private ArrayList<int> _edges;
 
         /// <summary>
         /// Initializes a new instance of the Mesh class.
@@ -27,13 +27,13 @@ namespace Aspose.ThreeD.Entities
         public Mesh(string name) : base(name)
         {
             _polygons = new List<int[]>();
-            _edges = new List<int>();
+            _edges = new ArrayList<int>();
         }
 
         /// <summary>
         /// Gets edges of the Mesh. Edge is optional in mesh, so it can be empty.
         /// </summary>
-        public IList<int> Edges => _edges;
+        public IArrayList<int> Edges => _edges;
 
         /// <summary>
         /// Gets the count of polygons

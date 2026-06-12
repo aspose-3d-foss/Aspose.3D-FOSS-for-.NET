@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Aspose.ThreeD.Utilities;
 
 namespace Aspose.ThreeD.Entities
 {
@@ -8,12 +9,13 @@ namespace Aspose.ThreeD.Entities
     /// </summary>
     public class VertexElementIntsTemplate : VertexElement, IIndexedVertexElement
     {
-        private readonly List<int> _data;
+        private List<int> _data;
+        private ArrayList<int> _internalData;
 
         /// <summary>
         /// Gets the vertex data
         /// </summary>
-        public List<int> Data => _data;
+        public IArrayList<int> Data => _internalData;
 
         /// <summary>
         /// Initializes a new instance of the VertexElementIntsTemplate class.
@@ -21,6 +23,7 @@ namespace Aspose.ThreeD.Entities
         public VertexElementIntsTemplate()
             : this(MappingMode.ControlPoint, ReferenceMode.Direct)
         {
+            _internalData = new ArrayList<int>();
         }
 
         /// <summary>
@@ -30,6 +33,7 @@ namespace Aspose.ThreeD.Entities
             : base(VertexElementType.Unknown, mappingMode, referenceMode)
         {
             _data = new List<int>();
+            _internalData = new ArrayList<int>();
         }
 
         /// <summary>
@@ -40,7 +44,7 @@ namespace Aspose.ThreeD.Entities
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
             target._data.AddRange(_data);
-            target.SetIndices(_indices);
+            target._internalData = new ArrayList<int>(_data);
         }
 
         /// <summary>
@@ -50,40 +54,17 @@ namespace Aspose.ThreeD.Entities
         {
             _data.Clear();
             _data.AddRange(data);
+            _internalData = new ArrayList<int>(_data);
         }
 
         /// <summary>
         /// Removes all elements from the direct and the index arrays.
         /// </summary>
-        public void Clear()
+        public override void Clear()
         {
             _data.Clear();
-            SetIndices(Array.Empty<int>());
-        }
-
-        private int[] _indices = Array.Empty<int>();
-
-        /// <summary>
-        /// Gets the indices data
-        /// </summary>
-        public int[] Indices => _indices;
-
-        /// <summary>
-        /// Sets the indices data
-        /// </summary>
-        public void SetIndices(int[] data)
-        {
-            _indices = data ?? Array.Empty<int>();
-        }
-
-        /// <summary>
-        /// Gets the index at the specified position
-        /// </summary>
-        public int GetIndex(int i)
-        {
-            if (i >= 0 && i < _indices.Length)
-                return _indices[i];
-            return i;
+            _internalData = new ArrayList<int>();
+            base.Clear();
         }
     }
 }

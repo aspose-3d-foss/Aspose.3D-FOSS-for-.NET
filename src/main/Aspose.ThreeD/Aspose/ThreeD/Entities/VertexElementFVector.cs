@@ -9,12 +9,13 @@ namespace Aspose.ThreeD.Entities
     /// </summary>
     public class VertexElementFVector : VertexElement, IIndexedVertexElement
     {
-        private readonly List<FVector4> _data;
+        private List<FVector4> _data;
+        private ArrayList<FVector4> _internalData;
 
         /// <summary>
         /// Gets the vertex data
         /// </summary>
-        public List<FVector4> Data => _data;
+        public IArrayList<FVector4> Data => _internalData;
 
         /// <summary>
         /// Initializes a new instance of the VertexElementFVector class.
@@ -22,6 +23,7 @@ namespace Aspose.ThreeD.Entities
         public VertexElementFVector()
             : this(MappingMode.ControlPoint, ReferenceMode.Direct)
         {
+            _internalData = new ArrayList<FVector4>();
         }
 
         /// <summary>
@@ -31,6 +33,7 @@ namespace Aspose.ThreeD.Entities
             : base(VertexElementType.Unknown, mappingMode, referenceMode)
         {
             _data = new List<FVector4>();
+            _internalData = new ArrayList<FVector4>();
         }
 
         /// <summary>
@@ -41,7 +44,7 @@ namespace Aspose.ThreeD.Entities
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
             target._data.AddRange(_data);
-            target.SetIndices(_indices);
+            target._internalData = new ArrayList<FVector4>(_data);
         }
 
         /// <summary>
@@ -51,6 +54,7 @@ namespace Aspose.ThreeD.Entities
         {
             _data.Clear();
             _data.AddRange(data);
+            _internalData = new ArrayList<FVector4>(_data);
         }
 
         /// <summary>
@@ -63,6 +67,7 @@ namespace Aspose.ThreeD.Entities
             {
                 _data.Add(new FVector4(item));
             }
+            _internalData = new ArrayList<FVector4>(_data);
         }
 
         /// <summary>
@@ -75,40 +80,17 @@ namespace Aspose.ThreeD.Entities
             {
                 _data.Add(new FVector4(item.X, item.Y, 0, 1));
             }
+            _internalData = new ArrayList<FVector4>(_data);
         }
 
         /// <summary>
         /// Removes all elements from the direct and the index arrays.
         /// </summary>
-        public void Clear()
+        public override void Clear()
         {
             _data.Clear();
-            SetIndices(Array.Empty<int>());
-        }
-
-        private int[] _indices = Array.Empty<int>();
-
-        /// <summary>
-        /// Gets the indices data
-        /// </summary>
-        public int[] Indices => _indices;
-
-        /// <summary>
-        /// Sets the indices data
-        /// </summary>
-        public void SetIndices(int[] data)
-        {
-            _indices = data ?? Array.Empty<int>();
-        }
-
-        /// <summary>
-        /// Gets the index at the specified position
-        /// </summary>
-        public int GetIndex(int i)
-        {
-            if (i >= 0 && i < _indices.Length)
-                return _indices[i];
-            return i;
+            _internalData = new ArrayList<FVector4>();
+            base.Clear();
         }
     }
 }

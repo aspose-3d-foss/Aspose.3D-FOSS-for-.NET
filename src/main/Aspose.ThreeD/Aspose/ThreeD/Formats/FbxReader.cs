@@ -521,13 +521,13 @@ namespace Aspose.ThreeD.Formats
                                 {
                                     // For ByPolygonVertex, we need per-vertex normals (one per polygon corner)
                                     int vertexCount = normals.Count / 4;
-                                    var indexedElement = (IIndexedVertexElement)vertexElement;
+                                    var vertexElem = (Aspose.ThreeD.Entities.VertexElement)vertexElement;
                                     int[] indices = new int[vertexCount];
                                     for (int i = 0; i < vertexCount; i++)
                                     {
                                         indices[i] = i;
                                     }
-                                    indexedElement.SetIndices(indices);
+                                    vertexElem.SetIndices(indices);
                                 }
                             }
                         }

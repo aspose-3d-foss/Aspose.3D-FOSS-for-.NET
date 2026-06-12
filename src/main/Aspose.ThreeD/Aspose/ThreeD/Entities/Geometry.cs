@@ -17,54 +17,50 @@ namespace Aspose.ThreeD.Entities
         {
             return Create(type, MappingMode.ControlPoint, ReferenceMode.Direct);
         }
+         /// <summary>
+         /// Creates a vertex element based on type with mapping and reference modes
+         /// </summary>
+         public static VertexElement Create(VertexElementType type, MappingMode mappingMode, ReferenceMode referenceMode)
+         {
+             switch (type)
+             {
+                 case VertexElementType.Normal:
+                 case VertexElementType.Binormal:
+                 case VertexElementType.Tangent:
+                     return new VertexElementFVector(mappingMode, referenceMode);
 
-        /// <summary>
-        /// Creates a vertex element based on type with mapping and reference modes
-        /// </summary>
-        public static VertexElement Create(VertexElementType type, MappingMode mappingMode, ReferenceMode referenceMode)
-        {
-            switch (type)
-            {
-                case VertexElementType.Normal:
-                case VertexElementType.Binormal:
-                case VertexElementType.Tangent:
-                    return new VertexElementVector(type, mappingMode, referenceMode);
+                 case VertexElementType.UV:
+                     return new VertexElementUV(TextureMapping.Diffuse, mappingMode, referenceMode);
 
-                case VertexElementType.UV:
-                    return new VertexElementUV(TextureMapping.Diffuse, mappingMode, referenceMode);
+                 case VertexElementType.VertexColor:
+                     return new VertexElementVertexColor(mappingMode, referenceMode);
 
-                case VertexElementType.VertexColor:
-                    return new VertexElementVertexColor(mappingMode, referenceMode);
+                 case VertexElementType.Material:
+                     return new VertexElementMaterial(mappingMode, referenceMode);
 
-                case VertexElementType.Material:
-                    return new VertexElementMaterial(mappingMode, referenceMode);
-
-                default:
-                    throw new ArgumentException($"Unsupported vertex element type: {type}");
-            }
-        }
-    }
+                 default:
+                     throw new ArgumentException($"Unsupported vertex element type: {type}");
+             }
+         }    }
 
     /// <summary>
     /// The base class of all renderable geometric objects (like Mesh, Box, Cylinder and etc.).
     /// </summary>
     public abstract class Geometry : Entity
-    {
-        private readonly List<Deformer> _deformers;
-        private readonly List<VertexElement> _vertexElements;
-        private readonly List<Vector4> _controlPoints;
-        private bool _visible;
-        private bool _castShadows;
-        private bool _receiveShadows;
-
+    {         private readonly List<Deformer> _deformers;
+         private readonly List<VertexElement> _vertexElements;
+         private ArrayList<Vector4> _controlPoints;
+         private bool _visible;
+         private bool _castShadows;
+         private bool _receiveShadows;
         /// <summary>
         /// Initializes a new instance of the Geometry class.
         /// </summary>
-        protected Geometry(string name) : base(name)
+        public Geometry(string name) : base(name)
         {
             _deformers = new List<Deformer>();
             _vertexElements = new List<VertexElement>();
-            _controlPoints = new List<Vector4>();
+            _controlPoints = new ArrayList<Vector4>();
             _visible = true;
             _castShadows = true;
             _receiveShadows = true;
@@ -83,12 +79,10 @@ namespace Aspose.ThreeD.Entities
         /// Gets all deformers associated with this geometry.
         /// </summary>
         public IList<Deformer> Deformers => _deformers;
-
-        /// <summary>
-        /// Gets all control points
-        /// </summary>
-        public IList<Vector4> ControlPoints => _controlPoints;
-
+         /// <summary>
+         /// Gets all control points
+         /// </summary>
+         public IArrayList<Vector4> ControlPoints => _controlPoints;
         /// <summary>
         /// Gets or sets whether this geometry can cast shadow
         /// </summary>
@@ -115,9 +109,9 @@ namespace Aspose.ThreeD.Entities
         /// <summary>
         /// Gets all deformers
         /// </summary>
-        public void GetDeformers()
+        public ICollection<Deformer> GetDeformers()
         {
-            throw new NotImplementedException("Getting deformers is not yet implemented");
+            return _deformers;
         }
 
         /// <summary>

@@ -6,7 +6,7 @@ namespace Aspose.ThreeD.Entities
     /// <summary>
     /// Defines blend weight for specified components.
     /// </summary>
-    public class VertexElementWeight : VertexElementDoublesTemplate, IIndexedVertexElement
+    public class VertexElementWeight : VertexElementDoublesTemplate
     {
         /// <summary>
         /// Initializes a new instance of the VertexElementWeight class.

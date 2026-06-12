@@ -260,43 +260,6 @@ namespace Aspose.ThreeD.Entities
     }
 
     /// <summary>
-    /// Boolean operand types.
-    /// </summary>
-    public enum BooleanOperand
-    {
-        /// <summary>
-        /// First operand
-        /// </summary>
-        First,
-
-        /// <summary>
-        /// Second operand
-        /// </summary>
-        Second
-    }
-
-    /// <summary>
-    /// Boolean operator types.
-    /// </summary>
-    public enum BooleanOperator
-    {
-        /// <summary>
-        /// Union operator
-        /// </summary>
-        Union,
-
-        /// <summary>
-        /// Subtract operator
-        /// </summary>
-        Subtract,
-
-        /// <summary>
-        /// Intersection operator
-        /// </summary>
-        Intersection
-    }
-
-    /// <summary>
     /// Split mesh policy.
     /// </summary>
     public enum SplitMeshPolicy

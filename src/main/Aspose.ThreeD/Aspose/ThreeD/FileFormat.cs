@@ -49,6 +49,38 @@ namespace Aspose.ThreeD
         /// Access to all supported formats
         /// </summary>
         public static IList<FileFormat> Formats => _formats;
+    // Static format instances
+    public static readonly FileFormat FBX = new FileFormat(".fbx", new[] { ".fbx" }, new Version(7, 4), true, true, FileContentType.Binary, FileFormatType.FBX);
+    public static readonly FileFormat OBJ = new FileFormat(".obj", new[] { ".obj" }, new Version(1, 0), true, true, FileContentType.ASCII, FileFormatType.WavefrontOBJ);
+    public static readonly FileFormat STL = new FileFormat(".stl", new[] { ".stl" }, new Version(1, 0), true, true, FileContentType.Binary, FileFormatType.STL);
+    public static readonly FileFormat GLTF = new FileFormat(".gltf", new[] { ".gltf", ".glb" }, new Version(2, 0), true, true, FileContentType.ASCII, FileFormatType.GLTF);
+    public static readonly FileFormat GLTF_Binary = new FileFormat(".glb", new[] { ".glb" }, new Version(2, 0), true, true, FileContentType.Binary, FileFormatType.GLTF);
+    public static readonly Formats.PdfFormat PDF = new Formats.PdfFormat();
+    public static readonly Formats.PlyFormat PLY = new Formats.PlyFormat();
+    public static readonly Formats.Microsoft3MFFormat Microsoft3MF = new Formats.Microsoft3MFFormat();
+    public static readonly Formats.DracoFormat Draco = new Formats.DracoFormat();
+    public static readonly Formats.RvmFormat RvmText = new Formats.RvmFormat();
+    public static readonly Formats.RvmFormat RvmBinary = new Formats.RvmFormat();
+    public static readonly FileFormat Blender = new FileFormat(".blend", new[] { ".blend" }, new Version(0, 0), true, true, FileContentType.Binary, FileFormatType.Blender);
+    public static readonly FileFormat DXF = new FileFormat(".dxf", new[] { ".dxf" }, new Version(0, 0), true, true, FileContentType.ASCII, FileFormatType.DXF);
+    public static readonly FileFormat XBinary = new FileFormat(".x", new[] { ".x" }, new Version(0, 0), true, true, FileContentType.Binary, FileFormatType.X);
+    public static readonly FileFormat XText = new FileFormat(".x", new[] { ".x" }, new Version(0, 0), true, true, FileContentType.ASCII, FileFormatType.X);
+    public static readonly FileFormat ASE = new FileFormat(".ase", new[] { ".ase" }, new Version(0, 0), true, true, FileContentType.ASCII, FileFormatType.ASE);
+    public static readonly FileFormat IFC = new FileFormat(".ifc", new[] { ".ifc" }, new Version(0, 0), true, true, FileContentType.ASCII, FileFormatType.IFC);
+    public static readonly FileFormat SiemensJT8 = new FileFormat(".jt", new[] { ".jt" }, new Version(8, 0), true, true, FileContentType.Binary, FileFormatType.SiemensJT);
+    public static readonly FileFormat SiemensJT9 = new FileFormat(".jt", new[] { ".jt" }, new Version(9, 0), true, true, FileContentType.Binary, FileFormatType.SiemensJT);
+    public static readonly FileFormat AMF = new FileFormat(".amf", new[] { ".amf" }, new Version(0, 0), true, true, FileContentType.ASCII, FileFormatType.AMF);
+    public static readonly FileFormat VRML = new FileFormat(".wrl", new[] { ".wrl" }, new Version(0, 0), true, true, FileContentType.ASCII, FileFormatType.VRML);
+    public static readonly FileFormat Aspose3DWeb = new FileFormat(".html", new[] { ".html" }, new Version(0, 0), true, true, FileContentType.ASCII, FileFormatType.Aspose3DWeb);
+    public static readonly FileFormat HTML5 = new FileFormat(".html", new[] { ".html" }, new Version(0, 0), true, true, FileContentType.ASCII, FileFormatType.HTML5);
+    public static readonly FileFormat Zip = new FileFormat(".zip", new[] { ".zip" }, new Version(0, 0), true, true, FileContentType.Binary, FileFormatType.Zip);
+    public static readonly FileFormat USD = new FileFormat(".usd", new[] { ".usd" }, new Version(0, 0), true, true, FileContentType.ASCII, FileFormatType.USD);
+    public static readonly FileFormat USDA = new FileFormat(".usda", new[] { ".usda" }, new Version(0, 0), true, true, FileContentType.ASCII, FileFormatType.USD);
+    public static readonly FileFormat USDZ = new FileFormat(".usdz", new[] { ".usdz" }, new Version(0, 0), true, true, FileContentType.Binary, FileFormatType.USD);
+    public static readonly FileFormat Xyz = new FileFormat(".xyz", new[] { ".xyz" }, new Version(0, 0), true, true, FileContentType.ASCII, FileFormatType.Xyz);
+    public static readonly FileFormat Pcd = new FileFormat(".pcd", new[] { ".pcd" }, new Version(0, 0), true, true, FileContentType.Binary, FileFormatType.Pcd);
+    public static readonly FileFormat PcdBinary = new FileFormat(".pcd", new[] { ".pcd" }, new Version(0, 0), true, true, FileContentType.Binary, FileFormatType.Pcd);
+
 
         /// <summary>
         /// Gets file format version

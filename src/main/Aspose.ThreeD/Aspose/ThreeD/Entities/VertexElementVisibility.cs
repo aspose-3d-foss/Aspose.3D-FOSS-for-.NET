@@ -6,7 +6,7 @@ namespace Aspose.ThreeD.Entities
     /// <summary>
     /// Defines if specified components is visible
     /// </summary>
-    public class VertexElementVisibility : VertexElementTemplate<bool>, IIndexedVertexElement
+    public class VertexElementVisibility : VertexElementTemplate<bool>
     {
         /// <summary>
         /// Initializes a new instance of the VertexElementVisibility class.

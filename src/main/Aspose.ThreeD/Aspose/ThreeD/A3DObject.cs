@@ -29,9 +29,13 @@ namespace Aspose.ThreeD
         }
 
         /// <summary>
-        /// Gets the name.
+        /// Gets or sets the name.
         /// </summary>
-        public string Name => _name;
+        public string Name
+        {
+            get => _name;
+            set => _name = value;
+        }
 
         /// <summary>
         /// Gets the collection of all properties.

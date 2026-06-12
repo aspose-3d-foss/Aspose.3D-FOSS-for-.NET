@@ -4,52 +4,29 @@ using System.Collections.Generic;
 namespace Aspose.ThreeD
 {
     /// <summary>
-    /// Base class of all Aspose.3D objects
+    /// The root class of objects that will be stored inside a scene.
     /// </summary>
-    public abstract class SceneObject : INamedObject
+    public abstract class SceneObject : A3DObject
     {
-        private string _name;
-        private readonly PropertyCollection _properties;
+        private Scene _scene;
 
         /// <summary>
-        /// Initializes a new instance of the SceneObject class
+        /// Initialize an SceneObject with a default name
         /// </summary>
-        protected SceneObject()
+        public SceneObject(string name) : base(name)
         {
-            _name = string.Empty;
-            _properties = new PropertyCollection();
         }
 
         /// <summary>
-        /// Initializes a new instance of the SceneObject class with a name
+        /// Initialize an SceneObject.
         /// </summary>
-        protected SceneObject(string name)
+        public SceneObject() : base()
         {
-            _name = name ?? string.Empty;
-            _properties = new PropertyCollection();
         }
 
         /// <summary>
-        /// Gets or sets the name
+        /// Gets the scene that this object belongs to
         /// </summary>
-        public string Name
-        {
-            get => _name;
-            set => _name = value ?? string.Empty;
-        }
-
-        /// <summary>
-        /// Gets the name
-        /// </summary>
-        /// <returns>The name of the object</returns>
-        public string GetName()
-        {
-            return Name;
-        }
-
-        /// <summary>
-        /// Gets the collection of properties
-        /// </summary>
-        public PropertyCollection Properties => _properties;
+        public Scene Scene => _scene;
     }
 }

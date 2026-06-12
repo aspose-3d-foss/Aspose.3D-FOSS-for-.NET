@@ -1,4 +1,5 @@
 using System;
+using Aspose.ThreeD.Profiles;
 using Aspose.ThreeD.Render;
 using Aspose.ThreeD.Utilities;
 
@@ -9,7 +10,7 @@ namespace Aspose.ThreeD.Entities
     /// </summary>
     public class RevolvedAreaSolid : Entity, INamedObject, IMeshConvertible
     {
-        private object _shape;
+        private Profile _shape;
         private Vector3 _axis;
         private Vector3 _origin;
         private double _angleStart;
@@ -74,7 +75,7 @@ namespace Aspose.ThreeD.Entities
         /// <summary>
         /// Gets or sets the base profile used to revolve.
         /// </summary>
-        public object Shape
+        public Profile Shape
         {
             get => _shape;
             set => _shape = value;

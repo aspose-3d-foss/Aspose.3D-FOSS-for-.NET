@@ -7,14 +7,14 @@ namespace Aspose.ThreeD.Entities
 {
     /// <summary>
     /// NURBS curve is a curve represented by NURBS(Non-uniform rational basis spline),
-    /// A NURBS curve is defined by its , a set of weighted  and a 
-    /// The w component in control point is used as control point's weight, whatever it is a  or
+    /// A NURBS curve is defined by its control points, a set of weighted control points and a knot vector
+    /// The w component in control point is used as control point's weight, whatever it is a 2D or 3D
     /// </summary>
     public class NurbsCurve : Curve, INamedObject
     {
-        private readonly IList<Vector4> _controlPoints;
-        private readonly IList<int> _multiplicity;
-        private readonly IList<double> _knotVectors;
+        private readonly IArrayList<Vector4> _controlPoints;
+        private readonly IArrayList<int> _multiplicity;
+        private readonly IArrayList<double> _knotVectors;
         private int _order;
         private NurbsType _curveType;
         private CurveDimension _dimension;
@@ -33,9 +33,9 @@ namespace Aspose.ThreeD.Entities
         /// <param name="name">The name of the NurbsCurve</param>
         public NurbsCurve(string name) : base(name)
         {
-            _controlPoints = new List<Vector4>();
-            _multiplicity = new List<int>();
-            _knotVectors = new List<double>();
+            _controlPoints = new ArrayList<Vector4>();
+            _multiplicity = new ArrayList<int>();
+            _knotVectors = new ArrayList<double>();
             _order = 2;
             _dimension = CurveDimension.ThreeDimensional;
             _curveType = NurbsType.Open;
@@ -45,12 +45,12 @@ namespace Aspose.ThreeD.Entities
         /// <summary>
         /// Gets all control points
         /// </summary>
-        public IList<Vector4> ControlPoints => _controlPoints;
+        public IArrayList<Vector4> ControlPoints => _controlPoints;
 
         /// <summary>
         /// Gets the multiplicity.
         /// </summary>
-        public IList<int> Multiplicity => _multiplicity;
+        public IArrayList<int> Multiplicity => _multiplicity;
         /// <summary>
         /// Gets or sets the order of a NURBS curve, it defines the number of nearby control points that influence any given point on the curve.
         /// </summary>
@@ -89,7 +89,7 @@ namespace Aspose.ThreeD.Entities
         /// <summary>
         /// Gets the knot vector, it is a sequence of parameter values that determines where and how the control points affect the NURBS curve.
         /// </summary>
-        public IList<double> KnotVectors => _knotVectors;
+        public IArrayList<double> KnotVectors => _knotVectors;
         /// <summary>
         /// Gets or sets whether it is rational, this value indicates whether this  is rational spline or non-rational spline.
         /// Non-rational B-spline is a special case of rational B-splines.

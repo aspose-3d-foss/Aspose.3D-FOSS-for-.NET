@@ -1,4 +1,5 @@
 using System;
+using Aspose.ThreeD.Profiles;
 using Aspose.ThreeD.Render;
 using Aspose.ThreeD.Utilities;
 
@@ -9,7 +10,7 @@ namespace Aspose.ThreeD.Entities
     /// </summary>
     public class LinearExtrusion : Entity, INamedObject, IMeshConvertible
     {
-        private object _shape;
+        private Profile _shape;
         private Vector3 _direction;
         private double _height;
         private int _slices;
@@ -36,7 +37,7 @@ namespace Aspose.ThreeD.Entities
         /// </summary>
         /// <param name="shape">The base shape to be extruded</param>
         /// <param name="height">The height of the extruded geometry</param>
-        public LinearExtrusion(object shape, double height) : this("LinearExtrusion")
+        public LinearExtrusion(Profile shape, double height) : this("LinearExtrusion")
         {
             _shape = shape;
             _direction = Vector3.UnitZ;
@@ -65,7 +66,7 @@ namespace Aspose.ThreeD.Entities
         /// <summary>
         /// The base shape to be extruded.
         /// </summary>
-        public object Shape
+        public Profile Shape
         {
             get => _shape;
             set => _shape = value;

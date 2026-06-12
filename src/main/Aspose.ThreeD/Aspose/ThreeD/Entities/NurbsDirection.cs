@@ -1,16 +1,15 @@
-using System.Collections.Generic;
 using Aspose.ThreeD.Utilities;
 
 namespace Aspose.ThreeD.Entities;
 
 /// <summary>
-/// A 3D  has two direction, the  and , the  defines data for each direction.
-/// A direction is actually a NURBS curve, that means it's also defined by its , a , and a set of weighted control points(defined in ).
+/// A 3D surface has two direction, the U and V, the NurbsDirection defines data for each direction.
+/// A direction is actually a NURBS curve, that means it's also defined by its knot vectors, a multiplicity, and a set of weighted control points(defined in NurbsCurve).
 /// </summary>
 public class NurbsDirection
 {
-    private readonly IList<double> knotVectors;
-    private readonly IList<int> multiplicity;
+    private readonly IArrayList<double> knotVectors;
+    private readonly IArrayList<int> multiplicity;
     private int order = 3;
     private int degree = 2;
     private int divisions = 10;
@@ -22,19 +21,19 @@ public class NurbsDirection
     /// </summary>
     public NurbsDirection()
     {
-        knotVectors = new List<double>();
-        multiplicity = new List<int>();
+        knotVectors = new ArrayList<double>();
+        multiplicity = new ArrayList<int>();
     }
 
     /// <summary>
     /// Gets the knot vector, it is a sequence of parameter values that determines where and how the control points affect the NURBS curve.
     /// </summary>
-    public IList<double> KnotVectors => knotVectors;
+    public IArrayList<double> KnotVectors => knotVectors;
 
     /// <summary>
     /// Gets the multiplicity.
     /// </summary>
-    public IList<int> Multiplicity => multiplicity;
+    public IArrayList<int> Multiplicity => multiplicity;
 
     /// <summary>
     /// Gets or sets the order of a NURBS curve, it defines the number of nearby control points that influence any given point on the curve.

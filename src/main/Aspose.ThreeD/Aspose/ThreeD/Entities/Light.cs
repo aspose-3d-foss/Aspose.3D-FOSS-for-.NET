@@ -8,21 +8,19 @@ namespace Aspose.ThreeD.Entities
     /// The formula to calculate the total attenuation of light is:
     /// A = ConstantAttenuation + (Dist * LinearAttenuation) + ((Dist^2) * QuadraticAttenuation)
     /// </summary>
-    public class Light : Entity, INamedObject, IOrientable
+    public class Light : Frustum, INamedObject, IOrientable
     {
         private LightType _lightType = LightType.Point;
         private Vector3 _color = Vector3.One;
         private double _intensity = 100.0;
         private double _hotSpot = 45.0;
-        private double _fallOff = 45.0;
+        private double _falloff = 45.0;
         private double _constantAttenuation = 1.0;
         private double _linearAttenuation = 0.0;
         private double _quadraticAttenuation = 0.0;
         private bool _castLight = true;
         private bool _castShadows = false;
         private Vector3 _shadowColor = new Vector3(0, 0, 0);
-        private Vector3 _direction = new Vector3(0, 0, -1);
-        private Node _target;
 
         /// <summary>
         /// Initializes a new instance of the class.
@@ -94,10 +92,10 @@ namespace Aspose.ThreeD.Entities
         /// <summary>
         /// Gets or sets the falloff cone angle (in degrees).
         /// </summary>
-        public double FallOff
+        public double Falloff
         {
-            get => _fallOff;
-            set => _fallOff = value;
+            get => _falloff;
+            set => _falloff = value;
         }
 
         /// <summary>
@@ -143,40 +141,6 @@ namespace Aspose.ThreeD.Entities
         {
             get => _shadowColor;
             set => _shadowColor = value;
-        }
-
-        /// <summary>
-        /// Gets the direction that the entity is looking at.
-        /// </summary>
-        public Vector3 Direction
-        {
-            get => _direction;
-            set => _direction = value;
-        }
-
-        /// <summary>
-        /// Gets or sets the target that the entity is looking at.
-        /// </summary>
-        public Node Target
-        {
-            get => _target;
-            set => _target = value;
-        }
-
-        /// <summary>
-        /// Gets the bounding box of current entity in its object space coordinate system.
-        /// </summary>
-        public override BoundingBox GetBoundingBox()
-        {
-            return BoundingBox.Null;
-        }
-
-        /// <summary>
-        /// Gets the key of the entity renderer registered in the renderer
-        /// </summary>
-        public override EntityRendererKey GetEntityRendererKey()
-        {
-            return new EntityRendererKey("Light");
         }
     }
 }

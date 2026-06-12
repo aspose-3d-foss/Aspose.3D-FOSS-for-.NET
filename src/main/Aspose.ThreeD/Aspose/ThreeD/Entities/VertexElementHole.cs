@@ -6,7 +6,7 @@ namespace Aspose.ThreeD.Entities
     /// <summary>
     /// Defines if specified polygon is hole
     /// </summary>
-    public class VertexElementHole : VertexElementTemplate<bool>, IIndexedVertexElement
+    public class VertexElementHole : VertexElementTemplate<bool>
     {
         /// <summary>
         /// Initializes a new instance of the VertexElementHole class.

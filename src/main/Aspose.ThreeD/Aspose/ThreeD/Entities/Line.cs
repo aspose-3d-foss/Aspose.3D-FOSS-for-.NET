@@ -5,13 +5,13 @@ using Aspose.ThreeD.Utilities;
 namespace Aspose.ThreeD.Entities;
 
 /// <summary>
-/// A polyline is a path defined by a set of points with , and connected by ,
+/// A polyline is a path defined by a set of points with segments, and connected by edges,
 /// which means it can also be a set of connected line segments.
-/// The line is usually a linear object, which means it cannot be used to represent a curve, in order to represent a curve, uses .
+/// The line is usually a linear object, which means it cannot be used to represent a curve, in order to represent a curve, uses NurbsCurve.
 /// </summary>
 public class Line : Curve, INamedObject
 {
-    private readonly IList<Vector4> controlPoints;
+    private readonly IArrayList<Vector4> controlPoints;
     private bool visible = true;
 
     /// <summary>
@@ -26,13 +26,13 @@ public class Line : Curve, INamedObject
     /// </summary>
     public Line(string name) : base(name)
     {
-        controlPoints = new List<Vector4>();
+        controlPoints = new ArrayList<Vector4>();
     }
 
     /// <summary>
     /// Gets all control points
     /// </summary>
-    public IList<Vector4> ControlPoints => controlPoints;
+    public IArrayList<Vector4> ControlPoints => controlPoints;
 
     /// <summary>
     /// Gets or sets if the geometry is visible

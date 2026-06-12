@@ -6,7 +6,7 @@ namespace Aspose.ThreeD.Entities
     /// <summary>
     /// Defines the vertex crease for specified components
     /// </summary>
-    public class VertexElementVertexCrease : VertexElementDoublesTemplate, IIndexedVertexElement
+    public class VertexElementVertexCrease : VertexElementDoublesTemplate
     {
         /// <summary>
         /// Initializes a new instance of the VertexElementVertexCrease class.

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is a FOSS (Free and Open Source) implementation of Aspose.3D for .NET 26.1.0.
+This is a FOSS (Free and Open Source) implementation of Aspose.3D for .NET 26.2.0.
 
 ## Implementation Strategy
 
@@ -73,10 +73,43 @@ This is a FOSS (Free and Open Source) implementation of Aspose.3D for .NET 26.1.
 |-----|--------|-------|
 | Scene.Render() | Stub (throws exception) | Rendering not implemented in FOSS version |
 | Scene.Save() for FBX | Stub (throws exception) | FBX export (FbxWriter) |
-| Geometry.GetDeformers() | Stub (throws exception) | Not yet implemented |
 | Watermark encoding/decoding | Stub (throws exception) | Watermark functionality not implemented in FOSS version |
 
-### Recent Fixes (Binary FBX Importer)
+### Proprietary Format Stubs (Added 2026-06-10)
+Added stub implementations for proprietary format classes:
+
+1. **PdfFormat** - Adobe's PDF format with extract methods
+2. **PlyFormat** - PLY point cloud format with encode/decode methods
+3. **Microsoft3MFFormat** - Microsoft 3MF format with buildable/transform methods
+4. **DracoFormat** - Google Draco compression format
+5. **RvmFormat** - AVEVA RVM format for plant design data
+6. **DracoSaveOptions** - Draco compression options with quantization bits
+7. **DracoCompressionLevel** - Compression level enum (NoCompression, Fast, Standard, Optimal)
+8. **PdfLoadOptions** - PDF loading options with password support
+9. **PdfSaveOptions** - PDF export options with render modes and lighting schemes
+10. **PdfRenderMode** - PDF render mode enum (Solid, Wireframe, Transparent, etc.)
+11. **PdfLightingScheme** - PDF lighting scheme enum (Artwork, Day, Night, etc.)
+
+All format stubs throw `NotImplementedException` at runtime as per FOSS policy.
+
+### API Signature Updates (Added 2026-06-11)
+Updated FOSS implementation to match On-Premise 26.2.0 API signatures:
+
+**Changes Made:**
+1. **A3DObject.Name**: Changed from read-only `{get;}` to read-write `{get; set;}` 
+2. **DynamicProperty**: Made internal class (was public, removed from On-Premise API)
+3. **SceneObject**: Changed inheritance from `INamedObject` to `A3DObject`
+4. **BooleanOperand**: Changed from enum to class with static `Of()` factory methods
+5. **BooleanOperator**: Changed from enum to class with constructors and properties
+6. **AnimationChannel**: Removed constructors, added `KeyframeSequence`, `ComponentType` properties
+7. **Light**: Changed inheritance from `Entity` to `Frustum`, removed `Direction`, `Target`, `GetBoundingBox()`, `GetEntityRendererKey()`
+8. **Geometry**: Changed `ControlPoints` to return `IList<Vector4>`, changed `GetDeformers()` to return `ICollection<Deformer>`, made constructor `public`
+9. **KeyFrame**: Updated constructor signature, changed `Time` from `float` to `double`, `Value` from `Vector4` to `float`
+10. **KeyframeSequence**: Changed inheritance from `object` to `A3DObject`
+11. **StepMode/WeightedMode**: Renamed enum values to PascalCase
+12. **Deformer**: Changed constructor from `protected` to `public`
+
+### Binary FBX Importer Fixes (Added 2026-06-10)
 Fixed binary FBX importer to correctly parse FBX files:
 
 **Issues Fixed:**
@@ -90,15 +123,48 @@ Fixed binary FBX importer to correctly parse FBX files:
 - Handles both 32-bit (version < 7500) and 64-bit (version >= 7500) FBX formats
 
 **Test Results:**
-- All 62 tests pass (including 2 new binary FBX tests)
+- All 63 tests pass (including 2 new binary FBX tests)
 - Verified with FBX 7300 and 7500 binary files with normals and UVs
+
+### API Changes Summary (2026-06-11)
+The FOSS implementation now matches On-Premise 26.2.0 API surface for all public types that exist in both versions. Remaining missing types are mostly:
+- **Rendering types** (~60 types) - EntityRenderer, IPipeline, IRenderQueue, etc.
+- **Proprietary format options** (~15 types) - A3dwSaveOptions, UsdSaveOptions, etc.
+- **CAD/profile types** (~20 types) - CircleShape, RectangleShape, Text, etc.
+
+These are all features that remain stubs or unimplemented per FOSS policy.
+
+### ArrayList<T> Interface Fix (Added 2026-06-12)
+
+Fixed ArrayList<T> implementation to avoid IList ambiguity:
+
+**Changes:**
+1. **ArrayList<T>**: Simplified implementation to avoid `IList` interface conflicts
+   - Changed `IArrayList<T>` to only extend `IList<T>` instead of `IList<T> + IList`
+   - Added explicit `IEnumerable.GetEnumerator()` implementation
+   - Removed explicit `IList` interface implementations
+
+2. **VertexElement subclasses**: Removed `readonly` from internal data fields
+   - Changed `private readonly ArrayList<T> field = new ArrayList<T>()` to `private ArrayList<T> field`
+   - Initialize in constructor instead of field initializer
+
+3. **Geometry/Mesh**: Fixed field initialization
+   - Changed from `ArrayList<T> field = new ArrayList<T>()` with `List<T>` assignment
+   - To `ArrayList<T> field` with `ArrayList<T>` assignment in constructor
+
+4. **IIndexedVertexElement**: Created interface with only `Indices` property
+   - No `SetIndices` method (as per On-Premise API)
+   - Fixed `FbxReader.cs` to cast to `VertexElement` for `SetIndices` calls
+
+**Test Results:**
+- Build: 0 errors, 0 warnings
+- Tests: 63/63 passing
 
 ### Not Implemented (Throws Exception)
 | API | Reason |
 |-----|--------|
 | License.SetLicense() | License validation not applicable |
-| Metered.SetMeteredKey() | Trial/metering not applicable |
-| Scene.Render() | Rendering requires proprietary algorithms |
+| Metered.SetMeteredKey() | Trial/metering not applicable || Scene.Render() | Stub (throws) | Rendering requires proprietary algorithms |
 
 ### Recent Changes (IOService Merge)
 Merged two IOService classes into one internal `Aspose.ThreeD.Formats.IOService` class:
@@ -114,6 +180,32 @@ Merged two IOService classes into one internal `Aspose.ThreeD.Formats.IOService`
 - Format detection (`FileFormat.Detect`) - fully implemented
 - Importer/Exporter creation (`IOService.CreateImporter/Exporter`) - stubs (throws `NotImplementedException`)
 
+### ArrayList<T> Interface Fix (Added 2026-06-12)
+
+Fixed ArrayList<T> implementation to avoid IList ambiguity:
+
+**Changes:**
+1. **ArrayList<T>**: Simplified implementation to avoid `IList` interface conflicts
+   - Changed `IArrayList<T>` to only extend `IList<T>` instead of `IList<T> + IList`
+   - Added explicit `IEnumerable.GetEnumerator()` implementation
+   - Removed explicit `IList` interface implementations
+
+2. **VertexElement subclasses**: Removed `readonly` from internal data fields
+   - Changed `private readonly ArrayList<T> field = new ArrayList<T>()` to `private ArrayList<T> field`
+   - Initialize in constructor instead of field initializer
+
+3. **Geometry/Mesh**: Fixed field initialization
+   - Changed from `ArrayList<T> field = new ArrayList<T>()` with `List<T>` assignment
+   - To `ArrayList<T> field` with `ArrayList<T>` assignment in constructor
+
+4. **IIndexedVertexElement**: Created interface with only `Indices` property
+   - No `SetIndices` method (as per On-Premise API)
+   - Fixed `FbxReader.cs` to cast to `VertexElement` for `SetIndices` calls
+
+**Test Results:**
+- Build: 0 errors, 0 warnings
+- Tests: 63/63 passing
+
 ## Test Coverage
 
 Tests have been implemented:
@@ -121,7 +213,7 @@ Tests have been implemented:
 - FileIOTests.cs - Tests for OBJ, STL, GLTF, FBX, PLY file I/O and primitive geometry
 - FormatDetectionTests.cs - Tests for format detection
 
-All 62 tests pass (including 2 new binary FBX tests).
+All 63 tests pass.
 
 ## Test Data
 

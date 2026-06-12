@@ -6,12 +6,65 @@ namespace Aspose.ThreeD.Entities
 {
     /// <summary>
     /// Base class of vertex elements
+    /// A vertex element type is identified by VertexElementType.
+    /// A VertexElement describes how the vertex element is mapped to a geometry surface and how the mapping information is arranged in memory.
+    /// A VertexElement contains Normals, UVs or other kind of information.
     /// </summary>
     public abstract class VertexElement
     {
         private readonly VertexElementType _type;
-        private readonly MappingMode _mappingMode;
-        private readonly ReferenceMode _referenceMode;
+        private MappingMode _mappingMode;
+        private ReferenceMode _referenceMode;
+        private IArrayList<int> _indices;
+
+        /// <summary>
+        /// Gets the type of the
+        /// </summary>
+        public VertexElementType VertexElementType => _type;
+
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets how the element is mapped.
+        /// </summary>
+        public MappingMode MappingMode
+        {
+            get => _mappingMode;
+            set => _mappingMode = value;
+        }
+
+        /// <summary>
+        /// Gets or sets how the element is referenced.
+        /// </summary>
+        public ReferenceMode ReferenceMode
+        {
+            get => _referenceMode;
+            set => _referenceMode = value;
+        }
+
+        /// <summary>
+        /// Gets the indices data
+        /// </summary>
+        public IArrayList<int> Indices => _indices;
+
+        /// <summary>
+        /// Sets the indices data
+        /// </summary>
+        public void SetIndices(int[] data)
+        {
+            _indices = new ArrayList<int>(data ?? Array.Empty<int>());
+        }
+
+        /// <summary>
+        /// Clears all the data from this vertex element.
+        /// </summary>
+        public virtual void Clear()
+        {
+            _indices = new ArrayList<int>();
+        }
 
         /// <summary>
         /// Initializes a new instance of the VertexElement class
@@ -21,32 +74,26 @@ namespace Aspose.ThreeD.Entities
             _type = type;
             _mappingMode = mappingMode;
             _referenceMode = referenceMode;
+            _indices = new ArrayList<int>();
+            Name = string.Empty;
         }
 
         /// <summary>
-        /// Gets the vertex element type
+        /// String representation of vertex element.
         /// </summary>
-        public VertexElementType VertexElementType => _type;
-
-        /// <summary>
-        /// Gets the mapping mode
-        /// </summary>
-        public MappingMode MappingMode => _mappingMode;
-
-        /// <summary>
-        /// Gets the reference mode
-        /// </summary>
-        public ReferenceMode ReferenceMode => _referenceMode;
+        public override string ToString()
+        {
+            return $"VertexElement({VertexElementType})";
+        }
     }
 
     /// <summary>
     /// Vertex element with UV coordinates
     /// </summary>
-    public class VertexElementUV : VertexElement, IIndexedVertexElement
+    public class VertexElementUV : VertexElement
     {
         private readonly TextureMapping _mapping;
         private readonly List<FVector2> _data;
-        private int[] _indices = Array.Empty<int>();
 
         /// <summary>
         /// Initializes a new instance of the VertexElementUV class
@@ -67,38 +114,14 @@ namespace Aspose.ThreeD.Entities
         /// Gets the UV data
         /// </summary>
         public List<FVector2> Data => _data;
-
-        /// <summary>
-        /// Gets the indices for index-to-direct mapping
-        /// </summary>
-        public int[] Indices => _indices;
-
-        /// <summary>
-        /// Sets the indices for index-to-direct mapping
-        /// </summary>
-        public void SetIndices(int[] indices)
-        {
-            _indices = indices ?? Array.Empty<int>();
-        }
-
-        /// <summary>
-        /// Gets the index at the specified position
-        /// </summary>
-        public int GetIndex(int i)
-        {
-            if (i >= 0 && i < _indices.Length)
-                return _indices[i];
-            return i;
-        }
     }
 
     /// <summary>
     /// Vertex element with vector data (normals, tangents, etc.)
     /// </summary>
-    public class VertexElementVector : VertexElement, IIndexedVertexElement
+    public class VertexElementVector : VertexElement
     {
         private readonly List<FVector4> _data;
-        private int[] _indices = Array.Empty<int>();
 
         /// <summary>
         /// Initializes a new instance of the VertexElementVector class
@@ -113,29 +136,6 @@ namespace Aspose.ThreeD.Entities
         /// Gets the vertex data
         /// </summary>
         public List<FVector4> Data => _data;
-
-        /// <summary>
-        /// Gets the indices for index-to-direct mapping
-        /// </summary>
-        public int[] Indices => _indices;
-
-        /// <summary>
-        /// Sets the indices for index-to-direct mapping
-        /// </summary>
-        public void SetIndices(int[] indices)
-        {
-            _indices = indices ?? Array.Empty<int>();
-        }
-
-        /// <summary>
-        /// Gets the index at the specified position
-        /// </summary>
-        public int GetIndex(int i)
-        {
-            if (i >= 0 && i < _indices.Length)
-                return _indices[i];
-            return i;
-        }
     }
 
     /// <summary>
