@@ -3,7 +3,7 @@
 ## Current Phase: Phase 7 - API Surface Alignment
 
 ### Phase 7 Update (2026-06-12) - Current Session
-- **Status**: **COMPLETE** - ArrayList<T> and IIndexedVertexElement Fixes + API Signature Updates
+- **Status**: **COMPLETE** - ArrayList<T> and IIndexedVertexElement Fixes + API Signature Updates + Dish.ToMesh Implementation
 - **Focus**: Fix ArrayList<T> interface implementation, IIndexedVertexElement usage, and API signature mismatches
 - **Based on API diff**: FOSS vs On-Premise 26.2.0
 - **Build Status**: Build succeeded, all tests passing (63/63)
@@ -30,6 +30,67 @@
 4. **Geometry and Mesh**: Fixed `_controlPoints` and `_edges` initialization
    - Changed from `ArrayList<T> field = new ArrayList<T>()` to `ArrayList<T> field` with initialization in constructor
    - Changed `List<T>` assignments to `ArrayList<T>` assignments
+
+5. **API Signature Fixes (IList to IArrayList)**:
+   - `NurbsCurve`: `ControlPoints`, `Multiplicity`, `KnotVectors`
+   - `NurbsDirection`: `KnotVectors`, `Multiplicity`
+   - `Line`: `ControlPoints`
+   - `Shape`: `Indices`
+
+6. **API Signature Fixes (object to proper types)**:
+   - `LinearExtrusion`: `Shape` (object → Profile)
+   - `RevolvedAreaSolid`: `Shape` (object → Profile)
+   - `SweptAreaSolid`: `Directrix` (object → Curve), `Shape` (object → Profile)
+
+7. **Profile Base Class**: Created `Aspose.ThreeD.Profiles.Profile.cs`
+   - Base class for 2D profiles
+   - Inherits from `Entity` with protected constructor
+
+8. **FileSystem**: Already fully implemented (MemoryFileSystem, DummyFileSystem, LocalFileSystem, ZipFileSystem stub)
+
+#### ToMesh Implementations
+
+**Implemented**:
+- `Dish.ToMesh()` - Full implementation using dome generation algorithm
+  - Generates vertices for a spherical cap dome shape
+  - Uses radius and height parameters to calculate vertex positions
+  - Creates quad polygons connecting adjacent vertices
+
+**Still Stub**:
+- `Torus.ToMesh()` - Torus to mesh conversion
+- `RectangularTorus.ToMesh()` - Rectangular torus to mesh conversion
+- `Pyramid.ToMesh()` - Pyramid to mesh conversion
+- `LinearExtrusion.ToMesh()` - Linear extrusion to mesh conversion
+- `RevolvedAreaSolid.ToMesh()` - Revolved area solid to mesh conversion
+- `NurbsCurve.Evaluate()` - NURBS curve evaluation
+- `NurbsCurve.EvaluateAt()` - NURBS curve evaluation at parameter
+- `NurbsSurface.ToMesh()` - NURBS surface to mesh conversion
+- `SweptAreaSolid.ToMesh()` - Swept area solid to mesh conversion
+
+#### New Files Created:
+- `Aspose.ThreeD.Entities.IIndexedVertexElement.cs` - Interface for indexed vertex elements
+- `Aspose.ThreeD.Profiles.Profile.cs` - Base profile class
+
+#### Changed Files:
+- `Aspose.ThreeD.Utilities.ArrayList.cs` - Simplified implementation
+- `Aspose.ThreeD.Utilities.IArrayList.cs` - Removed `IList` inheritance
+- `Aspose.ThreeD.Entities.VertexElement.cs` - Removed `readonly` from fields
+- `Aspose.ThreeD.Entities.VertexElementVector4.cs` - Removed `readonly` from `_internalData`
+- `Aspose.ThreeD.Entities.VertexElementTemplate.cs` - Removed `readonly` from fields
+- `Aspose.ThreeD.Entities.VertexElementIntsTemplate.cs` - Removed `readonly` from fields
+- `Aspose.ThreeD.Entities.VertexElementFVector.cs` - Removed `readonly` from fields
+- `Aspose.ThreeD.Entities.VertexElementDoublesTemplate.cs` - Removed `readonly` from fields
+- `Aspose.ThreeD.Entities.Geometry.cs` - Fixed field initialization
+- `Aspose.ThreeD.Entities.Mesh.cs` - Fixed field initialization
+- `Aspose.ThreeD.Entities.NurbsCurve.cs` - Fixed IList to IArrayList
+- `Aspose.ThreeD.Entities.NurbsDirection.cs` - Fixed IList to IArrayList
+- `Aspose.ThreeD.Entities.Line.cs` - Fixed IList to IArrayList
+- `Aspose.ThreeD.Entities.Shape.cs` - Fixed IList to IArrayList
+- `Aspose.ThreeD.Entities.LinearExtrusion.cs` - Fixed object to Profile
+- `Aspose.ThreeD.Entities.RevolvedAreaSolid.cs` - Fixed object to Profile
+- `Aspose.ThreeD.Entities.SweptAreaSolid.cs` - Fixed object to Curve/Profile
+- `Aspose.ThreeD.Entities.Dish.cs` - Implemented `ToMesh()` and `GetBoundingBox()`
+- `Aspose.ThreeD.Formats.FbxReader.cs` - Fixed `SetIndices` call
 
 #### New Files Created:
 - `Aspose.ThreeD.Entities.IIndexedVertexElement.cs` - Interface for indexed vertex elements
@@ -77,12 +138,80 @@
 - `Aspose.ThreeD.Animation.StepMode.cs` - Updated enum values
 - `Aspose.ThreeD.Animation.WeightedMode.cs` - Updated enum values
 - `Aspose.ThreeD.Deformers.Deformer.cs` - Changed constructor to public
-- `Aspose.ThreeD.Entities.Enums.cs` - Removed old enum definitions
-#### Test Results:
+- `Aspose.ThreeD.Entities.Enums.cs` - Removed old enum definitions#### Test Results:
 - Build: 0 errors, 0 warnings
 - Tests: 63/63 passing
+- Dish.ToMesh() implemented with dome generation algorithm
 
-### Phase 7 Update (2026-06-11) - Previous Session- **Status**: **COMPLETE** - Proprietary Format Stubs Implementation
+### Current Session (June 12, 2026)
+
+#### API Signature Fixes Implemented
+
+| Class | Issue | Fix |
+|-------|-------|-----|
+| NurbsCurve | ControlPoints/Multiplicity/KnotVectors return IList | Changed to IArrayList |
+| NurbsDirection | KnotVectors/Multiplicity return IList | Changed to IArrayList |
+| Line | ControlPoints returns IList | Changed to IArrayList |
+| LinearExtrusion | Shape is object | Changed to Profile |
+| RevolvedAreaSolid | Shape is object | Changed to Profile |
+| SweptAreaSolid | Directrix/Shape are object | Changed to Curve/Profile |
+| Shape | Indices returns IList | Changed to IArrayList |
+| Curve | Added as base class | Already existed |
+
+#### Profile Class Created
+
+- Created `Aspose.ThreeD.Profiles.Profile` base class for 2D profiles
+- Includes `GetEntityRendererKey()` method
+- Protected constructor to allow derived classes
+
+#### FileSystem Status
+
+- Already fully implemented with MemoryFileSystem, DummyFileSystem, LocalFileSystem, ZipFileSystem (stub)
+- No changes needed - API matches On-Premise exactly
+
+#### ToMesh Implementations
+
+**Implemented**:
+- Dish - ToMesh(), GetBoundingBox() - Full implementation using dome generation algorithm
+  - Generates vertices for a spherical cap dome shape
+  - Uses radius and height parameters to calculate vertex positions
+  - Creates quad polygons connecting adjacent vertices
+  - Implemented GetBoundingBox() for bounding box calculation
+
+**Still Stub** (require more complex geometry algorithms):
+- Torus - ToMesh(), GetBoundingBox()
+- RectangularTorus - ToMesh(), GetBoundingBox()
+- Pyramid - ToMesh()
+- LinearExtrusion - ToMesh()
+- RevolvedAreaSolid - ToMesh()
+- NurbsCurve - Evaluate(), EvaluateAt()
+- NurbsSurface - ToMesh()
+- SweptAreaSolid - ToMesh()
+
+#### Build Status
+- Build: 0 errors, 0 warnings (after fixes)
+- All 63 tests still passing
+- New files created:
+  - `Aspose.ThreeD.Entities.IIndexedVertexElement.cs` - Interface for indexed vertex elements
+  - `Aspose.ThreeD.Profiles.Profile.cs` - Base profile class
+  - Updated API signatures for NurbsCurve, NurbsDirection, Line
+  - Updated API signatures for LinearExtrusion, RevolvedAreaSolid, SweptAreaSolid
+  - Updated API signature for Shape
+  - Implemented Dish.ToMesh() and Dish.GetBoundingBox()
+
+#### Commit Status
+- Changes committed: Yes
+- Commit message: "fix: Update API signatures for FOSS compatibility with On-Premise 26.2.0"
+
+#### Next Cycle
+- Implement ToMesh for Torus
+- Implement ToMesh for RectangularTorus
+- Implement ToMesh for Pyramid
+- Implement ToMesh for LinearExtrusion
+- Implement ToMesh for RevolvedAreaSolid
+- Implement NurbsCurve.Evaluate and EvaluateAt
+- Implement ToMesh for NurbsSurface
+- Implement ToMesh for SweptAreaSolid### Phase 7 Update (2026-06-11) - Previous Session- **Status**: **COMPLETE** - Proprietary Format Stubs Implementation
 - **Focus**: Add stub classes for proprietary format types (PdfFormat, PlyFormat, Microsoft3MFFormat, DracoFormat, RvmFormat)
 - **Test Results**: All 63 tests passing
 - **Build**: 0 errors, 0 warnings
@@ -392,8 +521,10 @@ The FOSS version is now API-compatible with On-Premise for core functionality. T
 
 ### ToMesh Implementations
 
-Still stub implementations for:
-- Dish - ToMesh(), GetBoundingBox()
+**Implemented**:
+- Dish - ToMesh(), GetBoundingBox() - Full implementation using dome generation algorithm
+
+**Still Stub** (require more complex geometry algorithms):
 - Torus - ToMesh(), GetBoundingBox()
 - RectangularTorus - ToMesh(), GetBoundingBox()
 - Pyramid - ToMesh()
@@ -407,7 +538,23 @@ Still stub implementations for:
 - Build: 0 errors, 0 warnings (after fixes)
 - All 63 tests still passing
 - New files created:
+  - `Aspose.ThreeD.Entities.IIndexedVertexElement.cs` - Interface for indexed vertex elements
   - `Aspose.ThreeD.Profiles.Profile.cs` - Base profile class
   - Updated API signatures for NurbsCurve, NurbsDirection, Line
   - Updated API signatures for LinearExtrusion, RevolvedAreaSolid, SweptAreaSolid
   - Updated API signature for Shape
+  - Implemented Dish.ToMesh() and Dish.GetBoundingBox()
+
+### Commit Status
+- Changes committed: Yes
+- Commit message: "fix: Update API signatures for FOSS compatibility with On-Premise 26.2.0"
+
+### Next Cycle
+- Implement ToMesh for Torus
+- Implement ToMesh for RectangularTorus
+- Implement ToMesh for Pyramid
+- Implement ToMesh for LinearExtrusion
+- Implement ToMesh for RevolvedAreaSolid
+- Implement NurbsCurve.Evaluate and EvaluateAt
+- Implement ToMesh for NurbsSurface
+- Implement ToMesh for SweptAreaSolid
