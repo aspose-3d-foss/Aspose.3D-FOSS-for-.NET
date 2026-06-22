@@ -9,3 +9,4 @@ testdata
 foss.python
 *.dll
 foss-net-progress.md
+*.sh

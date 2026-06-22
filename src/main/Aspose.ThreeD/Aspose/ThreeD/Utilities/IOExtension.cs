@@ -31,17 +31,17 @@ namespace Aspose.ThreeD.Utilities
             writer.Write(mat.m02);
             writer.Write(mat.m03);
             writer.Write(mat.m10);
-            writer.Write(mat.m00);
-            writer.Write(mat.m01);
-            writer.Write(mat.m02);
-            writer.Write(mat.m20);
-            writer.Write(mat.m10);
             writer.Write(mat.m11);
             writer.Write(mat.m12);
-            writer.Write(mat.m30);
+            writer.Write(mat.m13);
             writer.Write(mat.m20);
             writer.Write(mat.m21);
             writer.Write(mat.m22);
+            writer.Write(mat.m23);
+            writer.Write(mat.m30);
+            writer.Write(mat.m31);
+            writer.Write(mat.m32);
+            writer.Write(mat.m33);
         }
 
         public static void Write(BinaryWriter writer, FVector2 v)
