@@ -5,13 +5,13 @@
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyName>Aspose.3D</AssemblyName>
-    <PackageId>Aspose.3D</PackageId>
+    <AssemblyName>Aspose.3D.FOSS</AssemblyName>
+    <PackageId>Aspose.3D.FOSS</PackageId>
     <Version>26.1.0</Version>
     <Authors>Aspose</Authors>
     <Description>FOSS implementation of Aspose.3D for .NET</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/aspose-3d/Aspose.3D-for-.NET</RepositoryUrl>
+    <RepositoryUrl>https://github.com/aspose-3d-foss/Aspose.3D-FOSS-for-.NET</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup />
