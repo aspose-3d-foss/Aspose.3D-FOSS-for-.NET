@@ -28,7 +28,7 @@ For full functionality, consider using [Aspose.3D's commercial On-Premise API](h
 ## Installation
 
 ```bash
-dotnet add package Aspose.3D
+dotnet add package Aspose.3D.FOSS
 ```
 
 ## Quick Start
