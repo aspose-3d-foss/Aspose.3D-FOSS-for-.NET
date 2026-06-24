@@ -12,7 +12,10 @@
     <Description>FOSS implementation of Aspose.3D for .NET</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/aspose-3d-foss/Aspose.3D-FOSS-for-.NET</RepositoryUrl>
+    <PackageIcon>logo.svg</PackageIcon>
   </PropertyGroup>
 
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="logo.svg" Pack="true" PackagePath="\" />
+  </ItemGroup>
 </Project>
