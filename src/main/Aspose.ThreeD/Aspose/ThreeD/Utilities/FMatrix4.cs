@@ -2,7 +2,7 @@ using System;
 
 namespace Aspose.ThreeD.Utilities
 {
-    public struct FMatrix4 : IEquatable<FMatrix4>
+    public struct FMatrix4
     {
         public float m00, m01, m02, m03;
         public float m10, m11, m12, m13;
@@ -65,25 +65,5 @@ namespace Aspose.ThreeD.Utilities
 
         public static FMatrix4 operator *(FMatrix4 lhs, float v) => new FMatrix4(lhs.m00 * v, lhs.m01 * v, lhs.m02 * v, lhs.m03 * v, lhs.m10 * v, lhs.m11 * v, lhs.m12 * v, lhs.m13 * v, lhs.m20 * v, lhs.m21 * v, lhs.m22 * v, lhs.m23 * v, lhs.m30 * v, lhs.m31 * v, lhs.m32 * v, lhs.m33 * v);
         public static FVector3 operator *(FMatrix4 lhs, FVector3 v) => new FVector3(lhs.m00 * v.X + lhs.m01 * v.Y + lhs.m02 * v.Z + lhs.m03, lhs.m10 * v.X + lhs.m11 * v.Y + lhs.m12 * v.Z + lhs.m13, lhs.m20 * v.X + lhs.m21 * v.Y + lhs.m22 * v.Z + lhs.m23);
-        public static FVector4 operator *(FMatrix4 lhs, FVector4 v) => new FVector4(lhs.m00 * v.X + lhs.m01 * v.Y + lhs.m02 * v.Z + lhs.m03 * v.W, lhs.m10 * v.X + lhs.m11 * v.Y + lhs.m12 * v.Z + lhs.m13 * v.W, lhs.m20 * v.X + lhs.m21 * v.Y + lhs.m22 * v.Z + lhs.m23 * v.W, lhs.m30 * v.X + lhs.m31 * v.Y + lhs.m32 * v.Z + lhs.m33 * v.W);
-
-        public static bool operator ==(FMatrix4 left, FMatrix4 right) => left.Equals(right);
-
-        public static bool operator !=(FMatrix4 left, FMatrix4 right) => !left.Equals(right);
-
-        public override bool Equals(object? obj) => obj is FMatrix4 && this == (FMatrix4)obj;
-
-        public bool Equals(FMatrix4 other) => m00 == other.m00 && m01 == other.m01 && m02 == other.m02 && m03 == other.m03 && m10 == other.m10 && m11 == other.m11 && m12 == other.m12 && m13 == other.m13 && m20 == other.m20 && m21 == other.m21 && m22 == other.m22 && m23 == other.m23 && m30 == other.m30 && m31 == other.m31 && m32 == other.m32 && m33 == other.m33;
-
-        public override int GetHashCode()
-        {
-            var h = new HashCode();
-            h.Add(m00); h.Add(m01); h.Add(m02); h.Add(m03);
-            h.Add(m10); h.Add(m11); h.Add(m12); h.Add(m13);
-            h.Add(m20); h.Add(m21); h.Add(m22); h.Add(m23);
-            h.Add(m30); h.Add(m31); h.Add(m32); h.Add(m33);
-            return h.ToHashCode();
-        }
     }
 }
-

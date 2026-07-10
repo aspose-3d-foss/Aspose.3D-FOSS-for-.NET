@@ -9,32 +9,15 @@ namespace Aspose.ThreeD.Entities
     /// </summary>
     public class VertexElementDoublesTemplate : VertexElement, IIndexedVertexElement
     {
-        private List<double> _data;
-        private ArrayList<double> _internalData;
+        internal VertexElementDoublesTemplate()
+        {
+        }
 
         /// <summary>
         /// Gets the vertex data
         /// </summary>
-        public IArrayList<double> Data => _internalData;
-
-        /// <summary>
-        /// Initializes a new instance of the VertexElementDoublesTemplate class.
-        /// </summary>
-        public VertexElementDoublesTemplate()
-            : this(MappingMode.ControlPoint, ReferenceMode.Direct)
-        {
-            _internalData = new ArrayList<double>();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the VertexElementDoublesTemplate class.
-        /// </summary>
-        public VertexElementDoublesTemplate(MappingMode mappingMode, ReferenceMode referenceMode)
-            : base(VertexElementType.Unknown, mappingMode, referenceMode)
-        {
-            _data = new List<double>();
-            _internalData = new ArrayList<double>();
-        }
+        private readonly List<double> _data = new List<double>();
+        public IArrayList<double> Data => new ArrayListAdapter<double>(_data);
 
         /// <summary>
         /// Copies data to specified element
@@ -43,27 +26,24 @@ namespace Aspose.ThreeD.Entities
         {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
-            target._data.AddRange(_data);
-            target._internalData = new ArrayList<double>(_data);
+            foreach (var item in Data)
+            {
+                target.Data.Add(item);
+            }
         }
 
-        /// <summary>
-        /// Sets the data
-        /// </summary>
         public void SetData(double[] data)
         {
-            _data.Clear();
-            _data.AddRange(data);
-            _internalData = new ArrayList<double>(_data);
+            Data.Clear();
+            foreach (var item in data)
+            {
+                Data.Add(item);
+            }
         }
 
-        /// <summary>
-        /// Removes all elements from the direct and the index arrays.
-        /// </summary>
         public override void Clear()
         {
-            _data.Clear();
-            _internalData = new ArrayList<double>();
+            Data.Clear();
             base.Clear();
         }
     }

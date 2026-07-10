@@ -12,7 +12,7 @@ namespace Aspose.ThreeD.Entities
     public class Mesh : Geometry, INamedObject, IEnumerable<int[]>, IEnumerable, IMeshConvertible
     {
         private readonly List<int[]> _polygons;
-        private ArrayList<int> _edges;
+        private List<int> _edges;
 
         /// <summary>
         /// Initializes a new instance of the Mesh class.
@@ -27,13 +27,43 @@ namespace Aspose.ThreeD.Entities
         public Mesh(string name) : base(name)
         {
             _polygons = new List<int[]>();
-            _edges = new ArrayList<int>();
+            _edges = new List<int>();
+        }
+
+        /// <summary>
+        /// Construct a mesh using specified height map, 
+        /// if the height map's pixel format contains multiple components, the first(usually the red) component will be used as the height value(z)
+        /// The control point's x and y components are normalized pixel coordinate.
+        /// </summary>
+        public Mesh(TextureData heightMap) : this("Mesh")
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Construct a mesh using specified height map, 
+        /// if the height map's pixel format contains multiple components, the first(usually the red) component will be used as the height value(z)
+        /// The control point's x and y components are normalized pixel coordinate.
+        /// </summary>
+        public Mesh(TextureData heightMap, Matrix4 transform) : this("Mesh")
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Construct a mesh using specified height map, 
+        /// if the height map's pixel format contains multiple components, the first(usually the red) component will be used as the height value(z)
+        /// The control point's x and y components are normalized pixel coordinate.
+        /// </summary>
+        public Mesh(TextureData heightMap, bool triMesh, Matrix4 transform) : this("Mesh")
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
         /// Gets edges of the Mesh. Edge is optional in mesh, so it can be empty.
         /// </summary>
-        public IArrayList<int> Edges => _edges;
+        public IArrayList<int> Edges => new ArrayListAdapter<int>(_edges);
 
         /// <summary>
         /// Gets the count of polygons
@@ -105,6 +135,28 @@ namespace Aspose.ThreeD.Entities
         }
 
         /// <summary>
+        /// Create a polygon with specified indices
+        /// </summary>
+        public void CreatePolygon(int[] indices, int offset, int length)
+        {
+            if (indices == null)
+                throw new ArgumentNullException(nameof(indices));
+
+            if (offset < 0 || offset >= indices.Length)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+
+            if (length < 3)
+                throw new ArgumentException("Polygon must have at least 3 vertices", nameof(length));
+
+            if (offset + length > indices.Length)
+                throw new ArgumentException("Offset + length exceeds array bounds", nameof(length));
+
+            var polygon = new int[length];
+            Array.Copy(indices, offset, polygon, 0, length);
+            _polygons.Add(polygon);
+        }
+
+        /// <summary>
         /// Gets the Mesh instance from current entity.
         /// </summary>
         public Mesh ToMesh()
@@ -164,12 +216,43 @@ namespace Aspose.ThreeD.Entities
             {
                 result.ControlPoints.Add(cp);
             }
+             foreach (var polygon in tempPolygons)
+             {
+                 result.CreatePolygon(polygon);
+             }
+              return result;
+         }
 
-            foreach (var polygon in tempPolygons)
-            {
-                result.CreatePolygon(polygon);
-            }
-             return result;
-        }
-    }
-}
+         /// <summary>
+         /// Calculate the union of two meshes
+         /// </summary>
+         public static Mesh operator |(Mesh a, Mesh b)
+         {
+             throw new NotImplementedException();
+         }
+
+         /// <summary>
+         /// Calculate the difference of two meshes
+         /// </summary>
+         public static Mesh operator -(Mesh a, Mesh b)
+         {
+             throw new NotImplementedException();
+         }
+
+         /// <summary>
+         /// Calculate the intersection of two meshes
+         /// </summary>
+         public static Mesh operator &(Mesh a, Mesh b)
+         {
+             throw new NotImplementedException();
+         }
+
+         /// <summary>
+         /// Performs boolean operations on meshes
+         /// </summary>
+         public static Mesh DoBoolean(BooleanOperation op, Mesh a, Nullable<Matrix4> transformA, Mesh b, Nullable<Matrix4> transformB)
+         {
+             throw new NotImplementedException();
+         }
+     }
+ }

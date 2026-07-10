@@ -11,7 +11,7 @@ namespace Aspose.ThreeD.Entities;
 /// </summary>
 public class Line : Curve, INamedObject
 {
-    private readonly IArrayList<Vector4> controlPoints;
+    private readonly List<Vector4> controlPoints;
     private bool visible = true;
 
     /// <summary>
@@ -26,13 +26,13 @@ public class Line : Curve, INamedObject
     /// </summary>
     public Line(string name) : base(name)
     {
-        controlPoints = new ArrayList<Vector4>();
+        controlPoints = new List<Vector4>();
     }
 
     /// <summary>
     /// Gets all control points
     /// </summary>
-    public IArrayList<Vector4> ControlPoints => controlPoints;
+    public IArrayList<Vector4> ControlPoints => new ArrayListAdapter<Vector4>(controlPoints);
 
     /// <summary>
     /// Gets or sets if the geometry is visible

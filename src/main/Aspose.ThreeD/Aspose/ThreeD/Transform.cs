@@ -8,6 +8,10 @@ namespace Aspose.ThreeD
     /// </summary>
     public class Transform : A3DObject, INamedObject
     {
+        internal Transform()
+        {
+        }
+
         private Vector3 _translation;
         private Vector3 _scaling;
         private Quaternion _rotation;

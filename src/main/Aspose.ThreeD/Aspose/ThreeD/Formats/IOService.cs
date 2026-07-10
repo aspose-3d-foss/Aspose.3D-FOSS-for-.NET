@@ -25,32 +25,15 @@ internal class IOService
     /// <returns>The detected file format.</returns>
     public static FileFormat DetectFormat(Stream stream, string? fileName)
     {
-        if (stream.CanRead && stream.CanSeek)
-        {
-            var position = stream.Position;
-            try
-            {
-                foreach (var format in FileFormat.Formats)
-                {
-                    if (format.CanDetect(stream, fileName))
-                    {
-                        return format;
-                    }
-                }
-            }
-            finally
-            {
-                stream.Position = position;
-            }
-        }
-
+        // Only use extension-based detection since stream-based detection requires
+        // each format to implement its own CanDetect logic which is not in the On-Premise API
         if (fileName != null)
         {
             var ext = Path.GetExtension(fileName);
             return FileFormat.GetFormatByExtension(ext);
         }
 
-        throw new ArgumentException("Cannot detect file format without file name or stream data");
+        throw new ArgumentException("Cannot detect file format without file name");
     }
 
     /// <summary>

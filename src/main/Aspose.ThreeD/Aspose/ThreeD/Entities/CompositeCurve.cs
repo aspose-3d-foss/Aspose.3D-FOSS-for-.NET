@@ -12,14 +12,7 @@ public class CompositeCurve : Curve, INamedObject
     /// <summary>
     /// Constructor of
     /// </summary>
-    public CompositeCurve() : this("CompositeCurve")
-    {
-    }
-
-    /// <summary>
-    /// Constructor of
-    /// </summary>
-    public CompositeCurve(string name) : base(name)
+    public CompositeCurve() : base("CompositeCurve")
     {
         segments = new List<Segment>();
     }

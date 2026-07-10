@@ -40,7 +40,7 @@ namespace Aspose.ThreeD.Formats
 
         public override SaveOptions CreateSaveOptions()
         {
-            return new GltfSaveOptions();
+            return new GltfSaveOptions(FileFormat.GLTF);
         }
     }
 }

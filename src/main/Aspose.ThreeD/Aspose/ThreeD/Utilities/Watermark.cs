@@ -3,7 +3,7 @@ using Aspose.ThreeD.Entities;
 
 namespace Aspose.ThreeD.Utilities
 {
-    public class Watermark
+    public static class Watermark
     {
         public static Mesh EncodeWatermark(Mesh input, string text)
         {

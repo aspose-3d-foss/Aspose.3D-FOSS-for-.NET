@@ -1,15 +1,10 @@
 namespace Aspose.ThreeD.Entities
 {
     /// <summary>
-    /// Vertex element type
+    /// The type of the vertex element, defined how it will be used in modeling.
     /// </summary>
     public enum VertexElementType
     {
-        /// <summary>
-        /// Unknown type
-        /// </summary>
-        Unknown,
-
         /// <summary>
         /// Vertex normal
         /// </summary>
@@ -36,11 +31,6 @@ namespace Aspose.ThreeD.Entities
         VertexColor,
 
         /// <summary>
-        /// Vertex weight
-        /// </summary>
-        VertexWeight,
-
-        /// <summary>
         /// Edge crease
         /// </summary>
         EdgeCrease,
@@ -49,11 +39,6 @@ namespace Aspose.ThreeD.Entities
         /// Vertex crease
         /// </summary>
         VertexCrease,
-
-        /// <summary>
-        /// Texture coordinate
-        /// </summary>
-        TextureCoordinate,
 
         /// <summary>
         /// Material index
@@ -88,7 +73,12 @@ namespace Aspose.ThreeD.Entities
         /// <summary>
         /// Specular
         /// </summary>
-        Specular
+        Specular,
+
+        /// <summary>
+        /// Weight
+        /// </summary>
+        Weight
     }
 
     /// <summary>
@@ -123,7 +113,7 @@ namespace Aspose.ThreeD.Entities
     }
 
     /// <summary>
-    /// Reference mode
+    /// defines how mapping information is stored and referenced by.
     /// </summary>
     public enum ReferenceMode
     {
@@ -135,11 +125,17 @@ namespace Aspose.ThreeD.Entities
         /// <summary>
         /// Index reference
         /// </summary>
+        Index,
+
+        /// <summary>
+        /// Index to direct
+        /// </summary>
         IndexToDirect
     }
 
     /// <summary>
-    /// Texture mapping
+    /// The texture mapping type for 
+    /// Describes which kind of texture mapping is used.
     /// </summary>
     public enum TextureMapping
     {
@@ -159,16 +155,6 @@ namespace Aspose.ThreeD.Entities
         Diffuse,
 
         /// <summary>
-        /// Specular texture mapping
-        /// </summary>
-        Specular,
-
-        /// <summary>
-        /// Shininess texture mapping
-        /// </summary>
-        Shininess,
-
-        /// <summary>
         /// Opacity texture mapping
         /// </summary>
         Opacity,
@@ -184,9 +170,34 @@ namespace Aspose.ThreeD.Entities
         Normal,
 
         /// <summary>
+        /// Specular texture mapping
+        /// </summary>
+        Specular,
+
+        /// <summary>
+        /// Glow texture mapping
+        /// </summary>
+        Glow,
+
+        /// <summary>
         /// Reflection texture mapping
         /// </summary>
-        Reflection
+        Reflection,
+
+        /// <summary>
+        /// Shadow texture mapping
+        /// </summary>
+        Shadow,
+
+        /// <summary>
+        /// Shininess texture mapping
+        /// </summary>
+        Shininess,
+
+        /// <summary>
+        /// Displacement texture mapping
+        /// </summary>
+        Displacement
     }
 
     /// <summary>
@@ -260,35 +271,33 @@ namespace Aspose.ThreeD.Entities
     }
 
     /// <summary>
-    /// Split mesh policy.
+    /// Share vertex/control point data between sub-meshes or each sub-mesh has its own compacted data.
     /// </summary>
     public enum SplitMeshPolicy
     {
         /// <summary>
-        /// Split by materials
+        /// Clone data for each sub-mesh
         /// </summary>
-        ByMaterials,
+        CloneData,
 
         /// <summary>
-        /// Split by polygons
+        /// Compact data for each sub-mesh
         /// </summary>
-        ByPolygons
+        CompactData
     }
-
     /// <summary>
-    /// Skeleton type.
+    /// 
     /// </summary>
     public enum SkeletonType
     {
         /// <summary>
-        /// Limb node
+        /// Skeleton type
         /// </summary>
-        LimbNode,
+        Skeleton,
 
         /// <summary>
-        /// Root
+        /// Bone type
         /// </summary>
-        Root
+        Bone
     }
-
 }

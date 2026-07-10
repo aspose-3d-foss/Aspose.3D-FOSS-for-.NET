@@ -13,11 +13,6 @@ namespace Aspose.ThreeD
         /// <summary>
         /// Text/ASCII content
         /// </summary>
-        ASCII,
-
-        /// <summary>
-        /// Unknown content type
-        /// </summary>
-        Unknown
+        ASCII
     }
 }

@@ -15,7 +15,7 @@ namespace Aspose.ThreeD
         /// <summary>
         /// Initializes a new instance of the PropertyCollection class.
         /// </summary>
-        public PropertyCollection()
+        internal PropertyCollection()
         {
             _properties = new Dictionary<string, Property>();
             _indexers = new Dictionary<string, object>();
@@ -102,7 +102,7 @@ namespace Aspose.ThreeD
         /// Adds a property to the collection.
         /// </summary>
         /// <param name="property">The property to add.</param>
-        public void Add(Property property)
+        internal void Add(Property property)
         {
             if (property == null)
                 throw new ArgumentNullException(nameof(property));

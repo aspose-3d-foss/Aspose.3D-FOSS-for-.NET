@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Aspose.ThreeD.Utilities;
 
 namespace Aspose.ThreeD.Entities;
@@ -11,7 +12,7 @@ namespace Aspose.ThreeD.Entities;
 /// </summary>
 public class Shape : Geometry, INamedObject
 {
-    private readonly IArrayList<int> indices;
+    private readonly List<int> indices;
 
     /// <summary>
     /// Initializes a new instance of the  class.
@@ -25,13 +26,13 @@ public class Shape : Geometry, INamedObject
     /// </summary>
     public Shape(string name) : base(name)
     {
-        indices = new ArrayList<int>();
+        indices = new List<int>();
     }
 
     /// <summary>
     /// Gets the indices.
     /// </summary>
-    public IArrayList<int> Indices => indices;
+    public IList<int> Indices => indices;
 
     /// <summary>
     /// Creates a shape from control points

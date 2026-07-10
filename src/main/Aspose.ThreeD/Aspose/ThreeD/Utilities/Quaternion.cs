@@ -3,9 +3,9 @@ using System;
 namespace Aspose.ThreeD.Utilities
 {
     /// <summary>
-    /// A quaternion is usually used to represent a rotation in 3D space.
+    /// Quaternion is usually used to perform rotation in computer graphics.
     /// </summary>
-    public struct Quaternion : IEquatable<Quaternion>
+    public struct Quaternion
     {
         public double W;
         public double X;
@@ -27,11 +27,6 @@ namespace Aspose.ThreeD.Utilities
         public bool Equals(object? obj)
         {
             return obj is Quaternion other && W == other.W && X == other.X && Y == other.Y && Z == other.Z;
-        }
-
-        public bool Equals(Quaternion other)
-        {
-            return W == other.W && X == other.X && Y == other.Y && Z == other.Z;
         }
 
         public override int GetHashCode()

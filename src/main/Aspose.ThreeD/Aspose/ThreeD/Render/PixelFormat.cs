@@ -1,0 +1,53 @@
+namespace Aspose.ThreeD.Render
+{
+    /// <summary>
+    /// The pixel's format used in texture unit.
+    /// </summary>
+    public enum PixelFormat
+    {
+        Unknown,
+        L8,
+        L16,
+        A8,
+        A4L4,
+        BYTE_LA,
+        R5G6B5,
+        B5G6R5,
+        R3G3B2,
+        A4R4G4B4,
+        A1R5G5B5,
+        R8G8B8,
+        B8G8R8,
+        A8R8G8B8,
+        A8B8G8R8,
+        B8G8R8A8,
+        R8G8B8A8,
+        X8R8G8B8,
+        X8B8G8R8,
+        A2R10G10B10,
+        A2B10G10R10,
+        DXT1,
+        DXT2,
+        DXT3,
+        DXT4,
+        DXT5,
+        FLOAT16_R,
+        FLOAT16_RGB,
+        FLOAT16_RGBA,
+        FLOAT32_R,
+        FLOAT32_RGB,
+        FLOAT32_RGBA,
+        FLOAT16_GR,
+        FLOAT32_GR,
+        DEPTH,
+        SHORT_RGBA,
+        SHORT_GR,
+        SHORT_RGB,
+        R32_UINT,
+        R32G32_UINT,
+        R32G32B32A32_UINT,
+        R8,
+        G8,
+        B8,
+    }
+}

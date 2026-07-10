@@ -590,13 +590,15 @@ namespace Aspose.ThreeD.Formats
                             int[] indices = new int[uvCount];
                             
                             // Add UV data and indices
+                            var uvList = new List<Vector2>(uvCount);
                             for (int i = 0; i < uvCount; i++)
                             {
                                 var u = (float)uvCoords[i * 2];
                                 var v = (float)uvCoords[i * 2 + 1];
-                                uvDataElement.Data.Add(new FVector2(u, v));
+                                uvList.Add(new Vector2(u, v));
                                 indices[i] = i;
                             }
+                            uvDataElement.AddData(uvList);
                             
                             uvDataElement.SetIndices(indices);
                         }

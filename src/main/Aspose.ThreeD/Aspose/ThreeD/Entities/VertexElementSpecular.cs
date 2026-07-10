@@ -13,16 +13,10 @@ namespace Aspose.ThreeD.Entities
         /// Initializes a new instance of the VertexElementSpecular class.
         /// </summary>
         public VertexElementSpecular()
-            : this(MappingMode.ControlPoint, ReferenceMode.Direct)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the VertexElementSpecular class.
-        /// </summary>
-        public VertexElementSpecular(MappingMode mappingMode, ReferenceMode referenceMode)
-            : base(mappingMode, referenceMode)
-        {
+            _type = VertexElementType.Specular;
+            _indices = new List<int>();
+            Name = string.Empty;
         }
     }
 }

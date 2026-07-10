@@ -1,10 +1,12 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Aspose.ThreeD.Entities;
 
 namespace Aspose.ThreeD.Utilities
 {
-    public sealed class VertexDeclaration : IEnumerable<VertexField>, IEquatable<VertexDeclaration>, IComparable<VertexDeclaration>
+    public sealed class VertexDeclaration : IEnumerable<VertexField>, IEnumerable, IComparable<VertexDeclaration>
     {
         private List<VertexField> _fields;
         private bool _sealed;
@@ -19,7 +21,7 @@ namespace Aspose.ThreeD.Utilities
 
         public int Count => _fields.Count;
 
-        public VertexField this[int index] => _fields[index];
+        public VertexField Item => _fields[0];
 
         public int Size => _fields.Count > 0 ? _fields[_fields.Count - 1].Offset + _fields[_fields.Count - 1].Size : 0;
 
@@ -33,7 +35,8 @@ namespace Aspose.ThreeD.Utilities
         public VertexField AddField(VertexFieldDataType dataType, VertexFieldSemantic semantic, int index, string alias)
         {
             if (_sealed)
-                throw new InvalidOperationException("VertexDeclaration is sealed and cannot be modified");
+                throw new InvalidOperationException(
+                    "VertexDeclaration is sealed and cannot be modified");
 
             int offset = Size;
             int size = GetFieldSize(dataType);
@@ -63,6 +66,22 @@ namespace Aspose.ThreeD.Utilities
             };
         }
 
+        public static VertexDeclaration FromType()
+        {
+            var decl = new VertexDeclaration();
+            decl.AddField(VertexFieldDataType.Float, VertexFieldSemantic.Position, 0, "Position");
+            return decl;
+        }
+
+        public static VertexDeclaration FromGeometry(Geometry geometry, bool useFloat)
+        {
+            var decl = new VertexDeclaration();
+            decl.AddField(VertexFieldDataType.FVector3, VertexFieldSemantic.Position, 0, "Position");
+            decl.AddField(VertexFieldDataType.FVector3, VertexFieldSemantic.Normal, 0, "Normal");
+            decl.AddField(VertexFieldDataType.FVector2, VertexFieldSemantic.UV, 0, "TexCoord");
+            return decl;
+        }
+
         public override int GetHashCode()
         {
             var hash = new HashCode();
@@ -76,20 +95,6 @@ namespace Aspose.ThreeD.Utilities
         public bool Equals(object? obj)
         {
             return obj is VertexDeclaration other && Equals(other);
-        }
-
-        public bool Equals(VertexDeclaration other)
-        {
-            if (_fields.Count != other._fields.Count)
-                return false;
-
-            for (int i = 0; i < _fields.Count; i++)
-            {
-                if (!_fields[i].Equals(other._fields[i]))
-                    return false;
-            }
-
-            return true;
         }
 
         public int CompareTo(VertexDeclaration other)

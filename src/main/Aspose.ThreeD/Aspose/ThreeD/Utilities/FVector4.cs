@@ -33,14 +33,6 @@ namespace Aspose.ThreeD.Utilities
             W = 1.0f;
         }
 
-        public FVector4(FVector3 xyz)
-        {
-            X = xyz.X;
-            Y = xyz.Y;
-            Z = xyz.Z;
-            W = 1.0f;
-        }
-
         public FVector4(Vector4 vec)
         {
             X = (float)vec.X;

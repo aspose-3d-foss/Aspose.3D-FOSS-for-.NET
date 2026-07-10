@@ -2,7 +2,7 @@ using System;
 
 namespace Aspose.ThreeD.Utilities
 {
-    public class MathUtils
+    public static class MathUtils
     {
         public static Vector3 CalcNormal(Vector3[] points)
         {

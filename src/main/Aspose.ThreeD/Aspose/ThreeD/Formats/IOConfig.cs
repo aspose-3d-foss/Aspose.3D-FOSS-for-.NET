@@ -12,6 +12,10 @@ namespace Aspose.ThreeD.Formats
     /// </summary>
     public class IOConfig
     {
+        internal IOConfig()
+        {
+        }
+
         /// <summary>
         /// Gets or sets the factory class for FileSystem.
         /// The default factory will create FileSystem which is not suitable for server environment.
@@ -22,7 +26,7 @@ namespace Aspose.ThreeD.Formats
         /// <summary>
         /// Gets the file format that specified in current Save/Load option.
         /// </summary>
-        public FileFormat FileFormat { get; internal set; }
+        public FileFormat FileFormat { get; }
 
         /// <summary>
         /// Gets or sets the default encoding for text-based files.
@@ -46,13 +50,7 @@ namespace Aspose.ThreeD.Formats
         /// </summary>
         public string FileName { get; set; }
 
-        /// <summary>
-        /// Initializes a new instance of the IOConfig class
-        /// </summary>
-        public IOConfig()
-        {
-            LookupPaths = new List<string>();
-        }
+
     }
 
     /// <summary>
@@ -60,11 +58,5 @@ namespace Aspose.ThreeD.Formats
     /// This can be a security issue in server environment.
     /// Use your own FileSystemFactory to create FileSystem to improve server side security.
     /// </summary>
-    public class FileSystemFactory
-    {
-        public FileSystem Invoke()
-        {
-            return null;
-        }
-    }
+    public delegate FileSystem FileSystemFactory();
 }

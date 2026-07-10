@@ -8,18 +8,6 @@ namespace Aspose.ThreeD.Utilities
     /// </summary>
     public struct BoundingBox
     {
-        /// <summary>
-        /// The null bounding box
-        /// </summary>
-        public static readonly BoundingBox Null = new BoundingBox(Vector3.Zero, Vector3.Zero);
-
-        /// <summary>
-        /// The infinite bounding box
-        /// </summary>
-        public static readonly BoundingBox Infinite = new BoundingBox(
-            new Vector3(double.NegativeInfinity, double.NegativeInfinity, double.NegativeInfinity),
-            new Vector3(double.PositiveInfinity, double.PositiveInfinity, double.PositiveInfinity));
-
         private Vector3 _minimum;
         private Vector3 _maximum;
 
@@ -30,6 +18,24 @@ namespace Aspose.ThreeD.Utilities
         {
             _minimum = minimum;
             _maximum = maximum;
+        }
+
+        /// <summary>
+        /// The null bounding box
+        /// </summary>
+        public static BoundingBox Null
+        {
+            get => new BoundingBox(Vector3.Zero, Vector3.Zero);
+        }
+
+        /// <summary>
+        /// The infinite bounding box
+        /// </summary>
+        public static BoundingBox Infinite
+        {
+            get => new BoundingBox(
+                new Vector3(double.NegativeInfinity, double.NegativeInfinity, double.NegativeInfinity),
+                new Vector3(double.PositiveInfinity, double.PositiveInfinity, double.PositiveInfinity));
         }
 
         /// <summary>
@@ -255,9 +261,5 @@ namespace Aspose.ThreeD.Utilities
         /// <summary>
         /// Check if two bounding boxes are equal
         /// </summary>
-        public bool Equals(BoundingBox other)
-        {
-            return _minimum.Equals(other._minimum) && _maximum.Equals(other._maximum);
-        }
     }
 }

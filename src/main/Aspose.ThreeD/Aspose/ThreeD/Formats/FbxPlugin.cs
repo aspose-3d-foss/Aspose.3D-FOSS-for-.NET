@@ -40,7 +40,7 @@ namespace Aspose.ThreeD.Formats
 
         public override SaveOptions CreateSaveOptions()
         {
-            return new FbxSaveOptions();
+            return new FbxSaveOptions(FileContentType.Binary);
         }
     }
 }

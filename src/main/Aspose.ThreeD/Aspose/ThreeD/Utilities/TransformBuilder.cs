@@ -52,13 +52,11 @@ namespace Aspose.ThreeD.Utilities
             _matrix = m * _matrix;
             return this;
         }
-
-        public TransformBuilder Rearrange(Axis newX, Axis newY, Axis newZ)
-        {
-            Matrix4 rearrange = Matrix4.Identity;
-            return this;
-        }
-
+         public TransformBuilder Rearrange(Aspose.ThreeD.Axis newX, Aspose.ThreeD.Axis newY, Aspose.ThreeD.Axis newZ)
+         {
+             Matrix4 rearrange = Matrix4.Identity;
+             return this;
+         }
         public TransformBuilder Scale(double s)
         {
             return Scale(s, s, s);
@@ -167,15 +165,6 @@ namespace Aspose.ThreeD.Utilities
                 default:
                     throw new ArgumentException("Unknown rotation order");
             }
-
-            Compose(combined);
         }
-    }
-
-    public enum Axis
-    {
-        X,
-        Y,
-        Z
     }
 }

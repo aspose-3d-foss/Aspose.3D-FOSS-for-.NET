@@ -84,4 +84,32 @@ namespace Aspose.ThreeD.Entities
         public double ReadDouble(int idx, VertexField field) => throw new NotImplementedException();
         public float ReadFloat(int idx, VertexField field) => throw new NotImplementedException();
     }
+
+    /// <summary>
+    /// Generic version of TriMesh for user's static-defined vertex type
+    /// </summary>
+    public class TriMesh<T> : TriMesh, INamedObject, IEnumerable<Vertex>, IEnumerable where T : struct
+    {
+        /// <summary>
+        /// Initialize an instance of
+        /// </summary>
+        public TriMesh(string name) : base(name, CreateVertexDeclaration<T>())
+        {
+        }
+
+        private static VertexDeclaration CreateVertexDeclaration<T>()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Create a TriMesh from given mesh object with automatically generated vertex layout.
+        /// </summary>
+        public static TriMesh<T> FromMesh(Mesh mesh) => throw new NotImplementedException();
+
+        /// <summary>
+        /// Convert the vertices data to typed array
+        /// </summary>
+        public T[] VerticesToTypedArray() => throw new NotImplementedException();
+    }
 }

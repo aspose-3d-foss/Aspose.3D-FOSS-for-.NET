@@ -12,9 +12,9 @@ namespace Aspose.ThreeD.Entities
     /// </summary>
     public class NurbsCurve : Curve, INamedObject
     {
-        private readonly IArrayList<Vector4> _controlPoints;
-        private readonly IArrayList<int> _multiplicity;
-        private readonly IArrayList<double> _knotVectors;
+        private readonly List<Vector4> _controlPoints;
+        private readonly List<int> _multiplicity;
+        private readonly List<double> _knotVectors;
         private int _order;
         private NurbsType _curveType;
         private CurveDimension _dimension;
@@ -33,9 +33,9 @@ namespace Aspose.ThreeD.Entities
         /// <param name="name">The name of the NurbsCurve</param>
         public NurbsCurve(string name) : base(name)
         {
-            _controlPoints = new ArrayList<Vector4>();
-            _multiplicity = new ArrayList<int>();
-            _knotVectors = new ArrayList<double>();
+            _controlPoints = new List<Vector4>();
+            _multiplicity = new List<int>();
+            _knotVectors = new List<double>();
             _order = 2;
             _dimension = CurveDimension.ThreeDimensional;
             _curveType = NurbsType.Open;
@@ -45,12 +45,13 @@ namespace Aspose.ThreeD.Entities
         /// <summary>
         /// Gets all control points
         /// </summary>
-        public IArrayList<Vector4> ControlPoints => _controlPoints;
+        public IArrayList<Vector4> ControlPoints => new ArrayListAdapter<Vector4>(_controlPoints);
 
         /// <summary>
         /// Gets the multiplicity.
         /// </summary>
-        public IArrayList<int> Multiplicity => _multiplicity;
+        public IArrayList<int> Multiplicity => new ArrayListAdapter<int>(_multiplicity);
+
         /// <summary>
         /// Gets or sets the order of a NURBS curve, it defines the number of nearby control points that influence any given point on the curve.
         /// </summary>
@@ -89,7 +90,7 @@ namespace Aspose.ThreeD.Entities
         /// <summary>
         /// Gets the knot vector, it is a sequence of parameter values that determines where and how the control points affect the NURBS curve.
         /// </summary>
-        public IArrayList<double> KnotVectors => _knotVectors;
+        public IArrayList<double> KnotVectors => new ArrayListAdapter<double>(_knotVectors);
         /// <summary>
         /// Gets or sets whether it is rational, this value indicates whether this  is rational spline or non-rational spline.
         /// Non-rational B-spline is a special case of rational B-splines.

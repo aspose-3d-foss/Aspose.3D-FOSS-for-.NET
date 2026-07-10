@@ -11,7 +11,7 @@ namespace Aspose.ThreeD.Formats
     /// </summary>
     public class Microsoft3MFFormat : FileFormat
     {
-        public Microsoft3MFFormat() : base(
+        internal Microsoft3MFFormat() : base(
             "3mf",
             new[] { "3mf" },
             new Version(1, 0),

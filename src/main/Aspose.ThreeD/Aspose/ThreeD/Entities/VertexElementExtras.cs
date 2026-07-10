@@ -1,57 +1,46 @@
 using System;
 using System.Collections.Generic;
+using Aspose.ThreeD.Entities;
 using Aspose.ThreeD.Utilities;
 
 namespace Aspose.ThreeD.Entities
 {
-    public class VertexElementNormal : VertexElement
+    public class VertexElementNormal : VertexElementFVector, IIndexedVertexElement
     {
-        private readonly List<Vector4> _normals;
-
-        public VertexElementNormal() : this(MappingMode.ControlPoint, ReferenceMode.Direct)
+        /// <summary>
+        /// Initializes a new instance of the VertexElementNormal class.
+        /// </summary>
+        public VertexElementNormal()
         {
+            _type = VertexElementType.Normal;
+            _indices = new List<int>();
+            Name = string.Empty;
         }
-
-        public VertexElementNormal(MappingMode mappingMode, ReferenceMode referenceMode) 
-            : base(VertexElementType.Normal, mappingMode, referenceMode)
-        {
-            _normals = new List<Vector4>();
-        }
-
-        public List<Vector4> Normals => _normals;
     }
 
-    public class VertexElementTangent : VertexElement
+    public class VertexElementTangent : VertexElementFVector, IIndexedVertexElement
     {
-        private readonly List<Vector4> _tangents;
-
-        public VertexElementTangent() : this(MappingMode.ControlPoint, ReferenceMode.Direct)
+        /// <summary>
+        /// Initializes a new instance of the VertexElementTangent class.
+        /// </summary>
+        public VertexElementTangent()
         {
+            _type = VertexElementType.Tangent;
+            _indices = new List<int>();
+            Name = string.Empty;
         }
-
-        public VertexElementTangent(MappingMode mappingMode, ReferenceMode referenceMode) 
-            : base(VertexElementType.Tangent, mappingMode, referenceMode)
-        {
-            _tangents = new List<Vector4>();
-        }
-
-        public List<Vector4> Tangents => _tangents;
     }
 
-    public class VertexElementBinormal : VertexElement
+    public class VertexElementBinormal : VertexElementFVector, IIndexedVertexElement
     {
-        private readonly List<Vector4> _binormals;
-
-        public VertexElementBinormal() : this(MappingMode.ControlPoint, ReferenceMode.Direct)
+        /// <summary>
+        /// Initializes a new instance of the VertexElementBinormal class.
+        /// </summary>
+        public VertexElementBinormal()
         {
+            _type = VertexElementType.Binormal;
+            _indices = new List<int>();
+            Name = string.Empty;
         }
-
-        public VertexElementBinormal(MappingMode mappingMode, ReferenceMode referenceMode) 
-            : base(VertexElementType.Binormal, mappingMode, referenceMode)
-        {
-            _binormals = new List<Vector4>();
-        }
-
-        public List<Vector4> Binormals => _binormals;
     }
 }

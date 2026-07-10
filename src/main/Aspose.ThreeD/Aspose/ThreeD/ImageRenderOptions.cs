@@ -6,15 +6,15 @@ using Aspose.ThreeD.Formats;
 namespace Aspose.ThreeD
 {
     /// <summary>
-    /// Image render options
+    /// Options for  and
     /// </summary>
-    public class ImageRenderOptions : SaveOptions
+    public class ImageRenderOptions : A3DObject, INamedObject
     {
         private Vector3 _backgroundColor;
         private List<string> _assetDirectories;
 
         /// <summary>
-        /// Initializes a new instance of the ImageRenderOptions class
+        /// Initialize an instance of
         /// </summary>
         public ImageRenderOptions()
         {
@@ -22,7 +22,7 @@ namespace Aspose.ThreeD
         }
 
         /// <summary>
-        /// Gets or sets the background color
+        /// The background color of the render result.
         /// </summary>
         public Vector3 BackgroundColor
         {
@@ -31,18 +31,17 @@ namespace Aspose.ThreeD
         }
 
         /// <summary>
-        /// Gets the asset directories
+        /// Directories that stored external assets(like textures)
         /// </summary>
-        public List<string> AssetDirectories => _assetDirectories;
+        public List<string> AssetDirectories
+        {
+            get => _assetDirectories;
+            set => _assetDirectories = value;
+        }
 
         /// <summary>
-        /// Gets or sets a value indicating whether shadows are enabled
+        /// Gets or sets whether to render shadows.
         /// </summary>
         public bool EnableShadows { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name
-        /// </summary>
-        public string Name { get; set; } = string.Empty;
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Aspose.ThreeD.Utilities;
 
 namespace Aspose.ThreeD.Entities
 {
@@ -24,16 +25,10 @@ namespace Aspose.ThreeD.Entities
         /// Initializes a new instance of the VertexElementUserData class.
         /// </summary>
         public VertexElementUserData()
-            : this(MappingMode.AllSame, ReferenceMode.Direct)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the VertexElementUserData class.
-        /// </summary>
-        public VertexElementUserData(MappingMode mappingMode, ReferenceMode referenceMode)
-            : base(VertexElementType.Unknown, mappingMode, referenceMode)
-        {
+            _type = VertexElementType.UserData;
+            _indices = new List<int>();
+            Name = string.Empty;
         }
 
         /// <summary>

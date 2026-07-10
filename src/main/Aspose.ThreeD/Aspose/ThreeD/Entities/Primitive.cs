@@ -6,10 +6,28 @@ namespace Aspose.ThreeD.Entities
     public abstract class Primitive : Geometry, INamedObject, IMeshConvertible
     {
         /// <summary>
-        /// Initializes a new instance of the Primitive class.
+        /// Initializes a new instance of the  class.
         /// </summary>
-        protected Primitive(string name) : base(name)
+        public Primitive(string name) : base(name)
         {
+        }
+
+        /// <summary>
+        /// Gets or sets whether this geometry can cast shadow
+        /// </summary>
+        public new bool CastShadows
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets whether this geometry can receive shadow.
+        /// </summary>
+        public new bool ReceiveShadows
+        {
+            get;
+            set;
         }
 
         /// <summary>

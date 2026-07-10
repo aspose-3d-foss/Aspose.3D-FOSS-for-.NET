@@ -5,6 +5,7 @@ using System.Threading;
 using Aspose.ThreeD.Utilities;
 using Aspose.ThreeD.Formats;
 using Aspose.ThreeD.Animation;
+using Aspose.ThreeD.Render;
 
 namespace Aspose.ThreeD
 {
@@ -190,47 +191,22 @@ namespace Aspose.ThreeD
         }
 
         /// <summary>
-        /// Opens the scene from given stream using detected file format.
+        /// Opens the scene from given stream.
         /// </summary>
         public void Open(Stream stream)
         {
             var format = FileFormat.Detect(stream, null);
-            Open(stream, format.CreateLoadOptions());
+            var options = format.CreateLoadOptions();
+            Open(stream, options, CancellationToken.None);
         }
 
         /// <summary>
-        /// Opens the scene from given stream using detected file format.
+        /// Opens the scene from given stream.
         /// </summary>
         public void Open(Stream stream, CancellationToken cancellationToken)
         {
             var format = FileFormat.Detect(stream, null);
-            Open(stream, format.CreateLoadOptions(), cancellationToken);
-        }
-
-        /// <summary>
-        /// Opens the scene from given stream using detected file format based on filename header.
-        /// </summary>
-        public void Open(Stream stream, string fileName)
-        {
-            var format = FileFormat.Detect(stream, fileName);
-            Open(stream, format.CreateLoadOptions());
-        }
-
-        /// <summary>
-        /// Opens the scene from given stream using detected file format based on filename header.
-        /// </summary>
-        public void Open(Stream stream, string fileName, CancellationToken cancellationToken)
-        {
-            var format = FileFormat.Detect(stream, fileName);
-            Open(stream, format.CreateLoadOptions(), cancellationToken);
-        }
-
-        /// <summary>
-        /// Opens the scene from given stream using specified IO config.
-        /// </summary>
-        public void Open(Stream stream, LoadOptions options)
-        {
-            var cancellationToken = CancellationToken.None;
+            var options = format.CreateLoadOptions();
             Open(stream, options, cancellationToken);
         }
 
@@ -239,7 +215,8 @@ namespace Aspose.ThreeD
         /// </summary>
         public void Open(string fileName, FileFormat format, CancellationToken cancellationToken)
         {
-            Open(fileName, format);
+            var options = format.CreateLoadOptions();
+            Open(fileName, options, cancellationToken);
         }
 
         /// <summary>
@@ -289,14 +266,6 @@ namespace Aspose.ThreeD
         public void Open(string fileName)
         {
             var format = FileFormat.GetFormatByExtension(Path.GetExtension(fileName));
-            Open(fileName, format.CreateLoadOptions());
-        }
-
-        /// <summary>
-        /// Opens the scene from given path using specified file format.
-        /// </summary>
-        public void Open(string fileName, FileFormat format)
-        {
             Open(fileName, format.CreateLoadOptions());
         }
 
@@ -512,25 +481,29 @@ namespace Aspose.ThreeD
             throw new NotImplementedException(
                 "This feature is not available in the FOSS version. " +
                 "Consider using Aspose.3D's commercial On-Premise API for full functionality.");
-        }
-        /// \u003Csummary>
+        }        /// <summary>
         /// Render the scene into bitmap from given camera's perspective.
-        /// \u003C/summary>
-        public void Render(Entities.Camera camera, object bitmap)
+        /// </summary>
+        public void Render(Entities.Camera camera, TextureData bitmap)
         {
             throw new NotImplementedException(
                 "This feature is not available in the FOSS version. " +
                 "Consider using Aspose.3D's commercial On-Premise API for full functionality.");
         }
 
-        /// \u003Csummary>
+        /// <summary>
         /// Render the scene into bitmap from given camera's perspective.
-        /// \u003C/summary>
-        public void Render(Entities.Camera camera, object bitmap, ImageRenderOptions options)
+        /// </summary>
+        public void Render(Entities.Camera camera, TextureData bitmap, ImageRenderOptions options)
         {
             throw new NotImplementedException(
                 "This feature is not available in the FOSS version. " +
                 "Consider using Aspose.3D's commercial On-Premise API for full functionality.");
         }
+
+        /// <summary>
+        /// Version of the Aspose.3D library.
+        /// </summary>
+        public const string Version = "FOSS";
     }
 }

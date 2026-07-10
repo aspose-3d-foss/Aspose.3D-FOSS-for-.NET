@@ -2,7 +2,7 @@ using System;
 
 namespace Aspose.ThreeD.Utilities
 {
-    public class VertexField : IComparable<VertexField>, IEquatable<VertexField>
+    public class VertexField : IComparable<VertexField>
     {
         private VertexFieldDataType _dataType;
         private VertexFieldSemantic _semantic;
@@ -11,7 +11,13 @@ namespace Aspose.ThreeD.Utilities
         private int _offset;
         private int _size;
 
-        public VertexField(VertexFieldDataType dataType, VertexFieldSemantic semantic, int index, string alias, int offset, int size)
+        // Internal parameterless constructor (matches On-Premise)
+        internal VertexField()
+        {
+        }
+
+        // Internal 6-parameter constructor for internal use
+        internal VertexField(VertexFieldDataType dataType, VertexFieldSemantic semantic, int index, string alias, int offset, int size)
         {
             _dataType = dataType;
             _semantic = semantic;
@@ -41,16 +47,6 @@ namespace Aspose.ThreeD.Utilities
         public bool Equals(object? obj)
         {
             return obj is VertexField other && Equals(other);
-        }
-
-        public bool Equals(VertexField other)
-        {
-            return _dataType == other._dataType &&
-                   _semantic == other._semantic &&
-                   _index == other._index &&
-                   _alias == other._alias &&
-                   _offset == other._offset &&
-                   _size == other._size;
         }
 
         public int CompareTo(VertexField other)

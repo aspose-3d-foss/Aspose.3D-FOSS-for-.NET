@@ -9,32 +9,15 @@ namespace Aspose.ThreeD.Entities
     /// </summary>
     public class VertexElementIntsTemplate : VertexElement, IIndexedVertexElement
     {
-        private List<int> _data;
-        private ArrayList<int> _internalData;
+        internal VertexElementIntsTemplate()
+        {
+        }
 
         /// <summary>
         /// Gets the vertex data
         /// </summary>
-        public IArrayList<int> Data => _internalData;
-
-        /// <summary>
-        /// Initializes a new instance of the VertexElementIntsTemplate class.
-        /// </summary>
-        public VertexElementIntsTemplate()
-            : this(MappingMode.ControlPoint, ReferenceMode.Direct)
-        {
-            _internalData = new ArrayList<int>();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the VertexElementIntsTemplate class.
-        /// </summary>
-        public VertexElementIntsTemplate(MappingMode mappingMode, ReferenceMode referenceMode)
-            : base(VertexElementType.Unknown, mappingMode, referenceMode)
-        {
-            _data = new List<int>();
-            _internalData = new ArrayList<int>();
-        }
+        private readonly List<int> _data = new List<int>();
+        public IArrayList<int> Data => new ArrayListAdapter<int>(_data);
 
         /// <summary>
         /// Copies data to specified element
@@ -43,8 +26,10 @@ namespace Aspose.ThreeD.Entities
         {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
-            target._data.AddRange(_data);
-            target._internalData = new ArrayList<int>(_data);
+            foreach (var item in Data)
+            {
+                target.Data.Add(item);
+            }
         }
 
         /// <summary>
@@ -52,9 +37,11 @@ namespace Aspose.ThreeD.Entities
         /// </summary>
         public void SetData(int[] data)
         {
-            _data.Clear();
-            _data.AddRange(data);
-            _internalData = new ArrayList<int>(_data);
+            Data.Clear();
+            foreach (var item in data)
+            {
+                Data.Add(item);
+            }
         }
 
         /// <summary>
@@ -62,8 +49,7 @@ namespace Aspose.ThreeD.Entities
         /// </summary>
         public override void Clear()
         {
-            _data.Clear();
-            _internalData = new ArrayList<int>();
+            Data.Clear();
             base.Clear();
         }
     }

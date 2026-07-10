@@ -5,8 +5,6 @@ namespace Aspose.ThreeD.Entities
 {
     /// <summary>
     /// The Skeleton is mainly used by CAD software to help designer to manipulate the transformation of skeletal structure, it's usually useless outside the CAD softwares.
-    /// To make the skeleton hierarchy acts like one object in CAD software, it's necessary to mark the top Skeleton node as the root one by setting Type to Root,
-    /// and all children set to LimbNode
     /// </summary>
     public class Skeleton : Entity, INamedObject
     {
@@ -16,7 +14,7 @@ namespace Aspose.ThreeD.Entities
         /// <summary>
         /// Initializes a new instance of the Skeleton class.
         /// </summary>
-        public Skeleton() : this("Skeleton", SkeletonType.LimbNode)
+        public Skeleton() : this("Skeleton", SkeletonType.Skeleton)
         {
         }
 
@@ -24,7 +22,7 @@ namespace Aspose.ThreeD.Entities
         /// Initializes a new instance of the Skeleton class.
         /// </summary>
         /// <param name="name">Entity name</param>
-        public Skeleton(string name) : this(name, SkeletonType.LimbNode)
+        public Skeleton(string name) : this(name, SkeletonType.Skeleton)
         {
         }
 

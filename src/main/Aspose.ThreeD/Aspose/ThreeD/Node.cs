@@ -365,5 +365,18 @@ namespace Aspose.ThreeD
         {
             return $"Node: {Name}";
         }
+
+        /// <summary>
+        /// Gets the first entity that matches the specified type T.
+        /// </summary>
+        public T GetEntity<T>() where T : Entity
+        {
+            foreach (var entity in _entities)
+            {
+                if (entity is T result)
+                    return result;
+            }
+            return null!;
+        }
     }
 }

@@ -40,20 +40,18 @@ namespace Aspose.ThreeD.Shading
         /// <summary>
         /// Initializes a new instance of the Material class.
         /// </summary>
-        public Material() : base()
+        internal Material() : base()
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the Material class.
         /// </summary>
-        public Material(string name) : base(name)
+        internal Material(string name) : base(name)
         {
         }
 
-        /// <summary>
-        /// Gets the texture from the specified slot, it can be material's property name or shader's parameter name.
-        /// </summary>
+        /// <summary>        /// </summary>
         public TextureBase GetTexture(string slotName)
         {
             _textures.TryGetValue(slotName, out var texture);

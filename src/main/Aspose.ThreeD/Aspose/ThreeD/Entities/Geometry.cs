@@ -16,40 +16,43 @@ namespace Aspose.ThreeD.Entities
         public static VertexElement Create(VertexElementType type)
         {
             return Create(type, MappingMode.ControlPoint, ReferenceMode.Direct);
+        }        /// <summary>
+        /// Creates a vertex element based on type with mapping and reference modes
+        /// </summary>
+        public static VertexElement Create(VertexElementType type, MappingMode mappingMode, ReferenceMode referenceMode)
+        {
+            switch (type)
+            {
+                case VertexElementType.Normal:
+                    return new VertexElementNormal();
+
+                case VertexElementType.Binormal:
+                    return new VertexElementBinormal();
+
+                case VertexElementType.Tangent:
+                    return new VertexElementTangent();
+
+                case VertexElementType.UV:
+                    return new VertexElementUV();
+
+                case VertexElementType.VertexColor:
+                    return new VertexElementVertexColor();
+
+                case VertexElementType.Material:
+                    return new VertexElementMaterial();
+
+                default:
+                    throw new ArgumentException($"Unsupported vertex element type: {type}");
+            }
         }
-         /// <summary>
-         /// Creates a vertex element based on type with mapping and reference modes
-         /// </summary>
-         public static VertexElement Create(VertexElementType type, MappingMode mappingMode, ReferenceMode referenceMode)
-         {
-             switch (type)
-             {
-                 case VertexElementType.Normal:
-                 case VertexElementType.Binormal:
-                 case VertexElementType.Tangent:
-                     return new VertexElementFVector(mappingMode, referenceMode);
-
-                 case VertexElementType.UV:
-                     return new VertexElementUV(TextureMapping.Diffuse, mappingMode, referenceMode);
-
-                 case VertexElementType.VertexColor:
-                     return new VertexElementVertexColor(mappingMode, referenceMode);
-
-                 case VertexElementType.Material:
-                     return new VertexElementMaterial(mappingMode, referenceMode);
-
-                 default:
-                     throw new ArgumentException($"Unsupported vertex element type: {type}");
-             }
-         }    }
-
+    }
     /// <summary>
     /// The base class of all renderable geometric objects (like Mesh, Box, Cylinder and etc.).
     /// </summary>
     public abstract class Geometry : Entity
     {         private readonly List<Deformer> _deformers;
          private readonly List<VertexElement> _vertexElements;
-         private ArrayList<Vector4> _controlPoints;
+         private List<Vector4> _controlPoints;
          private bool _visible;
          private bool _castShadows;
          private bool _receiveShadows;
@@ -60,7 +63,7 @@ namespace Aspose.ThreeD.Entities
         {
             _deformers = new List<Deformer>();
             _vertexElements = new List<VertexElement>();
-            _controlPoints = new ArrayList<Vector4>();
+            _controlPoints = new List<Vector4>();
             _visible = true;
             _castShadows = true;
             _receiveShadows = true;
@@ -82,7 +85,7 @@ namespace Aspose.ThreeD.Entities
          /// <summary>
          /// Gets all control points
          /// </summary>
-         public IArrayList<Vector4> ControlPoints => _controlPoints;
+         public IArrayList<Vector4> ControlPoints => new ArrayListAdapter<Vector4>(_controlPoints);
         /// <summary>
         /// Gets or sets whether this geometry can cast shadow
         /// </summary>
@@ -109,9 +112,9 @@ namespace Aspose.ThreeD.Entities
         /// <summary>
         /// Gets all deformers
         /// </summary>
-        public ICollection<Deformer> GetDeformers()
+        public ICollection<T> GetDeformers<T>()
         {
-            return _deformers;
+            return (ICollection<T>)_deformers;
         }
 
         /// <summary>
@@ -134,7 +137,7 @@ namespace Aspose.ThreeD.Entities
         {
             foreach (var element in _vertexElements)
             {
-                if (element is VertexElementUV uv && uv.Mapping == textureMapping)
+                if (element is VertexElementUV uv && uv.MatchesTextureMapping(textureMapping))
                     return uv;
             }
             return null;
@@ -184,7 +187,9 @@ namespace Aspose.ThreeD.Entities
         /// </summary>
         public VertexElementUV CreateElementUV(TextureMapping uvMapping, MappingMode mappingMode, ReferenceMode referenceMode)
         {
-            var element = new VertexElementUV(uvMapping, mappingMode, referenceMode);
+            var element = new VertexElementUV(uvMapping);
+            element.MappingMode = mappingMode;
+            element.ReferenceMode = referenceMode;
             _vertexElements.Add(element);
             return element;
         }

@@ -1,9 +1,18 @@
+using System;
+
 namespace Aspose.ThreeD.Formats
 {
     /// <summary>
-    /// Base class of load options
+    /// The base class to configure options in file loading for different types
     /// </summary>
-    public abstract class LoadOptions : IOConfig
+    public class LoadOptions : IOConfig
     {
+        internal LoadOptions()
+        {
+        }
+
+        internal LoadOptions(FileFormat format)
+        {
+        }
     }
 }

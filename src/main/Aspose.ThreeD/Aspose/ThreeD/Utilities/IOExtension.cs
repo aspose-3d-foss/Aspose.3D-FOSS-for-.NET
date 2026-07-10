@@ -2,7 +2,7 @@ using System.IO;
 
 namespace Aspose.ThreeD.Utilities
 {
-    public sealed class IOExtension
+    public static class IOExtension
     {
         public static void Write(BinaryWriter writer, Matrix4 mat)
         {

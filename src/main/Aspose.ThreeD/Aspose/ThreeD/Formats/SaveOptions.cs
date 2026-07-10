@@ -3,10 +3,18 @@ using System;
 namespace Aspose.ThreeD.Formats
 {
     /// <summary>
-    /// Base class of save options
+    /// The base class to configure options in file saving for different types
     /// </summary>
-    public abstract class SaveOptions : IOConfig
+    public class SaveOptions : IOConfig
     {
+        internal SaveOptions()
+        {
+        }
+
+        internal SaveOptions(FileFormat format)
+        {
+        }
+
         /// <summary>
         /// Try to copy textures used in scene to output directory.
         /// </summary>

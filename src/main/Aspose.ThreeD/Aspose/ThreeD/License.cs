@@ -76,6 +76,14 @@ namespace Aspose.ThreeD
                 "This feature is not available in the FOSS version. " +
                 "Consider using Aspose.3D's commercial On-Premise API for full functionality.");
         }
+
+        /// <summary>
+        /// Check whether metered is licensed
+        /// </summary>
+        public static bool IsMeteredLicensed()
+        {
+            return false;
+        }
     }
 
     /// <summary>
@@ -84,23 +92,23 @@ namespace Aspose.ThreeD
     public class TrialException : System.Exception
     {
         /// <summary>
-        /// Initializes a new instance of the TrialException class
+        /// Sets this to true to suppress trial exception for unlicensed usage, but the restrictions will not be lifted.
+        /// In order to lift the restrictions, please use a proper license.
+        /// And sets this to true also means you're aware of the unlicensed restrictions.
+        /// </summary>
+        public static bool SuppressTrialException { get; set; }
+
+        /// <summary>
+        /// Constructor of
         /// </summary>
         public TrialException() : base()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the TrialException class
+        /// Constructor of
         /// </summary>
         public TrialException(string message) : base(message)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the TrialException class
-        /// </summary>
-        public TrialException(string message, System.Exception innerException) : base(message, innerException)
         {
         }
     }
@@ -108,12 +116,12 @@ namespace Aspose.ThreeD
     /// <summary>
     /// Import exception
     /// </summary>
-    public class ImportException : System.Exception
+    public class ImportException : System.IO.IOException
     {
         /// <summary>
         /// Initializes a new instance of the ImportException class
         /// </summary>
-        public ImportException() : base()
+        internal ImportException() : base()
         {
         }
 
@@ -127,7 +135,7 @@ namespace Aspose.ThreeD
         /// <summary>
         /// Initializes a new instance of the ImportException class
         /// </summary>
-        public ImportException(string message, System.Exception innerException) : base(message, innerException)
+        internal ImportException(string message, System.Exception innerException) : base(message, innerException)
         {
         }
     }
@@ -135,26 +143,12 @@ namespace Aspose.ThreeD
     /// <summary>
     /// Export exception
     /// </summary>
-    public class ExportException : System.Exception
+    public class ExportException : System.IO.IOException, System.Runtime.Serialization.ISerializable
     {
         /// <summary>
-        /// Initializes a new instance of the ExportException class
+        /// Initializes a new instance
         /// </summary>
-        public ExportException() : base()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ExportException class
-        /// </summary>
-        public ExportException(string message) : base(message)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ExportException class
-        /// </summary>
-        public ExportException(string message, System.Exception innerException) : base(message, innerException)
+        public ExportException(string msg) : base(msg)
         {
         }
     }

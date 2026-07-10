@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Aspose.ThreeD.Utilities;
 
 namespace Aspose.ThreeD.Entities;
@@ -8,8 +10,8 @@ namespace Aspose.ThreeD.Entities;
 /// </summary>
 public class NurbsDirection
 {
-    private readonly IArrayList<double> knotVectors;
-    private readonly IArrayList<int> multiplicity;
+    private readonly List<double> _knotVectors;
+    private readonly List<int> _multiplicity;
     private int order = 3;
     private int degree = 2;
     private int divisions = 10;
@@ -21,19 +23,19 @@ public class NurbsDirection
     /// </summary>
     public NurbsDirection()
     {
-        knotVectors = new ArrayList<double>();
-        multiplicity = new ArrayList<int>();
+        _knotVectors = new List<double>();
+        _multiplicity = new List<int>();
     }
 
     /// <summary>
     /// Gets the knot vector, it is a sequence of parameter values that determines where and how the control points affect the NURBS curve.
     /// </summary>
-    public IArrayList<double> KnotVectors => knotVectors;
+    public IArrayList<double> KnotVectors => new ArrayListAdapter<double>(_knotVectors);
 
     /// <summary>
     /// Gets the multiplicity.
     /// </summary>
-    public IArrayList<int> Multiplicity => multiplicity;
+    public IArrayList<int> Multiplicity => new ArrayListAdapter<int>(_multiplicity);
 
     /// <summary>
     /// Gets or sets the order of a NURBS curve, it defines the number of nearby control points that influence any given point on the curve.

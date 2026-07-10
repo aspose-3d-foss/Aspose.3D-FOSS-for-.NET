@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 using Aspose.ThreeD;
 using Aspose.ThreeD.Entities;
 using Xunit;
@@ -66,7 +67,8 @@ using var stream = File.OpenRead(testFile);
 
             using var stream = File.OpenRead(testFile);
             var scene = new Scene();
-            scene.Open(stream);
+            var format = FileFormat.GetFormatByExtension(Path.GetExtension(Path.GetFileName(testFile)));
+            scene.Open(stream, format, CancellationToken.None);
 
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);
@@ -94,7 +96,8 @@ using var stream = File.OpenRead(testFile);
 
             using var stream = File.OpenRead(testFile);
             var scene = new Scene();
-            scene.Open(stream);
+            var format = FileFormat.GetFormatByExtension(Path.GetExtension(Path.GetFileName(testFile)));
+            scene.Open(stream, format, CancellationToken.None);
 
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);
@@ -122,7 +125,8 @@ using var stream = File.OpenRead(testFile);
 
             using var stream = File.OpenRead(testFile);
             var scene = new Scene();
-            scene.Open(stream, "simple_cube.gltf");
+            var format = FileFormat.Detect(stream, "simple_cube.gltf");
+            scene.Open(stream, format.CreateLoadOptions(), CancellationToken.None);
 
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);
@@ -140,7 +144,8 @@ using var stream = File.OpenRead(testFile);
 
             using var stream = File.OpenRead(testFile);
             var scene = new Scene();
-            scene.Open(stream, "cube.obj");
+            var format = FileFormat.Detect(stream, "cube.obj");
+            scene.Open(stream, format.CreateLoadOptions(), CancellationToken.None);
 
             Assert.NotNull(scene);
             Assert.NotNull(scene.RootNode);

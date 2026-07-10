@@ -9,31 +9,23 @@ namespace Aspose.ThreeD.Entities
     /// </summary>
     public abstract class VertexElementTemplate<T> : VertexElement, IIndexedVertexElement
     {
-        private List<T> _data;
-        private ArrayList<T> _internalData;
+        private readonly List<T> _data;
+        private readonly List<T> _internalData;
+        private readonly ArrayListAdapter<T> _dataAdapter;
 
         /// <summary>
         /// Gets the vertex data
         /// </summary>
-        public IArrayList<T> Data => _internalData;
+        public IArrayList<T> Data => _dataAdapter;
 
         /// <summary>
         /// Initializes a new instance of the VertexElementTemplate class.
         /// </summary>
         protected VertexElementTemplate()
-            : this(MappingMode.ControlPoint, ReferenceMode.Direct)
-        {
-            _internalData = new ArrayList<T>();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the VertexElementTemplate class.
-        /// </summary>
-        protected VertexElementTemplate(MappingMode mappingMode, ReferenceMode referenceMode)
-            : base(VertexElementType.Unknown, mappingMode, referenceMode)
         {
             _data = new List<T>();
-            _internalData = new ArrayList<T>();
+            _internalData = new List<T>();
+            _dataAdapter = new ArrayListAdapter<T>(_internalData);
         }
 
         /// <summary>
@@ -43,8 +35,8 @@ namespace Aspose.ThreeD.Entities
         {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
-            target._data.AddRange(_data);
-            target._internalData = new ArrayList<T>(_data);
+            target._internalData.Clear();
+            target._internalData.AddRange(_internalData);
         }
 
         /// <summary>
@@ -54,7 +46,8 @@ namespace Aspose.ThreeD.Entities
         {
             _data.Clear();
             _data.AddRange(data);
-            _internalData = new ArrayList<T>(_data);
+            _internalData.Clear();
+            _internalData.AddRange(_data);
         }
 
         /// <summary>
@@ -63,7 +56,7 @@ namespace Aspose.ThreeD.Entities
         public override void Clear()
         {
             _data.Clear();
-            _internalData = new ArrayList<T>();
+            _internalData.Clear();
             base.Clear();
         }
     }

@@ -369,10 +369,12 @@ namespace Aspose.ThreeD.Formats
                 var normals = ReadAccessorData(normalAccessor, bufferViews, buffers, "VEC3");
                 if (normals.Count >= positions.Count)
                 {
-                                        var normalElement = new VertexElementNormal(MappingMode.ControlPoint, ReferenceMode.Direct);
+                    var normalElement = new VertexElementNormal();
+                    normalElement.MappingMode = MappingMode.ControlPoint;
+                    normalElement.ReferenceMode = ReferenceMode.Direct;
                     foreach (var n in normals)
                     {
-                        normalElement.Normals.Add(new Vector4(n[0], n[1], n[2], 0.0f));
+                        normalElement.Data.Add(new FVector4(n[0], n[1], n[2], 0.0f));
                     }
                     mesh.AddElement(normalElement);
                 }
@@ -384,12 +386,16 @@ namespace Aspose.ThreeD.Formats
                 var uvs = ReadAccessorData(texcoordAccessor, bufferViews, buffers, "VEC2");
                 if (uvs.Count >= positions.Count)
                 {
-                                        var uvElement = new VertexElementUV(TextureMapping.Diffuse, MappingMode.ControlPoint, ReferenceMode.Direct);
+                    var uvElement = new VertexElementUV();
+                    uvElement.MappingMode = MappingMode.ControlPoint;
+                    uvElement.ReferenceMode = ReferenceMode.Direct;
+                    var uvList = new List<Vector2>(uvs.Count);
                     foreach (var uv in uvs)
                     {
                         float v = options.FlipTexCoordV ? uv[1] : -uv[1];
-                        uvElement.Data.Add(new FVector2(uv[0], v));
+                        uvList.Add(new Vector2(uv[0], v));
                     }
+                    uvElement.AddData(uvList);
                     mesh.AddElement(uvElement);
                 }
             }
@@ -404,7 +410,9 @@ namespace Aspose.ThreeD.Formats
                 }
                 if (colors.Count >= positions.Count)
                 {
-                                        var colorElement = new VertexElementVertexColor(MappingMode.ControlPoint, ReferenceMode.Direct);
+                    var colorElement = new VertexElementVertexColor();
+                    colorElement.MappingMode = MappingMode.ControlPoint;
+                    colorElement.ReferenceMode = ReferenceMode.Direct;
                     foreach (var color in colors)
                     {
                         if (color.Length == 3)

@@ -10,7 +10,7 @@ namespace Aspose.ThreeD.Formats
     /// </summary>
     public class DracoFormat : FileFormat
     {
-        public DracoFormat() : base(
+        internal DracoFormat() : base(
             "draco",
             new[] { "draco" },
             new Version(1, 0),

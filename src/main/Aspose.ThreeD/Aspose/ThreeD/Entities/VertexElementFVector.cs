@@ -9,32 +9,15 @@ namespace Aspose.ThreeD.Entities
     /// </summary>
     public class VertexElementFVector : VertexElement, IIndexedVertexElement
     {
-        private List<FVector4> _data;
-        private ArrayList<FVector4> _internalData;
+        internal VertexElementFVector()
+        {
+        }
 
         /// <summary>
         /// Gets the vertex data
         /// </summary>
-        public IArrayList<FVector4> Data => _internalData;
-
-        /// <summary>
-        /// Initializes a new instance of the VertexElementFVector class.
-        /// </summary>
-        public VertexElementFVector()
-            : this(MappingMode.ControlPoint, ReferenceMode.Direct)
-        {
-            _internalData = new ArrayList<FVector4>();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the VertexElementFVector class.
-        /// </summary>
-        public VertexElementFVector(MappingMode mappingMode, ReferenceMode referenceMode)
-            : base(VertexElementType.Unknown, mappingMode, referenceMode)
-        {
-            _data = new List<FVector4>();
-            _internalData = new ArrayList<FVector4>();
-        }
+        private readonly List<FVector4> _data = new List<FVector4>();
+        public IArrayList<FVector4> Data => new ArrayListAdapter<FVector4>(_data);
 
         /// <summary>
         /// Copies data to specified element
@@ -43,8 +26,10 @@ namespace Aspose.ThreeD.Entities
         {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
-            target._data.AddRange(_data);
-            target._internalData = new ArrayList<FVector4>(_data);
+            foreach (var item in Data)
+            {
+                target.Data.Add(item);
+            }
         }
 
         /// <summary>
@@ -52,9 +37,11 @@ namespace Aspose.ThreeD.Entities
         /// </summary>
         public void SetData(FVector4[] data)
         {
-            _data.Clear();
-            _data.AddRange(data);
-            _internalData = new ArrayList<FVector4>(_data);
+            Data.Clear();
+            foreach (var item in data)
+            {
+                Data.Add(item);
+            }
         }
 
         /// <summary>
@@ -62,12 +49,11 @@ namespace Aspose.ThreeD.Entities
         /// </summary>
         public void SetData(FVector3[] data)
         {
-            _data.Clear();
+            Data.Clear();
             foreach (var item in data)
             {
-                _data.Add(new FVector4(item));
+                Data.Add(new FVector4(item.X, item.Y, item.Z));
             }
-            _internalData = new ArrayList<FVector4>(_data);
         }
 
         /// <summary>
@@ -75,12 +61,11 @@ namespace Aspose.ThreeD.Entities
         /// </summary>
         public void SetData(FVector2[] data)
         {
-            _data.Clear();
+            Data.Clear();
             foreach (var item in data)
             {
-                _data.Add(new FVector4(item.X, item.Y, 0, 1));
+                Data.Add(new FVector4(item.X, item.Y, 0, 1));
             }
-            _internalData = new ArrayList<FVector4>(_data);
         }
 
         /// <summary>
@@ -88,8 +73,7 @@ namespace Aspose.ThreeD.Entities
         /// </summary>
         public override void Clear()
         {
-            _data.Clear();
-            _internalData = new ArrayList<FVector4>();
+            Data.Clear();
             base.Clear();
         }
     }

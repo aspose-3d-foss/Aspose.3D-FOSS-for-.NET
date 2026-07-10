@@ -9,7 +9,7 @@ namespace Aspose.ThreeD.Formats
     /// </summary>
     public class PdfFormat : FileFormat
     {
-        public PdfFormat() : base(
+        internal PdfFormat() : base(
             "pdf",
             new[] { "pdf" },
             new Version(1, 6),

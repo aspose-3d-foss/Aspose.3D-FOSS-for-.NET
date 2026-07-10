@@ -10,7 +10,7 @@ namespace Aspose.ThreeD.Formats
     /// </summary>
     public class PlyFormat : FileFormat
     {
-        public PlyFormat() : base(
+        internal PlyFormat() : base(
             "ply",
             new[] { "ply" },
             new Version(1, 0),

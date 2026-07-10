@@ -9,7 +9,7 @@ namespace Aspose.ThreeD.Formats
     /// </summary>
     public class RvmFormat : FileFormat
     {
-        public RvmFormat() : base(
+        internal RvmFormat() : base(
             "rvm",
             new[] { "rvm" },
             new Version(1, 0),

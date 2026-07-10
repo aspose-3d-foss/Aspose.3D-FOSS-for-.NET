@@ -1,27 +1,22 @@
 using System;
 using System.Collections.Generic;
+using Aspose.ThreeD.Utilities;
 
 namespace Aspose.ThreeD.Entities
 {
     /// <summary>
     /// Defines polygon group for specified components to group related polygons together.
     /// </summary>
-    public class VertexElementPolygonGroup : VertexElementIntsTemplate
+    public class VertexElementPolygonGroup : VertexElementIntsTemplate, IIndexedVertexElement
     {
         /// <summary>
         /// Initializes a new instance of the VertexElementPolygonGroup class.
         /// </summary>
         public VertexElementPolygonGroup()
-            : this(MappingMode.Polygon, ReferenceMode.IndexToDirect)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the VertexElementPolygonGroup class.
-        /// </summary>
-        public VertexElementPolygonGroup(MappingMode mappingMode, ReferenceMode referenceMode)
-            : base(mappingMode, referenceMode)
-        {
+            _type = VertexElementType.PolygonGroup;
+            _indices = new List<int>();
+            Name = string.Empty;
         }
     }
 }
