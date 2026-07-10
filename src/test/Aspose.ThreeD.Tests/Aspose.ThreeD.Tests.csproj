@@ -21,6 +21,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\main\Aspose.ThreeD\Aspose.ThreeD.csproj" />
-  </ItemGroup>
+     </ItemGroup>
+
+   <ItemGroup>
+     <Content Include="..\..\..\testdata\**\*">
+       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+     </Content>
+   </ItemGroup>
 
 </Project>
