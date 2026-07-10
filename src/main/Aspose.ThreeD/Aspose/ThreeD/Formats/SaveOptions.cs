@@ -7,11 +7,17 @@ namespace Aspose.ThreeD.Formats
     /// </summary>
     public class SaveOptions : IOConfig
     {
-        internal SaveOptions()
+        /// <summary>
+        /// Initializes a new instance of the SaveOptions class.
+        /// </summary>
+        public SaveOptions()
         {
         }
 
-        internal SaveOptions(FileFormat format)
+        /// <summary>
+        /// Initializes a new instance of the SaveOptions class with a file format.
+        /// </summary>
+        public SaveOptions(FileFormat format)
         {
         }
 
