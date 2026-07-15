@@ -8,7 +8,7 @@ using System.Collections;
 namespace Aspose.ThreeD.Utilities
 {
     /// <summary>
-    /// Adapter class that wraps List<T> and implements IArrayList<T>
+    /// Adapter class that wraps List&lt;T&gt; and implements IArrayList&lt;T&gt;
     /// </summary>
     /// <typeparam name="T">The type of elements in the list</typeparam>
     internal class ArrayListAdapter<T> : IArrayList<T>
