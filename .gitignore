@@ -10,3 +10,10 @@ foss.python
 *.dll
 foss-net-progress.md
 *.sh
+
+# AI-agent-generated output/diff/script files
+api-diff.txt
+api-diff-changed.txt
+build-output.txt
+test-output.txt
+fix_fileformat.py

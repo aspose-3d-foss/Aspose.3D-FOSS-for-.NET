@@ -1,9 +1,0 @@
-  Determining projects to restore...
-  All projects are up-to-date for restore.
-  Aspose.ThreeD -> /home/lexchou/workspace/aspose/foss.3d.net/src/main/Aspose.ThreeD/bin/Debug/net10.0/Aspose.3D.FOSS.dll
-
-Build succeeded.
-    0 Warning(s)
-    0 Error(s)
-
-Time Elapsed 00:00:02.07
