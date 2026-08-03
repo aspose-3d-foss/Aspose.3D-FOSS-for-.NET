@@ -131,7 +131,166 @@ namespace Aspose.ThreeD.Entities
         /// </summary>
         public Mesh ToMesh()
         {
-            throw new NotImplementedException("LinearExtrusion to mesh conversion is not yet implemented");
+            // If no shape is defined, return an empty mesh
+            if (_shape == null)
+            {
+                return new Mesh(Name);
+            }
+
+            // Handle common parameterized profiles
+            if (_shape is RectangleShape rectShape)
+            {
+                return CreateRectangleExtrusion(rectShape);
+            }
+            else if (_shape is CircleShape circleShape)
+            {
+                return CreateCircleExtrusion(circleShape);
+            }
+            
+            // For other profile types or unsupported profiles, return empty mesh
+            return new Mesh(Name);
+        }
+
+        /// <summary>
+        /// Create extrusion from RectangleShape
+        /// </summary>
+        private Mesh CreateRectangleExtrusion(RectangleShape rectShape)
+        {
+            var mesh = new Mesh(Name);
+            
+            // Get dimensions from the rectangle
+            var xDim = rectShape.XDim;
+            var yDim = rectShape.YDim;
+            var halfWidth = (float)(xDim / 2);
+            var halfHeight = (float)(yDim / 2);
+            
+            // Calculate extrusion direction
+            var dir = Direction.Normalize();
+            var extrudeHeight = (float)_height;
+            
+            // Create the two faces of the extrusion
+            // Base face (at start)
+            var baseOffset = _center ? -extrudeHeight / 2 : 0;
+            
+            // Calculate perpendicular vectors for the extrusion plane
+            Vector3 uDir, vDir;
+            if (Math.Abs(dir.Y) > 0.99f)
+            {
+                uDir = dir.Cross(Vector3.UnitZ).Normalize();
+                vDir = dir.Cross(uDir).Normalize();
+            }
+            else
+            {
+                uDir = dir.Cross(Vector3.UnitY).Normalize();
+                vDir = dir.Cross(uDir).Normalize();
+            }
+            
+            // Generate the four corners of the base rectangle
+            var p0 = dir * baseOffset + uDir * -halfWidth + vDir * -halfHeight;
+            var p1 = dir * baseOffset + uDir * halfWidth + vDir * -halfHeight;
+            var p2 = dir * baseOffset + uDir * halfWidth + vDir * halfHeight;
+            var p3 = dir * baseOffset + uDir * -halfWidth + vDir * halfHeight;
+            
+            // Top face (at end)
+            var topOffset = baseOffset + extrudeHeight;
+            var p4 = dir * topOffset + uDir * -halfWidth + vDir * -halfHeight;
+            var p5 = dir * topOffset + uDir * halfWidth + vDir * -halfHeight;
+            var p6 = dir * topOffset + uDir * halfWidth + vDir * halfHeight;
+            var p7 = dir * topOffset + uDir * -halfWidth + vDir * halfHeight;
+            
+            // Add control points
+            mesh.ControlPoints.Add(new Vector4((float)p0.X, (float)p0.Y, (float)p0.Z, 1));
+            mesh.ControlPoints.Add(new Vector4((float)p1.X, (float)p1.Y, (float)p1.Z, 1));
+            mesh.ControlPoints.Add(new Vector4((float)p2.X, (float)p2.Y, (float)p2.Z, 1));
+            mesh.ControlPoints.Add(new Vector4((float)p3.X, (float)p3.Y, (float)p3.Z, 1));
+            mesh.ControlPoints.Add(new Vector4((float)p4.X, (float)p4.Y, (float)p4.Z, 1));
+            mesh.ControlPoints.Add(new Vector4((float)p5.X, (float)p5.Y, (float)p5.Z, 1));
+            mesh.ControlPoints.Add(new Vector4((float)p6.X, (float)p6.Y, (float)p6.Z, 1));
+            mesh.ControlPoints.Add(new Vector4((float)p7.X, (float)p7.Y, (float)p7.Z, 1));
+            
+            // Create faces (quads)
+            // Bottom face
+            mesh.CreatePolygon(0, 1, 2, 3);
+            // Top face
+            mesh.CreatePolygon(4, 5, 6, 7);
+            // Side faces
+            mesh.CreatePolygon(0, 1, 5, 4);
+            mesh.CreatePolygon(1, 2, 6, 5);
+            mesh.CreatePolygon(2, 3, 7, 6);
+            mesh.CreatePolygon(3, 0, 4, 7);
+            
+            return mesh;
+        }
+        
+        /// <summary>
+        /// Create extrusion from CircleShape
+        /// </summary>
+        private Mesh CreateCircleExtrusion(CircleShape circleShape)
+        {
+            var mesh = new Mesh(Name);
+            
+            // For now, create a simple cylinder-like extrusion
+            // Get radius from GetExtent
+            var extent = circleShape.GetExtent();
+            var radius = (float)(extent.X / 2);
+            
+            // Default to 16 segments for circle approximation
+            var segments = 16;
+            var angleStep = (Math.PI * 2) / segments;
+            
+            // Calculate extrusion
+            var dir = Direction.Normalize();
+            var extrudeHeight = (float)_height;
+            var baseOffset = _center ? -extrudeHeight / 2 : 0;
+            
+            // Create perpendicular vectors
+            Vector3 uDir, vDir;
+            if (Math.Abs(dir.Y) > 0.99f)
+            {
+                uDir = dir.Cross(Vector3.UnitZ).Normalize();
+                vDir = dir.Cross(uDir).Normalize();
+            }
+            else
+            {
+                uDir = dir.Cross(Vector3.UnitY).Normalize();
+                vDir = dir.Cross(uDir).Normalize();
+            }
+            
+            // Generate vertices for bottom and top circles
+            for (int i = 0; i < 2; i++)
+            {
+                var zOffset = baseOffset + i * extrudeHeight;
+                var pos = dir * zOffset;
+                
+                for (int s = 0; s < segments; s++)
+                {
+                    var angle = s * angleStep;
+                    var x = (float)(Math.Cos(angle) * radius);
+                    var y = (float)(Math.Sin(angle) * radius);
+                    
+                    var point = pos + uDir * x + vDir * y;
+                    mesh.ControlPoints.Add(new Vector4((float)point.X, (float)point.Y, (float)point.Z, 1));
+                }
+            }
+            
+            // Create side polygons (quads)
+            var bottomStart = 0;
+            var topStart = segments;
+            for (int s = 0; s < segments; s++)
+            {
+                var next = (s + 1) % segments;
+                
+                // Bottom face (if center is true, we might want caps)
+                // For now, just create the side surface
+                mesh.CreatePolygon(
+                    bottomStart + s,
+                    bottomStart + next,
+                    topStart + next,
+                    topStart + s
+                );
+            }
+            
+            return mesh;
         }
     }
 }
