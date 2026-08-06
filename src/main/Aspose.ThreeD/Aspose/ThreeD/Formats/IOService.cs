@@ -84,6 +84,7 @@ internal class IOService
             FileFormat f when f == FileFormat.Microsoft3MFFormat => new Microsoft3MFWriter(),
             FileFormat f when f == FileFormat.ColladaFormat => new ColladaWriter(),
             FileFormat f when f == FileFormat.PlyFormat => new PlyWriter(),
+            FileFormat f when f == FileFormat.Discreet3DSFormat => new Discreet3DSWriter(),
             _ => throw new NotSupportedException($"Export not supported for {format.Extension}")
         };
     }
