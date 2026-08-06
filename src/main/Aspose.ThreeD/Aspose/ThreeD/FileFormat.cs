@@ -81,10 +81,8 @@ namespace Aspose.ThreeD
 
     // OBJ format
     public static readonly FileFormat WavefrontOBJ = new FileFormat(".obj", new[] { ".obj" }, new Version(1, 0), true, true, FileContentType.ASCII, FileFormatType.WavefrontOBJ);
-
     // 3DS format
-    public static readonly FileFormat Discreet3DS = new FileFormat(".3ds", new[] { ".3ds" }, new Version(0, 0), true, true, FileContentType.Binary, FileFormatType.Discreet3DS);
-
+    public static FileFormat Discreet3DS;
     // Collada format
     public static readonly FileFormat Collada = new FileFormat(".dae", new[] { ".dae" }, new Version(0, 0), true, true, FileContentType.ASCII, FileFormatType.COLLADA);
 
@@ -369,6 +367,7 @@ namespace Aspose.ThreeD
             ColladaFormat = new ColladaFormat();
             PlyFormat = new PlyFormat();
             Discreet3DSFormat = new Discreet3DSFormat();
+            Discreet3DS = Discreet3DSFormat;
 
             _formats.Add(ObjFormat);
             _formats.Add(StlFormat);
