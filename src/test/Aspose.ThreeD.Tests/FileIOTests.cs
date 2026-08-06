@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using Aspose.ThreeD;
 using Aspose.ThreeD.Entities;
-using Aspose.ThreeD.Formats;
+using Fmt = Aspose.ThreeD.Formats;
 using Xunit;
 
 namespace Aspose.ThreeD.Tests
@@ -186,7 +186,7 @@ namespace Aspose.ThreeD.Tests
             scene.RootNode.CreateChildNode("BoxNode", box);
 
             using var stream = new MemoryStream();
-            var options = new Formats.ObjSaveOptions();
+            var options = new Fmt.ObjSaveOptions();
             scene.Save(stream, options);
 
             stream.Seek(0, SeekOrigin.Begin);
@@ -204,7 +204,7 @@ namespace Aspose.ThreeD.Tests
             scene.RootNode.CreateChildNode("BoxNode", box);
 
             using var stream = new MemoryStream();
-            var options = new Formats.StlSaveOptions();
+            var options = new Fmt.StlSaveOptions();
             scene.Save(stream, options);
 
             stream.Seek(0, SeekOrigin.Begin);
@@ -225,7 +225,7 @@ namespace Aspose.ThreeD.Tests
 
             using var stream = File.OpenRead(testFile);
             var scene = new Scene();
-            var options = new Formats.ObjLoadOptions();
+            var options = new Fmt.ObjLoadOptions();
             scene.Open(stream, options, CancellationToken.None);
 
             Assert.NotNull(scene);
@@ -254,7 +254,7 @@ namespace Aspose.ThreeD.Tests
 
             using var stream = File.OpenRead(testFile);
             var scene = new Scene();
-            var options = new Formats.StlLoadOptions();
+            var options = new Fmt.StlLoadOptions();
             scene.Open(stream, options, CancellationToken.None);
 
             Assert.NotNull(scene);
@@ -278,7 +278,7 @@ namespace Aspose.ThreeD.Tests
             var box = new Box(2, 2, 2);
             scene.RootNode.CreateChildNode("BoxNode", box);
              using var stream = new MemoryStream();
-             var options = new Formats.GltfSaveOptions(FileFormat.GLTF2);
+             var options = new Fmt.GltfSaveOptions(FileFormat.GLTF2);
              scene.Save(stream, options);
             stream.Seek(0, SeekOrigin.Begin);
             var content = stream.ToArray();
@@ -298,7 +298,7 @@ namespace Aspose.ThreeD.Tests
 
             using var stream = File.OpenRead(testFile);
             var scene = new Scene();
-            var options = new Formats.GltfLoadOptions();
+            var options = new Fmt.GltfLoadOptions();
             scene.Open(stream, options, CancellationToken.None);
 
             Assert.NotNull(scene);
@@ -338,7 +338,7 @@ namespace Aspose.ThreeD.Tests
 
             using var stream = File.OpenRead(testFile);
             var scene = new Scene();
-            var options = new Formats.FbxLoadOptions();
+            var options = new Fmt.FbxLoadOptions();
             scene.Open(stream, options, CancellationToken.None);
 
             Assert.NotNull(scene);
@@ -417,7 +417,7 @@ namespace Aspose.ThreeD.Tests
             scene.Open(testFile);
 
             using var stream = new MemoryStream();
-            var options = new ObjSaveOptions() { Verbose = true };
+            var options = new Fmt.ObjSaveOptions() { Verbose = true };
             scene.Save(stream, options);
 
             stream.Seek(0, SeekOrigin.Begin);
@@ -439,7 +439,7 @@ namespace Aspose.ThreeD.Tests
             scene.RootNode.CreateChildNode("BoxNode", box);
 
             using var stream = new MemoryStream();
-            var options = new Formats.Microsoft3MFSaveOptions();
+            var options = new Fmt.Microsoft3MFSaveOptions();
             scene.Save(stream, options);
 
             stream.Seek(0, SeekOrigin.Begin);
@@ -497,7 +497,7 @@ namespace Aspose.ThreeD.Tests
             scene.RootNode.CreateChildNode("SphereNode", sphere);
 
             using var stream = new MemoryStream();
-            var options = new Formats.Microsoft3MFSaveOptions();
+            var options = new Fmt.Microsoft3MFSaveOptions();
             scene.Save(stream, options);
 
             stream.Seek(0, SeekOrigin.Begin);
@@ -523,7 +523,7 @@ namespace Aspose.ThreeD.Tests
             scene.RootNode.CreateChildNode("SphereNode", sphere);
 
             using var stream = new MemoryStream();
-            var options = new Formats.Microsoft3MFSaveOptions();
+            var options = new Fmt.Microsoft3MFSaveOptions();
             scene.Save(stream, options);
 
             stream.Seek(0, SeekOrigin.Begin);
@@ -548,7 +548,7 @@ namespace Aspose.ThreeD.Tests
 
             var outputFile = Path.Combine(Path.GetTempPath(), "test_output.fbx");             try
              {
-                                   var options = new Formats.FbxSaveOptions(FileFormat.FBX7700Binary);
+                                   var options = new Fmt.FbxSaveOptions(FileFormat.FBX7700Binary);
                  scene.Save(outputFile, options);
                 Assert.True(File.Exists(outputFile));
                 var content = File.ReadAllBytes(outputFile);
@@ -645,7 +645,7 @@ namespace Aspose.ThreeD.Tests
 
             using var stream = File.OpenRead(testFile);
             var scene = new Scene();
-            var options = new Formats.PlyLoadOptions();
+            var options = new Fmt.PlyLoadOptions();
             scene.Open(stream, options, CancellationToken.None);
 
             Assert.NotNull(scene);

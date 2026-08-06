@@ -23,15 +23,14 @@ namespace Aspose.ThreeD
         private readonly bool _canImport;
         private readonly FileContentType _contentType;
         private readonly FileFormatType _fileFormatType;
-
-        internal static FileFormat ObjFormat { get;	private set; } = null!;
-        internal static FileFormat StlFormat { get;	private set; } = null!;
-        internal static FileFormat GltfFormat { get;	private set; } = null!;
-        internal static FileFormat FbxFormat { get;	private set; } = null!;
-        internal static FileFormat Microsoft3MFFormat { get;	private set; } = null!;
-        internal static FileFormat ColladaFormat { get;	private set; } = null!;
-        internal static FileFormat PlyFormat { get;	private set; } = null!;
-
+        internal static FileFormat ObjFormat { get; private set; } = null!;
+        internal static FileFormat StlFormat { get; private set; } = null!;
+        internal static FileFormat GltfFormat { get; private set; } = null!;
+        internal static FileFormat FbxFormat { get; private set; } = null!;
+        internal static FileFormat Microsoft3MFFormat { get; private set; } = null!;
+        internal static FileFormat ColladaFormat { get; private set; } = null!;
+        internal static FileFormat PlyFormat { get; private set; } = null!;
+        internal static FileFormat Discreet3DSFormat { get; private set; } = null!;
         static FileFormat()
         {
             InitializeFormats();
@@ -369,6 +368,7 @@ namespace Aspose.ThreeD
             Microsoft3MFFormat = new Microsoft3MFFormat();
             ColladaFormat = new ColladaFormat();
             PlyFormat = new PlyFormat();
+            Discreet3DSFormat = new Discreet3DSFormat();
 
             _formats.Add(ObjFormat);
             _formats.Add(StlFormat);
@@ -377,6 +377,7 @@ namespace Aspose.ThreeD
             _formats.Add(Microsoft3MFFormat);
             _formats.Add(ColladaFormat);
             _formats.Add(PlyFormat);
+            _formats.Add(Discreet3DSFormat);
         }
     }
 
@@ -496,6 +497,24 @@ namespace Aspose.ThreeD
         public override Formats.SaveOptions CreateSaveOptions()
         {
             return new Formats.PlySaveOptions();
+        }
+    }
+
+    internal class Discreet3DSFormat : FileFormat
+    {
+        public Discreet3DSFormat() : base(
+            ".3ds", new[] { ".3ds" }, new Version(3, 0), true, true, FileContentType.Binary, new FileFormatType(".3ds"))
+        {
+        }
+
+        public override Formats.LoadOptions CreateLoadOptions()
+        {
+            return new Formats.Discreet3dsLoadOptions();
+        }
+
+        public override Formats.SaveOptions CreateSaveOptions()
+        {
+            return new Formats.Discreet3dsSaveOptions();
         }
     }
 

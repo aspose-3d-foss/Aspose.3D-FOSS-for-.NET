@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Aspose.ThreeD;
 using Aspose.ThreeD.Entities;
+using Fmt = Aspose.ThreeD.Formats;
 using Xunit;
 
 namespace Aspose.ThreeD.Tests
@@ -43,7 +44,7 @@ namespace Aspose.ThreeD.Tests
             scene.RootNode.CreateChildNode("BoxNode", box);
 
             using var stream = new MemoryStream();
-            var options = new Formats.ColladaSaveOptions();
+            var options = new Fmt.ColladaSaveOptions();
             scene.Save(stream, options);
 
             stream.Seek(0, SeekOrigin.Begin);
@@ -92,11 +93,11 @@ namespace Aspose.ThreeD.Tests
         [Fact]
         public void ColladaSaveOptions_HasRequiredProperties()
         {
-            var options = new Formats.ColladaSaveOptions();
+            var options = new Fmt.ColladaSaveOptions();
             
             Assert.NotNull(options);
             Assert.False(options.Indented);
-            Assert.Equal(Formats.ColladaTransformStyle.Components, options.TransformStyle);
+            Assert.Equal(Fmt.ColladaTransformStyle.Components, options.TransformStyle);
         }
     }
 }

@@ -63,6 +63,7 @@ internal class IOService
             FileFormat f when f == FileFormat.Microsoft3MFFormat => new Microsoft3MFReader(),
             FileFormat f when f == FileFormat.ColladaFormat => new ColladaReader(),
             FileFormat f when f == FileFormat.PlyFormat => new PlyReader(),
+            FileFormat f when f == FileFormat.Discreet3DSFormat => new Discreet3DSReader(),
             _ => throw new NotSupportedException($"Import not supported for {format.Extension}")
         };
     }

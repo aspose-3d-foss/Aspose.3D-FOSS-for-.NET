@@ -162,6 +162,7 @@ namespace Aspose.ThreeD
                 Formats.GltfLoadOptions => FileFormat.GltfFormat,
                 Formats.FbxLoadOptions => FileFormat.FbxFormat,
                 Formats.PlyLoadOptions => FileFormat.PlyFormat,
+                Formats.Discreet3dsLoadOptions => FileFormat.Discreet3DSFormat,
                 _ => null
             };
             if (format == null)
