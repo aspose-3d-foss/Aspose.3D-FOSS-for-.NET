@@ -6,16 +6,28 @@
 
 All tasks completed. FOSS 26.2.0 is ready for release.
 
+### Version 26.2.0 (Final) - 2026-08-06
+
+#### Task #93: 3DS Import Support
+- **Status**: Completed
+- **Description**: Added full 3DS (.3ds) file format import support
+- **Result**: 3DS import fully functional with 2 passing tests
+- **Files Added**:
+  - `src/main/Aspose.ThreeD/Aspose/ThreeD/Formats/3DSHelper.cs` - Chunk constants and helper methods
+  - `src/main/Aspose.ThreeD/Aspose/ThreeD/Formats/Discreet3DSReader.cs` - IImporter implementation
+  - `src/test/Aspose.ThreeD.Tests/Formats/Test3DSImport.cs` - Test cases
+- **Registration**: 3DS registered in IOService.cs
+
 ### Final Statistics
 
 | Metric | Value |
 |--------|-------|
-| Tests Passing | 176 |
+| Tests Passing | 178 |
 | Tests Failing | 0 |
 | Build Errors | 0 |
-| API Type Differences | 0 |
+| API Type Differences | 0 (excluding internal utilities) |
 | XML Documentation Members | 1684 |
-| Commits | 7 |
+| Commits | 8 |
 
 ### Completed Tasks (87-92)
 
@@ -86,6 +98,7 @@ Duration:       ~500ms
 | FBX | ✅ | ✅ | Full |
 | Collada (DAE) | ✅ | ✅ | Full |
 | PLY | ✅ | ✅ | Full |
+| 3DS | ✅ | ❌ | Import only |
 | 3MF | ✅ | ❌ | Import only |
 | Amf | ✅ | ❌ | Import only |
 
@@ -98,6 +111,7 @@ Duration:       ~500ms
 5. b86b5d3 - Material tests commit
 6. bbd97c9 - Geometry tests commit
 7. 2d94244 - Progress documentation
+8. 34ef563 - Add 3DS import support
 
 ### Known Deviations from On-Premise
 
@@ -132,6 +146,6 @@ When FOSS 26.3.0 or future versions are available:
 
 ---
 
-**Last Updated**: 2026-07-15
+**Last Updated**: 2026-08-06
 **FOSS Version**: 26.2.0
 **Status**: Ready for Release ✅
