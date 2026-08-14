@@ -24,47 +24,31 @@ third-party renderer.
 ## At a glance
 
 ```mermaid
-flowchart LR
-  subgraph Inputs["Inputs and formats"]
+flowchart TD
+  subgraph StartingPoints["Starting Points"]
+    direction TB
     I1["OBJ / .mtl"]
     I2["STL (binary & ASCII)"]
     I3["glTF 2.0 / GLB"]
     I4["FBX / COLLADA / 3MF"]
     I5["PLY (import only)"]
   end
-
   PRODUCT["Aspose.3D FOSS for .NET"]
-
-  subgraph Capabilities["Core capabilities"]
+  subgraph Capabilities["Core Capabilities"]
+    direction TB
     C1["Scene-graph construction (Scene, Node, Entity)"]
     C2["Parametric primitives (Box, Sphere, Cylinder, Torus...)"]
     C3["Per-format load/save options"]
     C4["Coordinate & normal transforms"]
     C5["Materials (Lambert/Phong/PBR), cameras, lights, and TransformBuilder transforms"]
   end
-
-  subgraph Outputs["Outputs and accessible content"]
+  subgraph Outputs["Outputs"]
+    direction TB
     O1["OBJ, STL, glTF/GLB files"]
     O2["FBX, COLLADA, 3MF files"]
     O3["Round-tripped scene graphs"]
   end
-
-  I1 --- PRODUCT
-  I2 --- PRODUCT
-  I3 --- PRODUCT
-  I4 --- PRODUCT
-  I5 --- PRODUCT
-  PRODUCT --- C1
-  PRODUCT --- C2
-  PRODUCT --- C3
-  PRODUCT --- C4
-  PRODUCT --- C5
-  C1 --- O1
-  C2 --- O1
-  C3 --- O2
-  C4 --- O2
-  C1 --- O3
-  C5 --- O1
+  StartingPoints --> PRODUCT --> Capabilities --> Outputs
 ```
 
 ## Key capabilities
