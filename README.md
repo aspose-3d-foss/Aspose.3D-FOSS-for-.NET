@@ -16,6 +16,7 @@ Universal 3D, as pure managed code with no native dependencies.
 - [At a Glance](#at-a-glance)
 - [Key Capabilities](#key-capabilities)
 - [Installation](#installation)
+- [Dependencies](#dependencies)
 - [Quick Start](#quick-start)
 - [Additional Examples](#additional-examples)
 - [API Reference](#api-reference)
@@ -295,7 +296,7 @@ saving via the `FileFormat` registry.
 | `Extrapolation` | Controls the extrapolation mode (via `ExtrapolationType`) applied outside a keyframe sequence's range. |
 | `FbxLoadOptions` | Load options for FBX format. |
 | `FbxSaveOptions` | Save options for FBX format. |
-| `FileFormat` | File format registry and definition — exposes the static format constants used with `Scene.Save()`/`FromFile()`. |
+| `FileFormat` | File format registry — `Detect`/`GetFormatByExtension` plus per-format static members (`WavefrontOBJ`, `STLBinary`, `GLTF2`, `Collada`, `Discreet3DS`, `Microsoft3MF`) used with `Scene.Save()`/`FromFile()`. |
 | `FileFormatType` | File format family type. |
 | `FileSystem` | File system encapsulation used during load/save. |
 | `FontFile` | Font glyph definitions, used to create a `Text` profile. |
